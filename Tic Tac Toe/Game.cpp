@@ -123,7 +123,6 @@ void Game::Handle()
 
 									_gridPieces[i][j].setTexture(&_xTex);
 
-									BotPlay();
 									OnWin(CheckWin());
 
 									break;
@@ -236,10 +235,10 @@ int Game::CheckWin()
 	for (size_t i = 0; i < 3; i++)
 	{
 
-		if (_boxAssinged[i][3-i] == PLAYER1)
+		if (_boxAssinged[i][2-i] == PLAYER1)
 		{
 			sumPlayer1++;
-		}if (_boxAssinged[i][3-i] == PLAYER2)
+		}if (_boxAssinged[i][2-i] == PLAYER2)
 		{
 			sumPlayer2++;
 		}
