@@ -15,7 +15,7 @@ public:
 	~Client();
 
 	int InitClient();
-	int ClientSendMessage();
+	int ClientSendMessage(const char* message);
 	void ClientRecieveMessage();
 
 private:
@@ -23,7 +23,7 @@ private:
 	//Server Connection
 	WSADATA _wsaData;
 	sockaddr_in _serverAdress;
-	const char* _clientMessage = "GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n";
+	const char* _clientMessage = NULL;  //"GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n"
 	char buffer[1024] = { 0 };
 
 

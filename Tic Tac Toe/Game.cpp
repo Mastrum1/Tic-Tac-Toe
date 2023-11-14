@@ -123,6 +123,9 @@ void Game::Handle()
 
 									_gridPieces[i][j].setTexture(&_xTex);
 
+									// send message to server
+									_client->ClientSendMessage((const char*) i);
+
 									OnWin(CheckWin());
 
 									break;

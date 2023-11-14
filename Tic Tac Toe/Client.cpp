@@ -35,10 +35,10 @@ int Client::InitClient()
 	_hints.ai_family = AF_INET;
 	_hints.ai_socktype = SOCK_STREAM;
 	_hints.ai_protocol = IPPROTO_TCP;
-	ClientSendMessage();
+	//ClientSendMessage();
 }
 
-int Client::ClientSendMessage()
+int Client::ClientSendMessage(const char* message)
 {
 	_adressInfo = getaddrinfo(NULL, NULL, &_hints, &_result);
 
@@ -55,7 +55,7 @@ int Client::ClientSendMessage()
 	}
 	std::cout << "Connection made" << std::endl;
 
-	int sendError = send(sockfd, _clientMessage, strlen(_clientMessage), 0);
+	int sendError = send(sockfd, message, strlen(message), 0);
 	if (sendError == SOCKET_ERROR)
 	{
 		std::cout << "Failed to send message : " << WSAGetLastError() << std::endl;
