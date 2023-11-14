@@ -123,8 +123,8 @@ void Game::Handle()
 
 									_gridPieces[i][j].setTexture(&_xTex);
 
-									// send message to server
-									_client->ClientSendMessage((const char*) i);
+									//Create coordinate message
+									_messages->GenerateCoordinate(i, j);
 
 									OnWin(CheckWin());
 
@@ -279,6 +279,9 @@ void Game::OnWin(int checkwin)
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
 	_menuShowing = true;
+	_PlayerWon = true; 
+	_messages->GenerateWinResult(_PlayerWon);
+
 
 	OpenMenu();
 

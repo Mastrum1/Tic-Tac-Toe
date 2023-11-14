@@ -3,7 +3,6 @@
 
 Client::Client()
 {
-	InitClient();
 }	
 
 Client::~Client()
@@ -35,10 +34,13 @@ int Client::InitClient()
 	_hints.ai_family = AF_INET;
 	_hints.ai_socktype = SOCK_STREAM;
 	_hints.ai_protocol = IPPROTO_TCP;
-	//ClientSendMessage();
+
+	setMessages(_messages);
+	auto mes = _messages->GetMessage(); 
+	ClientSendMessage(mes);
 }
 
-int Client::ClientSendMessage(const char* message)
+int Client::ClientSendMessage(json message)
 {
 	_adressInfo = getaddrinfo(NULL, NULL, &_hints, &_result);
 
@@ -76,3 +78,4 @@ void Client::ClientRecieveMessage()
 	closesocket(sockfd);
 	WSACleanup();
 }
+

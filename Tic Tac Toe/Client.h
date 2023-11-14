@@ -1,9 +1,11 @@
 #pragma once
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#include "MessageGenerator.h"
 #include <iostream>
 
 #pragma comment (lib, "Ws2_32.lib")
+
 
 #define IP_ADRESS "142.251.168.101"
 #define PORT "80"
@@ -15,8 +17,9 @@ public:
 	~Client();
 
 	int InitClient();
-	int ClientSendMessage(const char* message);
+	int ClientSendMessage(json message);
 	void ClientRecieveMessage();
+	void setMessages(MessageGenerator* messages) { _messages = messages; }
 
 private:
 	
@@ -33,6 +36,7 @@ private:
 	int valread, clienfd, sockfd;
 
 	DWORD _adressInfo = NULL;
+	MessageGenerator* _messages;
 
 };
 
