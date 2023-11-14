@@ -3,6 +3,7 @@
 
 Client::Client()
 {
+	InitClient();
 }	
 
 Client::~Client()
@@ -34,32 +35,34 @@ int Client::InitClient()
 	_hints.ai_family = AF_INET;
 	_hints.ai_socktype = SOCK_STREAM;
 	_hints.ai_protocol = IPPROTO_TCP;
+	ClientSendMessage();
 }
 
 int Client::ClientSendMessage()
 {
-	_threadId = getaddrinfo(IP_ADRESS, "80", &_hints, &_result);
+	_adressInfo = getaddrinfo(NULL, NULL, &_hints, &_result);
 
-	if (_threadId <= 0)
+	if (_adressInfo <= 0)
 	{
-		std::cout << "Erreur de conversion d'adresse : " << WSAGetLastError() << std::endl;
+		std::cout << "Failed to convert adress : " << WSAGetLastError() << std::endl;
 		return -1;
 	}
-	std::cout << "bbb" << std::endl;
+	std::cout << "Adress works" << std::endl;
 	if (connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress)) == SOCKET_ERROR)
 	{
-		std::cout << "Erreur de connexion : " << WSAGetLastError() << std::endl;
+		std::cout << "Connection error : " << WSAGetLastError() << std::endl;
 		return -1;
 	}
-	std::cout << "ccc" << std::endl;
+	std::cout << "Connection made" << std::endl;
 
-	int c = send(sockfd, _clientMessage, strlen(_clientMessage), 0);
-	if (c == SOCKET_ERROR)
+	int sendError = send(sockfd, _clientMessage, strlen(_clientMessage), 0);
+	if (sendError == SOCKET_ERROR)
 	{
-		std::cout << "Erreur d'envoi de message : " << WSAGetLastError() << std::endl;
+		std::cout << "Failed to send message : " << WSAGetLastError() << std::endl;
 		return -1;
 	}
-
+	std::cout << "Message sent" << std::endl;
+	ClientRecieveMessage();
 
 }
 
