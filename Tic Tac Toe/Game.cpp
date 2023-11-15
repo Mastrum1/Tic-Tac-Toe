@@ -1,18 +1,6 @@
 #include "Game.h"
-#include <iostream>
+#include "pch.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 800
-
-// state of individual square
-#define EMPTY 0
-#define PLAYER1 1
-#define PLAYER2 2
-
-// Result of Game
-#define PLAYER1_WIN 3
-#define PLAYER2_WIN 4
-#define DRAW 5
 
 Game::Game()
 {
@@ -126,8 +114,8 @@ void Game::Handle()
 									_gridPieces[i][j].setTexture(&_xTex);
 
 									//Create coordinate message
-									/*std::string mes = _messages.GenerateCoordinate(i, j);
-									_client.ClientSendMessage(mes);*/
+									std::string mes = _messages.GenerateCoordinate(i, j);
+									_client.ClientSendMessage(mes);
 									
 
 									OnWin(CheckWin());

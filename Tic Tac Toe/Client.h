@@ -1,8 +1,6 @@
 #pragma once
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+#include "pch.h"
 #include "MessageGenerator.h"
-#include <iostream>
 
 #pragma comment (lib, "Ws2_32.lib")
 
