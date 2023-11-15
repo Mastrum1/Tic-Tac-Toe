@@ -114,8 +114,11 @@ void Game::Handle()
 									_gridPieces[i][j].setTexture(&_xTex);
 
 									//Create coordinate message
-									std::string mes = _messages.GenerateCoordinate(i, j);
-									_client.ClientSendMessage(mes);
+									auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+									mes["x"] = i;
+									mes["y"] = j;
+									std::string message = mes.dump();
+									_client.ClientSendMessage(message);
 									
 
 									OnWin(CheckWin());
@@ -272,9 +275,12 @@ void Game::OnWin(int checkwin)
 
 	_menuShowing = true;
 	_PlayerWon = true; 
-	std::string result = _messages.GenerateWinResult(_PlayerWon);
-	_client.ClientSendMessage(result);
-
+	auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+	mes["WinCondition"] = _PlayerWon;
+	std::string message = mes.dump();
+	_client.ClientSendMessage(message);
+	//std::string result = _messages.SetWinResult(_PlayerWon);
+	//_client.ClientSendMessage(result);
 
 	OpenMenu();
 

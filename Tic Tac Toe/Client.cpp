@@ -53,7 +53,7 @@ int Client::ClientSendMessage(std::string message)
 	}
 	std::cout << "Connection made" << std::endl;
 
-	int sendError = send(sockfd, PLAYER1 + message.c_str(), message.length(), 0);
+	int sendError = send(sockfd,  message.c_str(), message.length(), 0);
 	if (sendError == SOCKET_ERROR)
 	{
 		std::cout << "Failed to send message : " << WSAGetLastError() << std::endl;

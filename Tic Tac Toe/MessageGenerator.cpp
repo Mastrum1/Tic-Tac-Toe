@@ -10,20 +10,13 @@ MessageGenerator::~MessageGenerator()
 {
 }
 
-std::string MessageGenerator::GenerateWinResult(bool result)
+json& MessageGenerator::CreateMessage(int id, int cmd)
 {
-	m_Message["WinResult"] = result;
-	std::string message = m_Message.dump(); //convert json to string
-	return message;
+	m_Message.clear();
+	m_Message["Type"] = id;
+	m_Message["Cmd"] = cmd;
+
+	return m_Message;
 }
 
-std::string MessageGenerator::GenerateCoordinate(int x, int y)
-{
-	m_Message["Type"] = REQUEST_ID;
-	m_Message["Cmd"] = SET;
-
-	m_Message["Coordinate"] = { x, y };
-	std::string message = m_Message.dump(); //convert json to string
-	return message;
-}
 
