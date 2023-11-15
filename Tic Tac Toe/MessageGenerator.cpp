@@ -2,8 +2,8 @@
 
 MessageGenerator::MessageGenerator()
 {
-	m_Message["Coordinate"] = NULL;
-	m_Message["WinResult"] = NULL;
+	//m_Message["Coordinate"];// = NULL;
+	//m_Message["WinResult"] = NULL;
 }
 
 MessageGenerator::~MessageGenerator()

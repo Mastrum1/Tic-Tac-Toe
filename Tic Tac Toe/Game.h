@@ -17,7 +17,7 @@ public:
 	void BotPlay();
 	void OpenMenu();
 
-	void setMessages(MessageGenerator* messages) {_messages = messages;}
+	void setMessages(MessageGenerator messages) {_messages = messages;}
 private:
 		
 	sf::RenderWindow _window;
@@ -39,7 +39,7 @@ private:
 	bool _menuShowing = false;
 	bool _PlayerWon = false;
 
-	Client* _client;
-	MessageGenerator* _messages;
+	Client _client;
+	MessageGenerator _messages;
 };
 
