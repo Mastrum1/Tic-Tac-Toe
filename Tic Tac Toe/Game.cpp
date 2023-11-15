@@ -117,8 +117,7 @@ void Game::Handle()
 									auto mes = _messages.CreateMessage(SET, REQUEST_ID);
 									mes["x"] = i;
 									mes["y"] = j;
-									std::string message = mes.dump();
-									_client.ClientSendMessage(message);
+									_client.ClientSendMessage(_messages.FinalizeMessage(mes));
 									OnWin(CheckWin());
 
 									break;
@@ -275,8 +274,7 @@ void Game::OnWin(int checkwin)
 	_PlayerWon = true; 
 	auto mes = _messages.CreateMessage(SET, REQUEST_ID);
 	mes["WinCondition"] = _PlayerWon;
-	std::string message = mes.dump();
-	_client.ClientSendMessage(message);
+	_client.ClientSendMessage(_messages.FinalizeMessage(mes));
 
 	OpenMenu();
 
