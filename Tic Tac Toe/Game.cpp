@@ -119,8 +119,6 @@ void Game::Handle()
 									mes["y"] = j;
 									std::string message = mes.dump();
 									_client.ClientSendMessage(message);
-									
-
 									OnWin(CheckWin());
 
 									break;
@@ -279,8 +277,6 @@ void Game::OnWin(int checkwin)
 	mes["WinCondition"] = _PlayerWon;
 	std::string message = mes.dump();
 	_client.ClientSendMessage(message);
-	//std::string result = _messages.SetWinResult(_PlayerWon);
-	//_client.ClientSendMessage(result);
 
 	OpenMenu();
 
