@@ -17,7 +17,6 @@ public:
 	void BotPlay();
 	void OpenMenu();
 
-	void setClient(Client* client) {_client = client;}
 	void setMessages(MessageGenerator* messages) {_messages = messages;}
 private:
 		

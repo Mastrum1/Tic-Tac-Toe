@@ -73,6 +73,7 @@ void Game::Start()
 
 void Game::Reset()
 {
+	_PlayerWon = false;
 	for (size_t i = 0; i < 3; i++)
 	{
 		for (size_t j = 0; j < 3; j++)
@@ -125,6 +126,7 @@ void Game::Handle()
 
 									//Create coordinate message
 									_messages->GenerateCoordinate(i, j);
+									_client->InitClient();
 
 									OnWin(CheckWin());
 

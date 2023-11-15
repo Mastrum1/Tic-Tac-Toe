@@ -17,7 +17,7 @@ public:
 	~Client();
 
 	int InitClient();
-	int ClientSendMessage(json message);
+	int ClientSendMessage(std::string message);
 	void ClientRecieveMessage();
 	void setMessages(MessageGenerator* messages) { _messages = messages; }
 

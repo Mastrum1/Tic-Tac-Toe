@@ -36,11 +36,12 @@ int Client::InitClient()
 	_hints.ai_protocol = IPPROTO_TCP;
 
 	setMessages(_messages);
-	auto mes = _messages->GetMessage(); 
-	ClientSendMessage(mes);
+	auto mes = _messages->GetClientMessage();
+	std::string message = mes.dump(); 
+	ClientSendMessage(message);
 }
 
-int Client::ClientSendMessage(json message)
+int Client::ClientSendMessage(std::string message)
 {
 	_adressInfo = getaddrinfo(NULL, NULL, &_hints, &_result);
 
@@ -57,7 +58,7 @@ int Client::ClientSendMessage(json message)
 	}
 	std::cout << "Connection made" << std::endl;
 
-	int sendError = send(sockfd, message, strlen(message), 0);
+	int sendError = send(sockfd, message.c_str(), message.length(), 0);
 	if (sendError == SOCKET_ERROR)
 	{
 		std::cout << "Failed to send message : " << WSAGetLastError() << std::endl;

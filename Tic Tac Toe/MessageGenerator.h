@@ -10,7 +10,7 @@ public:
 	~MessageGenerator();
 	void GenerateWinResult(bool result);
 	void GenerateCoordinate(int x, int y);
-	json GetMessage() { return m_Message; };
+	json GetClientMessage() { return m_Message; };
 
 
 private:
