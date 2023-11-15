@@ -1,4 +1,4 @@
-#include "Server.h"
+﻿#include "Server.h"
 
 //____CLIENT 1 TURN______
 //Client1 joue
@@ -7,7 +7,9 @@
 //Send -> Client2 = Client1's Coord
 //Send -> Data = Grid + Client1's Coord
 
-int Server::Init() {
+int Server::Init()
+{
+	
 	WSADATA wsaData;
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
@@ -105,3 +107,4 @@ retry:
 
 	return 0;
 }
+

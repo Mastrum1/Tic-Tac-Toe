@@ -3,23 +3,25 @@
 #include <WS2tcpip.h>
 #include <iostream>
 #include <string>
+#include <Windows.h>
 
 #pragma comment (lib, "Ws2_32.lib")
 
 #define PORT = 31350;
 #define LOCALHOST = 127.0.0.1;
+#define WM_SOCKET WM_USER + 1
 
 class Server
 {
 public:
 
+	int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 	int Init();
+
 	int Listener();
 
 	sockaddr_in addr;
 	socklen_t addrlen = sizeof(addr);
-
-
 private:
 
 	int _server_fd, _new_socket;
@@ -32,3 +34,4 @@ private:
 
 };
 
+BOOL ServerWinProc(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam);
