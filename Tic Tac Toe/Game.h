@@ -1,5 +1,7 @@
 #pragma once
-#include "SFML/Graphics.hpp"
+#include "pch.h"
+#include "Client.h"
+#include "MessageGenerator.h"
 
 class Game
 {
@@ -14,6 +16,8 @@ public:
 	void OnWin(int checkwin);
 	void BotPlay();
 	void OpenMenu();
+
+	void setMessages(MessageGenerator messages) {_messages = messages;}
 private:
 		
 	sf::RenderWindow _window;
@@ -33,5 +37,9 @@ private:
 	int _boxAssinged[3][3];
 
 	bool _menuShowing = false;
+	bool _PlayerWon = false;
+
+	Client _client;
+	MessageGenerator _messages;
 };
 

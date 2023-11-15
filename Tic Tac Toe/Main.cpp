@@ -1,6 +1,6 @@
-#include "SFML/Window.hpp"
-#include "SFML/Graphics.hpp"
+#include "pch.h"
 #include "Game.h"
+#include "Client.h"
 
 int main() {
 	Game game;
