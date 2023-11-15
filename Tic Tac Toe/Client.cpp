@@ -34,11 +34,6 @@ int Client::InitClient()
 	_hints.ai_family = AF_INET;
 	_hints.ai_socktype = SOCK_STREAM;
 	_hints.ai_protocol = IPPROTO_TCP;
-
-	setMessages(_messages);
-	auto mes = _messages->GetClientMessage();
-	std::string message = mes.dump(); 
-	ClientSendMessage(message);
 }
 
 int Client::ClientSendMessage(std::string message)

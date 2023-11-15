@@ -34,6 +34,7 @@ void Game::Start()
 {
 	_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Tic Tac Toe");
 	_window.setFramerateLimit(30);
+	_client->InitClient();
 
 	for (size_t i = 0; i < 3; i++)
 	{
@@ -126,7 +127,10 @@ void Game::Handle()
 
 									//Create coordinate message
 									_messages->GenerateCoordinate(i, j);
-									_client->InitClient();
+									setMessages(_messages);
+									auto mes = _messages->GetClientMessage();
+									std::string message = mes.dump(); //convert string to const* char
+									_client->ClientSendMessage(message);
 
 									OnWin(CheckWin());
 
