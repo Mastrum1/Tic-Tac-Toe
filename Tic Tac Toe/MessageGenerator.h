@@ -8,8 +8,8 @@ class MessageGenerator
 public:
 	MessageGenerator();
 	~MessageGenerator();
-	void GenerateWinResult(bool result);
-	void GenerateCoordinate(int x, int y);
+	std::string GenerateWinResult(bool result);
+	std::string GenerateCoordinate(int x, int y);
 	json GetClientMessage() { return m_Message; };
 
 
