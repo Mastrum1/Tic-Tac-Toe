@@ -1,6 +1,6 @@
 #pragma once
-#include "pch.h"
-#include "MessageGenerator.h"
+#include "pch/pch.h"
+#include "Messages/MessageGenerator.h"
 
 #pragma comment (lib, "Ws2_32.lib")
 

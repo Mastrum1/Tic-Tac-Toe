@@ -1,7 +1,7 @@
 #pragma once
-#include "pch.h"
-#include "Client.h"
-#include "MessageGenerator.h"
+#include "pch/pch.h"
+#include "Client/Client.h"
+#include "Client/Messages/MessageGenerator.h"
 
 class Game
 {
