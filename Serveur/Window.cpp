@@ -66,8 +66,11 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     OutputDebugString(L"\nRead :\n");
                     OutputDebugStringA(_buffer);
                     OutputDebugString(L"\n");
+                    
+                    send(hClient, "PD", 2, 0);
                     return 0;
                 }
+
                 case FD_CLOSE:
                 {
                     OutputDebugString(L"\nSocket closed\n");
