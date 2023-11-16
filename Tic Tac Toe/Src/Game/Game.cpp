@@ -1,18 +1,5 @@
 #include "Game.h"
-#include <iostream>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 800
-
-// state of individual square
-#define EMPTY 0
-#define PLAYER1 1
-#define PLAYER2 2
-
-// Result of Game
-#define PLAYER1_WIN 3
-#define PLAYER2_WIN 4
-#define DRAW 5
 
 Game::Game()
 {
@@ -34,6 +21,7 @@ void Game::Start()
 {
 	_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Tic Tac Toe");
 	_window.setFramerateLimit(30);
+	_client.InitClient();
 
 	for (size_t i = 0; i < 3; i++)
 	{
@@ -73,6 +61,7 @@ void Game::Start()
 
 void Game::Reset()
 {
+	_PlayerWon = false;
 	for (size_t i = 0; i < 3; i++)
 	{
 		for (size_t j = 0; j < 3; j++)
@@ -123,6 +112,11 @@ void Game::Handle()
 
 									_gridPieces[i][j].setTexture(&_xTex);
 
+									//Create coordinate message
+									auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+									mes["x"] = i;
+									mes["y"] = j;
+									_client.ClientSendMessage(_messages.FinalizeMessage(mes));
 									OnWin(CheckWin());
 
 									break;
@@ -276,6 +270,10 @@ void Game::OnWin(int checkwin)
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
 	_menuShowing = true;
+	_PlayerWon = true; 
+	auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+	mes["WinCondition"] = _PlayerWon;
+	_client.ClientSendMessage(_messages.FinalizeMessage(mes));
 
 	OpenMenu();
 
