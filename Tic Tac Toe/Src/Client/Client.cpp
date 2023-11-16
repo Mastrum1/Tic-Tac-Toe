@@ -34,10 +34,7 @@ int Client::InitClient()
 	_hints.ai_family = AF_INET;
 	_hints.ai_socktype = SOCK_STREAM;
 	_hints.ai_protocol = IPPROTO_TCP;
-}
 
-int Client::ClientSendMessage(std::string message)
-{
 	_adressInfo = getaddrinfo(NULL, NULL, &_hints, &_result);
 
 	if (_adressInfo <= 0)
@@ -52,7 +49,10 @@ int Client::ClientSendMessage(std::string message)
 		return -1;
 	}
 	std::cout << "Connection made" << std::endl;
+}
 
+int Client::ClientSendMessage(std::string message)
+{
 	int sendError = send(sockfd,  message.c_str(), message.length(), 0);
 	if (sendError == SOCKET_ERROR)
 	{
@@ -68,9 +68,8 @@ void Client::ClientRecieveMessage()
 {
 	valread = recv(sockfd, buffer, 1024 - 1, 0);
 	std::cout << valread << std::endl;
-	std::cout << "Message reçu : " << buffer << std::endl;
+	std::cout << "Message reï¿½u : " << buffer << std::endl;
 
-	WSACleanup();
 }
 
 

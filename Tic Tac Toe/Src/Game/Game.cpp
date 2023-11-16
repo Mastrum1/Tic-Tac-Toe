@@ -65,6 +65,7 @@ void Game::Reset()
 {
 	_client.CloseSocket();
 	_PlayerWon = false;
+	_client.CloseSocket();
 	for (size_t row = 0; row < 3; row++)
 	{
 		for (size_t col = 0; col < 3; col++)
