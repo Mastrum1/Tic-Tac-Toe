@@ -2,6 +2,7 @@
 #include "pch/pch.h"
 #include "Client/Client.h"
 #include "Client/Messages/MessageGenerator.h"
+#include "Menus/MenuManager.h"
 
 class Game
 {
@@ -16,7 +17,6 @@ public:
 	int CheckWin();
 	void OnWin(int checkwin);
 	void BotPlay();
-	void OpenMenu();
 
 	void setMessages(MessageGenerator messages) {_messages = messages;}
 private:
@@ -31,16 +31,14 @@ private:
 
 	sf::Font _arial;
 	sf::Text _gameMessage;
-	sf::FloatRect _gameMenu;
-
 
 	sf::RectangleShape _gridPieces[3][3];
 	int _boxAssinged[3][3];
 
-	bool _menuShowing = false;
 	bool _PlayerWon = false;
 
 	Client _client;
 	MessageGenerator _messages;
+	MenuManager _menu;
 };
 

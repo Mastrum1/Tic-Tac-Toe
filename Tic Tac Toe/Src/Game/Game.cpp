@@ -21,6 +21,7 @@ void Game::Start()
 {
 	_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Tic Tac Toe");
 	_window.setFramerateLimit(30);
+
 	_client.InitClient();
 
 	for (size_t row = 0; row < 3; row++)
@@ -39,8 +40,9 @@ void Game::Start()
 
 		_window.clear(sf::Color::White);
 
-		if (_menuShowing)
+		if (_menu.IsMenuShowing())
 		{
+			//_window.draw(_menu.ShowMenu(_gameMessage));
 			_window.draw(_gameMessage);
 		}
 		else
@@ -90,11 +92,11 @@ void Game::Handle()
 		{
 			if (e.mouseButton.button == sf::Mouse::Left)
 			{
-				if (_menuShowing)
+				if (_menu.IsMenuShowing())
 				{
 					if (_gameMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
 					{
-						_menuShowing = false;
+						_menu.HideMenu();
 						break;
 					}
 				}
@@ -129,10 +131,10 @@ void Game::UserPlay()
 					_gridPieces[row][col].setTexture(&_xTex);
 
 					//Create coordinate message
-					/*auto mes = _messages.CreateMessage(SET, REQUEST_ID);
-					mes["x"] = row;
-					mes["y"] = col;
-					_client.ClientSendMessage(_messages.FinalizeMessage(mes));*/
+					auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+					mes["x"] = col;
+					mes["y"] = row;
+					_client.ClientSendMessage(_messages.FinalizeMessage(mes));
 					OnWin(CheckWin());
 				}
 			}
@@ -196,13 +198,11 @@ void Game::OnWin(int checkwin)
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("Player 2 Wins", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
-	_menuShowing = true;
+	_menu.ShowMenu(_gameMessage);
 	_PlayerWon = true; 
-	auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+	/*auto mes = _messages.CreateMessage(SET, REQUEST_ID);
 	mes["WinCondition"] = _PlayerWon;
-	_client.ClientSendMessage(_messages.FinalizeMessage(mes));
-
-	OpenMenu();
+	_client.ClientSendMessage(_messages.FinalizeMessage(mes));*/
 
 	Reset();
 
@@ -223,13 +223,4 @@ void Game::BotPlay()
 			}
 		}
 	}
-}
-
-void Game::OpenMenu()
-{
-	_gameMenu = _gameMessage.getGlobalBounds();
-
-	_gameMessage.setOrigin(_gameMenu.left + _gameMenu.width / 2.0f, _gameMenu.top + _gameMenu.height / 2.0f);
-	_gameMessage.setPosition(sf::Vector2f(400, 400));
-	_gameMessage.setFillColor(sf::Color::Black);
 }
