@@ -12,6 +12,7 @@ public:
 	void Start();
 	void Reset();
 	void Handle();
+	void UserPlay();
 	int CheckWin();
 	void OnWin(int checkwin);
 	void BotPlay();
