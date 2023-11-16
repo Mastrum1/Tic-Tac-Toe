@@ -28,7 +28,7 @@ int Client::InitClient()
 	}
 
 	_serverAdress.sin_family = AF_INET;
-	_serverAdress.sin_port = htons(80);
+	_serverAdress.sin_port = htons(PORT);
 	inet_pton(AF_INET, IP_ADRESS, &_serverAdress.sin_addr);
 
 	_hints.ai_family = AF_INET;

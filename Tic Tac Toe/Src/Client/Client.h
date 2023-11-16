@@ -5,8 +5,8 @@
 #pragma comment (lib, "Ws2_32.lib")
 
 
-#define IP_ADRESS "142.251.168.101"
-#define PORT "80"
+#define IP_ADRESS "10.1.170.18"
+#define PORT 31350
 
 class Client
 {
