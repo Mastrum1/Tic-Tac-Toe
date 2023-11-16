@@ -1,7 +1,8 @@
 #pragma once
 #include "pch/pch.h"
+#include "MainMenu.h"
 
-class MenuManager
+class MenuManager : public MainMenu
 {
 public:
 	MenuManager();
