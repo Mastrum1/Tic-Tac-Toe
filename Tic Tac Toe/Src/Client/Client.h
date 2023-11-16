@@ -18,7 +18,7 @@ public:
 	int ClientSendMessage(std::string message);
 	void ClientRecieveMessage();
 	void setMessages(MessageGenerator* messages) { _messages = messages; }
-
+	void CloseSocket() { closesocket(sockfd); WSACleanup(); };
 private:
 	
 	//Server Connection
