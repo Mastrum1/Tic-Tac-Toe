@@ -5,8 +5,8 @@
 #pragma comment (lib, "Ws2_32.lib")
 
 
-#define IP_ADRESS "142.251.168.101"
-#define PORT "80"
+#define IP_ADRESS "10.1.170.18"
+#define PORT 31350
 
 class Client
 {
@@ -18,7 +18,7 @@ public:
 	int ClientSendMessage(std::string message);
 	void ClientRecieveMessage();
 	void setMessages(MessageGenerator* messages) { _messages = messages; }
-
+	void CloseSocket() { closesocket(sockfd); WSACleanup(); };
 private:
 	
 	//Server Connection

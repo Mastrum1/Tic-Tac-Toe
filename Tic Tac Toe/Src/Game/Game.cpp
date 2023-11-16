@@ -21,15 +21,16 @@ void Game::Start()
 {
 	_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Tic Tac Toe");
 	_window.setFramerateLimit(30);
+
 	_client.InitClient();
 
-	for (size_t i = 0; i < 3; i++)
+	for (size_t row = 0; row < 3; row++)
 	{
-		for (size_t j = 0; j < 3; j++)
+		for (size_t col = 0; col < 3; col++)
 		{
-			_gridPieces[i][j].setSize(sf::Vector2f(150, 150));
-			_gridPieces[i][j].setPosition(sf::Vector2f(110 + j * 210, 110 + i * 215));
-			_boxAssinged[i][j] = EMPTY;
+			_gridPieces[row][col].setSize(sf::Vector2f(150, 150));
+			_gridPieces[row][col].setPosition(sf::Vector2f(110 + col * 210, 110 + row * 215));
+			_boxAssinged[row][col] = EMPTY;
 		}
 	}
 
@@ -39,19 +40,20 @@ void Game::Start()
 
 		_window.clear(sf::Color::White);
 
-		if (_menuShowing)
+		if (_menu.IsMenuShowing())
 		{
+			//_window.draw(_menu.ShowMenu(_gameMessage));
 			_window.draw(_gameMessage);
 		}
 		else
 		{
 			_window.draw(_gridSprite);
 
-			for (size_t i = 0; i < 3; i++)
+			for (size_t row = 0; row < 3; row++)
 			{
-				for (size_t j = 0; j < 3; j++)
+				for (size_t col = 0; col < 3; col++)
 				{
-					_window.draw(_gridPieces[i][j]);
+					_window.draw(_gridPieces[row][col]);
 				}
 			}
 		}
@@ -62,12 +64,13 @@ void Game::Start()
 void Game::Reset()
 {
 	_PlayerWon = false;
-	for (size_t i = 0; i < 3; i++)
+	_client.CloseSocket();
+	for (size_t row = 0; row < 3; row++)
 	{
-		for (size_t j = 0; j < 3; j++)
+		for (size_t col = 0; col < 3; col++)
 		{
-			_boxAssinged[i][j] = EMPTY;
-			_gridPieces[i][j].setTexture(NULL);
+			_boxAssinged[row][col] = EMPTY;
+			_gridPieces[row][col].setTexture(NULL);
 		}
 	}
 	return;
@@ -90,40 +93,18 @@ void Game::Handle()
 		{
 			if (e.mouseButton.button == sf::Mouse::Left)
 			{
-				if (_menuShowing)
+				if (_menu.IsMenuShowing())
 				{
 					if (_gameMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
 					{
-						_menuShowing = false;
+						_menu.HideMenu();
 						break;
 					}
 				}
 				else
 				{
-					for (size_t i = 0; i < 3; i++)
-					{
-						for (size_t j = 0; j < 3; j++)
-						{
-							if (_gridPieces[i][j].getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
-							{
-								if (_boxAssinged[i][j] == EMPTY)
-								{
-									_boxAssinged[i][j] = PLAYER1;
-
-									_gridPieces[i][j].setTexture(&_xTex);
-
-									//Create coordinate message
-									auto mes = _messages.CreateMessage(SET, REQUEST_ID);
-									mes["x"] = i;
-									mes["y"] = j;
-									_client.ClientSendMessage(_messages.FinalizeMessage(mes));
-									OnWin(CheckWin());
-
-									break;
-								}
-							}
-						}
-					}
+					UserPlay();
+					break;
 				}
 			}
 			break;
@@ -136,122 +117,71 @@ void Game::Handle()
 	}
 }
 
+void Game::UserPlay()
+{
+	for (size_t row = 0; row < 3; row++)
+	{
+		for (size_t col = 0; col < 3; col++)
+		{
+			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
+			{
+				if (_boxAssinged[row][col] == EMPTY)
+				{
+					_boxAssinged[row][col] = PLAYER1;
+
+					_gridPieces[row][col].setTexture(&_xTex);
+
+					//Create coordinate message
+					auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+					mes["x"] = col;
+					mes["y"] = row;
+					_client.ClientSendMessage(_messages.FinalizeMessage(mes));
+					OnWin(CheckWin());
+				}
+			}
+		}
+	}
+}
+
 int Game::CheckWin()
 {
-	/* Box id in grid i = row, j = column
-	
+	/* 
 		column | column | column
 	row  0/0   |  0/1   |  0/2
 	row  1/0   |  1/1   |  1/2
 	row  2/0   |  2/1   |  2/2
 	*/
 
-	int sumPlayer1;
-	int sumPlayer2;
-
-	// Check win in rows [i][j]
 	for (size_t i = 0; i < 3; i++)
 	{
-		sumPlayer1 = 0;
-		sumPlayer2 = 0;
-		for (size_t j = 0; j < 3; j++)
-		{
-			if (_boxAssinged[i][j] == PLAYER1)
-			{
-				sumPlayer1++;
-			}if (_boxAssinged[i][j] == PLAYER2)
-			{
-				sumPlayer2++;
-			}
-		}
-		if (sumPlayer1 == 3)
+		// check rows
+		if (_boxAssinged[i][0] == PLAYER1 && _boxAssinged[i][1] == PLAYER1 && _boxAssinged[i][2] == PLAYER1)
 		{
 			return PLAYER1_WIN;
 		}
-		if (sumPlayer2 == 3)
-		{
-			return PLAYER2_WIN;
-		}
-	}
-
-	// Check win for column [j][i]
-	for (size_t i = 0; i < 3; i++)
-	{
-		sumPlayer1 = 0;
-		sumPlayer2 = 0;
-		for (size_t j = 0; j < 3; j++)
-		{
-			if (_boxAssinged[j][i] == PLAYER1)
-			{
-				sumPlayer1++;
-			}if (_boxAssinged[j][i] == PLAYER2)
-			{
-				sumPlayer2++;
-			}
-		}
-		if (sumPlayer1 == 3)
+		// check clolumns
+		if (_boxAssinged[0][i] == PLAYER1 && _boxAssinged[1][i] == PLAYER1 && _boxAssinged[2][i] == PLAYER1)
 		{
 			return PLAYER1_WIN;
 		}
-		if (sumPlayer2 == 3)
+		// check left-right diagonal
+		if (_boxAssinged[0][0] == PLAYER1 && _boxAssinged[1][1] == PLAYER1 && _boxAssinged[2][2] == PLAYER1)
 		{
-			return PLAYER2_WIN;
+			return PLAYER1_WIN;
+		}
+		// check right-left diagonal
+		if (_boxAssinged[0][2] == PLAYER1 && _boxAssinged[1][1] == PLAYER1 && _boxAssinged[2][0] == PLAYER1)
+		{
+			return PLAYER1_WIN;
 		}
 	}
 
-	sumPlayer1 = 0;
-	sumPlayer2 = 0;
-
-	// Check for left-right diagonal
-	for (size_t i = 0; i < 3; i++)
+	// Check if still able to play
+	for (size_t row = 0; row < 3; row++)
 	{
-
-		if (_boxAssinged[i][i] == PLAYER1)
+		for (size_t col = 0; col < 3; col++)
 		{
-			sumPlayer1++;
-		}if (_boxAssinged[i][i] == PLAYER2)
-		{
-			sumPlayer2++;
-		}
-	}
-	if (sumPlayer1 == 3)
-	{
-		return PLAYER1_WIN;
-	}
-	if (sumPlayer2 == 3)
-	{
-		return PLAYER2_WIN;
-	}
-
-	sumPlayer1 = 0;
-	sumPlayer2 = 0;
-	// Check for right-left diagonal
-	for (size_t i = 0; i < 3; i++)
-	{
-
-		if (_boxAssinged[i][2-i] == PLAYER1)
-		{
-			sumPlayer1++;
-		}if (_boxAssinged[i][2-i] == PLAYER2)
-		{
-			sumPlayer2++;
-		}
-	}
-	if (sumPlayer1 == 3)
-	{
-		return PLAYER1_WIN;
-	}
-	if (sumPlayer2 == 3)
-	{
-		return PLAYER2_WIN;
-	}
-
-	// Check if 
-	for (size_t i = 0; i < 3; i++)
-	{
-		for (size_t j = 0; j < 3; j++)
-		{
-			if (_boxAssinged[i][j] == EMPTY)
+			if (_boxAssinged[row][col] == EMPTY)
 			{
 				return EMPTY;
 			}
@@ -269,13 +199,11 @@ void Game::OnWin(int checkwin)
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("Player 2 Wins", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
-	_menuShowing = true;
+	_menu.ShowMenu(_gameMessage);
 	_PlayerWon = true; 
-	auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+	/*auto mes = _messages.CreateMessage(SET, REQUEST_ID);
 	mes["WinCondition"] = _PlayerWon;
-	_client.ClientSendMessage(_messages.FinalizeMessage(mes));
-
-	OpenMenu();
+	_client.ClientSendMessage(_messages.FinalizeMessage(mes));*/
 
 	Reset();
 
@@ -296,13 +224,4 @@ void Game::BotPlay()
 			}
 		}
 	}
-}
-
-void Game::OpenMenu()
-{
-	_gameMenu = _gameMessage.getGlobalBounds();
-
-	_gameMessage.setOrigin(_gameMenu.left + _gameMenu.width / 2.0f, _gameMenu.top + _gameMenu.height / 2.0f);
-	_gameMessage.setPosition(sf::Vector2f(400, 400));
-	_gameMessage.setFillColor(sf::Color::Black);
 }
