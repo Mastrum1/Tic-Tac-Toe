@@ -23,7 +23,7 @@ Window::Window(HINSTANCE hInstance)
 
     if (!wnd)
     {
-        OutputDebugString(L"Window creation failed");
+        OutputDebugString(L"\nWindow creation failed\n");
     }
 }
 
@@ -49,19 +49,20 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         switch (WSAGETSELECTEVENT(lParam))
         {
         case FD_ACCEPT:
-            OutputDebugString(L"Accepting..");
+            OutputDebugString(L"\nConnexion accepted\n");
             Accept = accept(wParam, NULL, NULL);
             WSAAsyncSelect(Accept, hwnd, WM_SOCKET, FD_READ | FD_WRITE | FD_CLOSE);
             return 0;
 
         case FD_READ:
+            OutputDebugString(L"\nRead :\n");
             return 0;
 
         case FD_WRITE:
             return 0;
 
         case FD_CLOSE:
-            OutputDebugString(L"Ceci est un debug");
+            OutputDebugString(L"\nSocket closed\n");
             closesocket((SOCKET)wParam);
 
             return 0;

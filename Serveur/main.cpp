@@ -11,14 +11,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
-        OutputDebugString(L"WAS EXPLODED");
+        OutputDebugString(L"\nWAS EXPLODED\n");
 		return -1;
 	}	
 
     int Listen = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (Listen == INVALID_SOCKET)
     {
-        OutputDebugString(L"LISTEN EXPLODED");
+        OutputDebugString(L"\nLISTEN EXPLODED\n");
         return 1;
     }
 
@@ -28,20 +28,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     if (WSAAsyncSelect(Listen, window.wnd, WM_SOCKET, FD_ACCEPT | FD_CLOSE) != 0)
     {
-        OutputDebugString(L"WSAAsync EXPLODED");
+        OutputDebugString(L"\nWSAAsync EXPLODED\n");
         return 1;
     }
 
     if (bind(Listen, (PSOCKADDR)&InternetAddr, sizeof(InternetAddr)) == SOCKET_ERROR)
     {
-        OutputDebugString(L"Bind EXPLOSED");
+        OutputDebugString(L"\nBind EXPLOSED\n");
         return 1;
     }
 
 
     if (listen(Listen, 5))
     {
-        OutputDebugString(L"listen EXPLODED");
+        OutputDebugString(L"\nlisten EXPLODED\n");
         return 1;
     }
 
@@ -50,18 +50,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     {
         if (Ret == -1)
         {
-            OutputDebugString(L"in While");
+            OutputDebugString(L"\nin While\n");
             return 1;
         }
 
         else 
         {
-            OutputDebugString(L"in Else");
+            OutputDebugString(L"\nInitialization suceeded\n");
         }
 
-        OutputDebugString(L"Tranlating");
+        OutputDebugString(L"\nTranlating\n");
         TranslateMessage(&msg);
-        OutputDebugString(L"Dispatching");
+        OutputDebugString(L"\nDispatching\n");
         DispatchMessage(&msg);
     }
 }
