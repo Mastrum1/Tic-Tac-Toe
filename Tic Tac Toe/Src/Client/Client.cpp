@@ -70,8 +70,7 @@ void Client::ClientRecieveMessage()
 	std::cout << valread << std::endl;
 	std::cout << "Message reçu : " << buffer << std::endl;
 
-	//Close socket
-	closesocket(sockfd);
 	WSACleanup();
 }
+
 
