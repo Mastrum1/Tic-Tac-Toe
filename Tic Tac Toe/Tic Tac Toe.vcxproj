@@ -146,6 +146,7 @@
     <ClInclude Include="Src\Client\Client.h" />
     <ClInclude Include="Src\Client\Messages\MessageGenerator.h" />
     <ClInclude Include="Src\Game\Game.h" />
+    <ClInclude Include="Src\Game\Menus\MenuManager.h" />
     <ClInclude Include="Src\pch\pch.h" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClCompile Include="Src\Client\Client.cpp" />
     <ClCompile Include="Src\Client\Messages\MessageGenerator.cpp" />
     <ClCompile Include="Src\Game\Game.cpp" />
+    <ClCompile Include="Src\Game\Menus\MenuManager.cpp" />
     <ClCompile Include="Src\Main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
