@@ -7,11 +7,13 @@
 class Window
 {
 public:
-	Window(HINSTANCE hInstance);
+	Window(HINSTANCE hInstance);	
 	virtual ~Window();
-
+	
 	static LRESULT CALLBACK ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
 	HWND wnd;
+	HWND GetWnd();
+	int* listen;
+
 };
 

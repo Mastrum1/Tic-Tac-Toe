@@ -19,7 +19,10 @@ Window::Window(HINSTANCE hInstance)
 
     RegisterClassEx(&wc);
 
+   // wnd = CreateWindow(CLASS_NAME, L"", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, 0, 0, hInstance, 0);
     wnd = CreateWindow(CLASS_NAME, L"", 0, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, 0, 0, hInstance, 0);
+
+
     if (!wnd)
     {
         OutputDebugString(L"\nWindow creation failed\n");
@@ -51,30 +54,28 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
             switch (WSAGETSELECTEVENT(lParam))
             {
-                case FD_ACCEPT:
-                {
-                    OutputDebugString(L"\nConnexion accepted\n");
-                    Accept = accept(wParam, NULL, NULL);
-                    WSAAsyncSelect(Accept, hwnd, WM_SOCKET, FD_READ | FD_CLOSE);
-                    return 0;
-                }
+            case FD_ACCEPT:
+                OutputDebugString(L"\nConnexion accepted\n");
+                Accept = accept(wParam, NULL, NULL);
+                WSAAsyncSelect(Accept, hwnd, WM_SOCKET, FD_READ | FD_CLOSE);
+                return 0;
 
-                case FD_READ: 
-                {
-                    int byteNum = recv(hClient, _buffer, 1024 - 1, 0);
-                    _buffer[byteNum] = 0;
-                    OutputDebugString(L"\nRead :\n");
-                    OutputDebugStringA(_buffer);
-                    OutputDebugString(L"\n");
-                    return 0;
-                }
-                case FD_CLOSE:
-                {
-                    OutputDebugString(L"\nSocket closed\n");
-                    closesocket((SOCKET)wParam);
+            case FD_READ: 
+            {
+                int nombreOctet = recv(hClient, _buffer, 1024 - 1, 0);
+                _buffer[nombreOctet] = 0;
+                OutputDebugString(L"\nRead :\n");
+                OutputDebugStringA(_buffer);
+                OutputDebugString(L"\n");
 
-                    return 0;
-                }
+
+                return 0;
+            }
+            case FD_CLOSE:
+                OutputDebugString(L"\nSocket closed\n");
+                closesocket((SOCKET)wParam);
+
+                return 0;
             }
 
             return 0;
