@@ -149,6 +149,7 @@
     <ClInclude Include="Src\Game\Menus\MainMenu.h" />
     <ClInclude Include="Src\Game\Menus\MenuManager.h" />
     <ClInclude Include="Src\pch\pch.h" />
+    <ClInclude Include="Src\Client\Messages\WindowMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tic Tac Toe.rc" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Src\Game\Menus\MainMenu.cpp" />
     <ClCompile Include="Src\Game\Menus\MenuManager.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Client\Messages\WindowMessage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

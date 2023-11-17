@@ -7,6 +7,7 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <string>
+#include <Windows.h>
 
 //for screen size
 #define SCREEN_WIDTH 800

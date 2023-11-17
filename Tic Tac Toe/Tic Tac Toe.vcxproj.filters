@@ -69,6 +69,9 @@
     <ClInclude Include="Src\Game\Menus\MainMenu.h">
       <Filter>Header Files\Game\Menus</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Client\Messages\WindowMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tic Tac Toe.rc">
@@ -93,6 +96,9 @@
     </ClCompile>
     <ClCompile Include="Src\Game\Menus\MainMenu.cpp">
       <Filter>Source Files\Game\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Client\Messages\WindowMessage.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

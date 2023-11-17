@@ -3,6 +3,7 @@
 #include "Client/Client.h"
 #include "Client/Messages/MessageGenerator.h"
 #include "Menus/MenuManager.h"
+#include "Client/Messages/WindowMessage.h"
 
 class Game
 {
@@ -40,5 +41,8 @@ private:
 	Client _client;
 	MessageGenerator _messages;
 	MenuManager _menu;
+
+
+	WindowMessage _windowMessage;
 };
 

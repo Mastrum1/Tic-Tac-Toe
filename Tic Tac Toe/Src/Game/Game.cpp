@@ -11,6 +11,7 @@ Game::Game()
 	_gridSprite.setTexture(_grid);
 	_gridSprite.setPosition(50, 50);
 	_gridSprite.setScale(sf::Vector2f(3.5, 3.5));
+	
 }
 
 Game::~Game()
@@ -38,6 +39,7 @@ void Game::Start()
 	{
 		Handle();
 
+		_windowMessage.UpdateWindowMessage();
 		_window.clear(sf::Color::White);
 
 		if (_menu.IsMenuShowing())
