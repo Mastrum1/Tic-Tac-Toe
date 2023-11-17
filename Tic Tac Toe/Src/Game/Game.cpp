@@ -19,9 +19,6 @@ Game::~Game()
 
 void Game::Start()
 {
-	_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Tic Tac Toe");
-	_window.setFramerateLimit(30);
-
 	_client.InitClient();
 
 	for (size_t row = 0; row < 3; row++)
@@ -34,30 +31,30 @@ void Game::Start()
 		}
 	}
 
-	while (_window.isOpen()) 
+	while (_window.GetWindow().isOpen()) 
 	{
 		Handle();
 
-		_window.clear(sf::Color::White);
+		_window.GetWindow().clear(sf::Color::White);
 
 		if (_menu.IsMenuShowing())
 		{
-			//_window.draw(_menu.ShowMenu(_gameMessage));
-			_window.draw(_gameMessage);
+			_window.GetWindow().draw(_menu.getMainMessage());
+			_window.GetWindow().draw(_menu.getPlayMessage());
 		}
 		else
 		{
-			_window.draw(_gridSprite);
+			_window.GetWindow().draw(_gridSprite);
 
 			for (size_t row = 0; row < 3; row++)
 			{
 				for (size_t col = 0; col < 3; col++)
 				{
-					_window.draw(_gridPieces[row][col]);
+					_window.GetWindow().draw(_gridPieces[row][col]);
 				}
 			}
 		}
-		_window.display();
+		_window.GetWindow().display();
 	}
 }
 
@@ -81,13 +78,13 @@ void Game::Handle()
 {
 	sf::Event e;
 
-	while (_window.pollEvent(e))
+	while (_window.GetWindow().pollEvent(e))
 	{
 		switch (e.type)
 		{
 		case sf::Event::Closed:
 		{
-			_window.close();
+			_window.GetWindow().close();
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
@@ -96,7 +93,7 @@ void Game::Handle()
 			{
 				if (_menu.IsMenuShowing())
 				{
-					if (_gameMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
+					if (_menu.getPlayMessage().getGlobalBounds().contains(sf::Mouse::getPosition(_window.GetWindow()).x, sf::Mouse::getPosition(_window.GetWindow()).y))
 					{
 						_menu.HideMenu();
 						break;
@@ -124,7 +121,7 @@ void Game::UserPlay()
 	{
 		for (size_t col = 0; col < 3; col++)
 		{
-			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
+			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window.GetWindow()).x, sf::Mouse::getPosition(_window.GetWindow()).y))
 			{
 				if (_boxAssinged[row][col] == EMPTY)
 				{
@@ -200,7 +197,7 @@ void Game::OnWin(int checkwin)
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("Player 2 Wins", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
-	_menu.ShowMenu(_gameMessage);
+	//_menu.ShowMainMenu(_gameMessage);
 	_PlayerWon = true; 
 	/*auto mes = _messages.CreateMessage(SET, REQUEST_ID);
 	mes["WinCondition"] = _PlayerWon;

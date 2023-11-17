@@ -146,6 +146,7 @@
     <ClInclude Include="Src\Client\Client.h" />
     <ClInclude Include="Src\Client\Messages\MessageGenerator.h" />
     <ClInclude Include="Src\Game\Game.h" />
+    <ClInclude Include="Src\Game\GameWindow.h" />
     <ClInclude Include="Src\Game\Menus\MainMenu.h" />
     <ClInclude Include="Src\Game\Menus\MenuManager.h" />
     <ClInclude Include="Src\pch\pch.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Src\Client\Client.cpp" />
     <ClCompile Include="Src\Client\Messages\MessageGenerator.cpp" />
     <ClCompile Include="Src\Game\Game.cpp" />
+    <ClCompile Include="Src\Game\GameWindow.cpp" />
     <ClCompile Include="Src\Game\Menus\MainMenu.cpp" />
     <ClCompile Include="Src\Game\Menus\MenuManager.cpp" />
     <ClCompile Include="Src\Main.cpp" />

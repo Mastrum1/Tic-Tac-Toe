@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Window.h"
 
 Window::Window(HINSTANCE hInstance)
 {
@@ -25,10 +26,6 @@ Window::Window(HINSTANCE hInstance)
     {
         OutputDebugString(L"\nWindow creation failed\n");
     }
-}
-
-Window::~Window()
-{
 }
 
 LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
