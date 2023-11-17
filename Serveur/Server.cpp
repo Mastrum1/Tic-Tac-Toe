@@ -1,10 +1,6 @@
 ﻿#include "Server.h"
-//____CLIENT 1 TURN______
-//Client1 joue
-//Read -> ID Joueur
-//Read -> Coord
-//Send -> Client2 = Client1's Coord
-//Send -> Data = Grid + Client1's Coord
+
+using json = nlohmann::json;
 
 Server::Server()
 {
@@ -79,12 +75,17 @@ void Server::CloseConnexion(SOCKET sock)
 
 void Server::Read()
 {
+    OutputDebugString(L"\nReading..\n");
     int byteNum = recv(hClient, _buffer, 1024 - 1, 0);
     _buffer[byteNum] = 0;
-    OutputDebugString(L"\nRead :\n");
-    OutputDebugStringA(_buffer);
-    OutputDebugString(L"\n");
-
+    json data = json::parse(_buffer);
+    
+    if (data["Cmd"] == REQUEST_ID) {
+        if (data["Type"] == SET) {
+            grid[(int)data["x"]][(int)data["y"]] = 1;
+        }
+    }
+    OutputDebugString(L"\nCompleted\n");
     send(hClient, "Ok", 2, 0);
 }
 

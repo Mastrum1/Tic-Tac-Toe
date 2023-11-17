@@ -1,6 +1,5 @@
 ﻿#include "Server.h"
 #include "Window.h"
-#include "main.h"
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -22,7 +21,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         else 
         {
-
         }
 
         TranslateMessage(&msg);

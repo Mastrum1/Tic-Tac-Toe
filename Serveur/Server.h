@@ -1,8 +1,5 @@
 #pragma once
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <iostream>
-#include <string>
+#include "pch/pch.h"
 #include <Windows.h>
 #include "Window.h"
 
@@ -38,4 +35,12 @@ private:
 	size_t _valread;
 	char _buffer[1024] = { 0 };
 	bool _isListening = false;
+
+//Data
+private :
+	SOCKET Client1;
+	SOCKET Client2;
+
+	int grid[3][3] = { 0 };
+
 };
