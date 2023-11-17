@@ -4,13 +4,13 @@
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    Server serv;
+    Server* serv = Server::GetInstance();
     SOCKADDR_IN InternetAddr;
     MSG msg;
     DWORD Ret;
     WSADATA wsaData;
 
-    serv.Init(hInstance);
+    serv->Init(hInstance);
 
     while (Ret = GetMessage(&msg, NULL, 0, 0))
     {

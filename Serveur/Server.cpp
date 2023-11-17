@@ -6,6 +6,20 @@
 //Send -> Client2 = Client1's Coord
 //Send -> Data = Grid + Client1's Coord
 
+Server::Server()
+{
+}
+
+Server* Server::_instance = nullptr;
+Server* Server::GetInstance()
+{
+    if (_instance == nullptr)
+    {
+		_instance = new Server();
+	}
+	return _instance;
+}
+
 int Server::Init(HINSTANCE hInstance)
 {
 	WSADATA wsaData;
@@ -41,7 +55,6 @@ int Server::Init(HINSTANCE hInstance)
         return 1;
     }
 
-
     if (listen(Listen, 5))
     {
         OutputDebugString(L"\nlisten EXPLODED\n");
@@ -49,4 +62,36 @@ int Server::Init(HINSTANCE hInstance)
     }
 
 }
+
+void Server::AcceptConnexion(WPARAM wParam, HWND hwnd)
+{
+    SOCKET Accept;
+    OutputDebugString(L"\nConnexion accepted\n");
+    Accept = accept(wParam, NULL, NULL);
+    WSAAsyncSelect(Accept, hwnd, WM_SOCKET, FD_READ | FD_CLOSE);
+}
+
+void Server::CloseConnexion(SOCKET sock)
+{
+	closesocket(sock);
+    OutputDebugString(L"\nSocket closed\n");
+}
+
+void Server::Read()
+{
+    int byteNum = recv(hClient, _buffer, 1024 - 1, 0);
+    _buffer[byteNum] = 0;
+    OutputDebugString(L"\nRead :\n");
+    OutputDebugStringA(_buffer);
+    OutputDebugString(L"\n");
+
+    send(hClient, "Ok", 2, 0);
+}
+
+
+void Server::LogClient(WPARAM wParam) {
+    hClient = (SOCKET)wParam;
+}
+
+
 

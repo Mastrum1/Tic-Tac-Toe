@@ -15,19 +15,27 @@
 class Server
 {
 public:
+	Server();
+	static Server* GetInstance();
 
 	int Init(HINSTANCE hInstance);
+	void AcceptConnexion(WPARAM wParam, HWND hwnd);
+	void CloseConnexion(SOCKET sock);
+	void Read();
+	void LogClient(WPARAM wParam);
+
 	sockaddr_in addr;
 	socklen_t addrlen = sizeof(addr);
 
 
 private:
+	static Server* _instance;
+
+	SOCKET hClient;
 
 	int _server_fd, _new_socket;
 	char _opt = 1;
 	size_t _valread;
 	char _buffer[1024] = { 0 };
-	const char* _hello = "Oui";
-	const char* _hello2 = "Non";
 	bool _isListening = false;
 };

@@ -3,6 +3,7 @@
 
 Window::Window(HINSTANCE hInstance)
 {
+
     WNDCLASSEX wc;
     wc.cbSize = sizeof(wc);
     wc.style = 0;// CS_HREDRAW | CS_VREDRAW;
@@ -32,18 +33,15 @@ Window::~Window()
 
 LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    SOCKET Accept;
-    Server serv;
-    size_t readValues;
-    char _buffer[1024] = { 0 };
+    Server* serv = Server::GetInstance();
     switch (uMsg)
     {
         case WM_SOCKET:
         {
-            SOCKET hClient = (SOCKET)wParam;
+            serv->LogClient(wParam);
             if (WSAGETSELECTERROR(lParam))
             {
-                closesocket((SOCKET)wParam);
+                serv->CloseConnexion(wParam);
                 return 0;
             }
 
@@ -53,28 +51,19 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             {
                 case FD_ACCEPT:
                 {
-                    OutputDebugString(L"\nConnexion accepted\n");
-                    Accept = accept(wParam, NULL, NULL);
-                    WSAAsyncSelect(Accept, hwnd, WM_SOCKET, FD_READ | FD_CLOSE);
+                    serv->AcceptConnexion(wParam, hwnd);
                     return 0;
                 }
 
                 case FD_READ: 
                 {
-                    int byteNum = recv(hClient, _buffer, 1024 - 1, 0);
-                    _buffer[byteNum] = 0;
-                    OutputDebugString(L"\nRead :\n");
-                    OutputDebugStringA(_buffer);
-                    OutputDebugString(L"\n");
-                    
-                    send(hClient, "PD", 2, 0);
+                    serv->Read();
                     return 0;
                 }
 
                 case FD_CLOSE:
                 {
-                    OutputDebugString(L"\nSocket closed\n");
-                    closesocket((SOCKET)wParam);
+                    serv->CloseConnexion(wParam);
 
                     return 0;
                 }
