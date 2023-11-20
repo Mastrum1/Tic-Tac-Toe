@@ -7,6 +7,7 @@
 #include <WS2tcpip.h>
 #include <string>
 #include <Windows.h>
+#include <fstream>
 
 //for screen size
 #define SCREEN_WIDTH 800

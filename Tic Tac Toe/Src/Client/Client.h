@@ -18,6 +18,7 @@ public:
 
 	static Client* GetInstance();
 
+	void Connect();
 	int InitClient();
 	int ClientSendMessage(std::string message);
 	int ClientReceiveMessage();

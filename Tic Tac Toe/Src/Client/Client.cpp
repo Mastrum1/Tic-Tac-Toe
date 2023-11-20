@@ -88,6 +88,13 @@ int Client::ClientReceiveMessage()
 
 	ZeroMemory(buffer, sizeof(buffer));
 	int bytesReceived = recv(sockfd, buffer, sizeof(buffer), 0);
+	if (buffer == "Connection Pending")
+	{
+		std::ifstream Passport("Resources/Passport.json");
+		json yes = json::parse(Passport);
+		std::string yess = yes.dump();
+		send(sockfd, yess.c_str(), yess.size(), 0);
+	}
 	if (bytesReceived <= 0)
 	{
 		std::cout << "Connection closed" << std::endl;
