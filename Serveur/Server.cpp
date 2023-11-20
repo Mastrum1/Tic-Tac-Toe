@@ -22,11 +22,13 @@ int Server::Init(HINSTANCE hInstance)
 	SOCKADDR_IN InternetAddr;
     Window window(hInstance);
 
+    OutputDebugString(L"\nServer Starting...\n");
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
     {
         OutputDebugString(L"\nWAS EXPLODED\n");
         return -1;
     }
+    OutputDebugString(L"\nWSA ready\n");
 
     SOCKET Listen = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (Listen == INVALID_SOCKET)
@@ -34,28 +36,33 @@ int Server::Init(HINSTANCE hInstance)
         OutputDebugString(L"\nLISTEN EXPLODED\n");
         return 1;
     }
+    OutputDebugString(L"Listen socket ready\n");
 
     InternetAddr.sin_family = AF_INET;
     InternetAddr.sin_addr.s_addr = htonl(INADDR_ANY);
     InternetAddr.sin_port = htons(31350);
+    OutputDebugString(L"Address Set\n");
 
     if (WSAAsyncSelect(Listen, window.GetWnd(), WM_SOCKET, FD_ACCEPT | FD_CLOSE) != 0)
     {
         OutputDebugString(L"\nWSAAsync EXPLODED\n");
         return 1;
     }
+    OutputDebugString(L"WSAAsyncSelect Ready\n");
 
     if (bind(Listen, (PSOCKADDR)&InternetAddr, sizeof(InternetAddr)) == SOCKET_ERROR)
     {
         OutputDebugString(L"\nBind EXPLOSED\n");
         return 1;
     }
+    OutputDebugString(L"\nServer Ready\n");
 
     if (listen(Listen, 5))
     {
         OutputDebugString(L"\nlisten EXPLODED\n");
         return 1;
     }
+    OutputDebugString(L"\nListening...\n");
 
 }
 
@@ -82,13 +89,12 @@ void Server::Read()
     
     if (data["Cmd"] == REQUEST_ID) {
         if (data["Type"] == SET) {
-            grid[(int)data["x"]][(int)data["y"]] = 1;
+            grid[(int)data["x"]][(int)data["y"]] = (int)data["Player"];
         }
     }
     OutputDebugString(L"\nCompleted\n");
     send(hClient, "Ok", 2, 0);
 }
-
 
 void Server::LogClient(WPARAM wParam) {
     hClient = (SOCKET)wParam;

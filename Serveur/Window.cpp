@@ -64,7 +64,6 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 case FD_CLOSE:
                 {
                     serv->CloseConnexion(wParam);
-
                     return 0;
                 }
             }
