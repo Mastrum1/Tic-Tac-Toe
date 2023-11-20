@@ -1,8 +1,8 @@
 #pragma once
-#include "pch/pch.h"
 #include "Client/Client.h"
 #include "Client/Messages/MessageGenerator.h"
 #include "Menus/MenuManager.h"
+#include "Game/GameWindow.h"
 
 class Game
 {
@@ -20,8 +20,6 @@ public:
 
 	void setMessages(MessageGenerator messages) {_messages = messages;}
 private:
-		
-	sf::RenderWindow _window;
 
 	sf::Texture _grid;
 	sf::Texture _xTex;
@@ -37,6 +35,7 @@ private:
 
 	bool _PlayerWon = false;
 
+	GameWindow* _window;
 	Client _client;
 	MessageGenerator _messages;
 	MenuManager _menu;

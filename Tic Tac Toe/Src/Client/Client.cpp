@@ -68,7 +68,8 @@ void Client::ClientRecieveMessage()
 {
 	valread = recv(sockfd, buffer, 1024 - 1, 0);
 	std::cout << valread << std::endl;
-	std::cout << "Message reçu : " << buffer << std::endl;
+	std::cout << "Message reï¿½u : " << buffer << std::endl;
 
 }
+
 
