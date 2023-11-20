@@ -1,8 +1,7 @@
 #pragma once
-#include "pch/pch.h"
 #include "Client/Client.h"
 #include "Client/Messages/MessageGenerator.h"
-#include "Menus/MainMenu.h"
+#include "Menus/MenuManager.h"
 #include "Game/GameWindow.h"
 
 class Game
@@ -36,9 +35,9 @@ private:
 
 	bool _PlayerWon = false;
 
-	GameWindow _window;
+	GameWindow* _window;
 	Client _client;
 	MessageGenerator _messages;
-	MainMenu _menu;
+	MenuManager _menu;
 };
 

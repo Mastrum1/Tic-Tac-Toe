@@ -7,12 +7,19 @@ public:
 	GameWindow();
 	~GameWindow();
 
-	sf::RenderWindow& GetWindow() {
-		return _window;
-	}
+	static GameWindow* getInstance();
+
+	void InitWindow();
+	void Update();
+
+	sf::RenderWindow& GetWindow();
+
+	sf::Color& GetWindowColor();
 
 private:
 
 	sf::RenderWindow _window;
+
+	sf::Color _windowColor;
 };
 

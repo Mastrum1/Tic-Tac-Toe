@@ -1,16 +1,19 @@
+#include "pch/pch.h"
 #include "Game.h"
 
 
 Game::Game()
 {
+	_window = GameWindow::getInstance();
+
 	if (!_grid.loadFromFile("Resources/Board.png")) std::cout << "load texture error.\n";
 	if (!_xTex.loadFromFile("Resources/X_Piece.png")) std::cout << "load texture error.\n";
 	if (!_oTex.loadFromFile("Resources/O_Piece.png")) std::cout << "load texture error.\n";
 	if (!_arial.loadFromFile("Resources/arial.ttf")) std::cout << "load font error.\n";
 
 	_gridSprite.setTexture(_grid);
-	_gridSprite.setPosition(50, 50);
-	_gridSprite.setScale(sf::Vector2f(3.5, 3.5));
+	//_gridSprite.setPosition(50, 50);
+	//_gridSprite.setScale(sf::Vector2f(3.5, 3.5));
 }
 
 Game::~Game()
@@ -19,42 +22,42 @@ Game::~Game()
 
 void Game::Start()
 {
-	_client.InitClient();
+	//_client.InitClient();
 
 	for (size_t row = 0; row < 3; row++)
 	{
 		for (size_t col = 0; col < 3; col++)
 		{
-			_gridPieces[row][col].setSize(sf::Vector2f(150, 150));
-			_gridPieces[row][col].setPosition(sf::Vector2f(110 + col * 210, 110 + row * 215));
+			_gridPieces[row][col].setSize(sf::Vector2f(120, 120));
+			_gridPieces[row][col].setPosition(sf::Vector2f(190 + col * 150, 190 + row * 150));
+			_gridPieces[row][col].setFillColor(_window->GetWindowColor());
 			_boxAssinged[row][col] = EMPTY;
 		}
 	}
 
-	while (_window.GetWindow().isOpen()) 
+	while (_window->GetWindow().isOpen()) 
 	{
 		Handle();
 
-		_window.GetWindow().clear(sf::Color::White);
+		_window->Update();
 
-		if (_menu.IsMenuShowing())
+		if (_menu.isMenuShowing())
 		{
-			_window.GetWindow().draw(_menu.getMainMessage());
-			_window.GetWindow().draw(_menu.getPlayMessage());
+			_menu.ShowMainMenu();
 		}
 		else
 		{
-			_window.GetWindow().draw(_gridSprite);
+			_window->GetWindow().draw(_gridSprite);
 
 			for (size_t row = 0; row < 3; row++)
 			{
 				for (size_t col = 0; col < 3; col++)
 				{
-					_window.GetWindow().draw(_gridPieces[row][col]);
+					_window->GetWindow().draw(_gridPieces[row][col]);
 				}
 			}
 		}
-		_window.GetWindow().display();
+		_window->GetWindow().display();
 	}
 }
 
@@ -78,26 +81,24 @@ void Game::Handle()
 {
 	sf::Event e;
 
-	while (_window.GetWindow().pollEvent(e))
+	while (_window->GetWindow().pollEvent(e))
 	{
 		switch (e.type)
 		{
 		case sf::Event::Closed:
 		{
-			_window.GetWindow().close();
+			_window->GetWindow().close();
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
 		{
 			if (e.mouseButton.button == sf::Mouse::Left)
 			{
-				if (_menu.IsMenuShowing())
+				if (_menu.isMenuShowing())
 				{
-					if (_menu.getPlayMessage().getGlobalBounds().contains(sf::Mouse::getPosition(_window.GetWindow()).x, sf::Mouse::getPosition(_window.GetWindow()).y))
-					{
-						_menu.HideMenu();
-						break;
-					}
+					_menu.CheckClickPlay();
+					_menu.CheckClickCustom();
+					break;
 				}
 				else
 				{
@@ -121,7 +122,7 @@ void Game::UserPlay()
 	{
 		for (size_t col = 0; col < 3; col++)
 		{
-			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window.GetWindow()).x, sf::Mouse::getPosition(_window.GetWindow()).y))
+			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 			{
 				if (_boxAssinged[row][col] == EMPTY)
 				{

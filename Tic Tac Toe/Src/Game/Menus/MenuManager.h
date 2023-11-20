@@ -3,15 +3,26 @@
 #include "MainMenu.h"
 #include "Game/GameWindow.h"
 
+class GameMenu;
+
 class MenuManager : public MainMenu
 {
 public:
 	MenuManager();
 	~MenuManager();
 
+	bool isMenuShowing();
+	
+	void ShowMenu();
+	void HideMenu();
+
 	void ShowMainMenu();
+	void CheckClickPlay();
+	void CheckClickCustom();
 
 private:
+
+	bool _isMenuShowing;
 
 	GameWindow* _window;
 };

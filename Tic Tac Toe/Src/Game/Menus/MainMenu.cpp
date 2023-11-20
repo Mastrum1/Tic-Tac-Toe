@@ -2,33 +2,30 @@
 
 MainMenu::MainMenu() 
 {
+	if (!_backGroundT.loadFromFile("Resources/Background.png")) std::cout << "load texture error.\n";
 	if (!_arial.loadFromFile("Resources/arial.ttf")) std::cout << "load font error.\n";
 
+	_backGroundS.setTexture(_backGroundT);
 
-	mainMessage = sf::Text("Welcome to Tic Tac Toe", _arial, 30);
+	titleMessage = sf::Text("Welcome to Tic Tac Toe", _arial, 30);
 	playMessage = sf::Text("Play", _arial, 30);
+	customGameMessage = sf::Text("Custom Game", _arial, 30);
 
-	messageButton = playMessage.getGlobalBounds();
+	playMessageButton = playMessage.getGlobalBounds();
+	customGameButton = customGameMessage.getGlobalBounds();
 
-	playMessage.setPosition(sf::Vector2f(375, 400));
+	titleMessage.setPosition(sf::Vector2f(225, 200));
+	titleMessage.setFillColor(sf::Color::Black);
+
+	playMessage.setPosition(sf::Vector2f(350, 325));
 	playMessage.setFillColor(sf::Color::Black);
 
-	mainMessage.setPosition(sf::Vector2f(250, 200));
-	mainMessage.setFillColor(sf::Color::Black);
+	customGameMessage.setPosition(sf::Vector2f(285, 375));
+	customGameMessage.setFillColor(sf::Color::Black);
 
-	_menuShowing = true;
 }
 
 MainMenu::~MainMenu()
 {
 }
 
-bool MainMenu::IsMenuShowing()
-{
-	return _menuShowing;
-}
-
-void MainMenu::HideMenu()
-{
-	_menuShowing = false;
-}
