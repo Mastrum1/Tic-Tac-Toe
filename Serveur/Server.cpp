@@ -64,7 +64,6 @@ int Server::Init(HINSTANCE hInstance)
         return 1;
     }
     OutputDebugString(L"\nListening...\n");
-
 }
 
 void Server::AcceptConnexion(WPARAM wParam, HWND hwnd)
@@ -75,8 +74,6 @@ void Server::AcceptConnexion(WPARAM wParam, HWND hwnd)
         OutputDebugString(L"\nConnexion accepted\n");
     }
     else OutputDebugString(L"\nConnexion rejeted\n");
-
-    send(Accept, "Connection Accepted", 19, 0);
 
     WSAAsyncSelect(Accept, hwnd, WM_SOCKET, FD_READ | FD_CLOSE);
 }
@@ -97,6 +94,7 @@ void Server::Read()
     Client _player1 = _dataList[(int)data["ID"]]->getClient1();
     Client _player2 = _dataList[(int)data["ID"]]->getClient2();
     
+    //Check informations of the game avec a move and send it to the other player (Not Completed)
     if (data["Cmd"] == REQUEST_ID) {
         if (data["Type"] == SET) {
             _dataList[(int)data["ID"]]->setGridCoord((int)data["x"], (int)data["y"], (int)data["Player"]);
@@ -107,12 +105,34 @@ void Server::Read()
 			}
         }
     }
+
+    //Check in the database if the player is already registered  (Not Completed)
+    else if (data["Cmd"] == REQUEST_ID) {
+        if (data["Type"] == SET) {
+            bool founded = false;
+            for (auto& c : db->_clientsList){
+                if (data["Name"] == c.second->getName()) {
+                    send(hClient, "Connection Completed", 21, 0);
+                    founded = true;
+				}
+            }
+            if (founded == false) {
+                db->createClientinDB(data["Name"]);
+
+                //Renvoyer le passeport du client en JSON
+
+                send(hClient, "Connection Completed", 21, 0);
+            }
+		}   
+    }
+
     OutputDebugString(L"\nCompleted\n");
     send(hClient, "Completed", 2, 0);
 }
 
 void Server::LogClient(WPARAM wParam) {
     hClient = (SOCKET)wParam;
+    send(hClient, "Connection Pending", 19, 0);
 }
 
 

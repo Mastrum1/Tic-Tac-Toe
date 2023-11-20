@@ -16,7 +16,7 @@ public:
 	void updateClientinDB(Client* c); //Update one Client in the local database
 	Client createClientinDB(std::string name); //Create a new client in the local database
 
+	std::map<int, Client*> _clientsList;
 private:
 	json ClientDB;
-	std::map<int, Client*> _clientsList;
 };
