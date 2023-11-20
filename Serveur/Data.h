@@ -1,5 +1,6 @@
 #pragma once
 #include "pch/pch.h"
+#include "Client.h"
 
 class Data
 {
@@ -13,11 +14,11 @@ public:
 	bool isPrivate();
 	void setPrivate(bool value);
 
-	SOCKET getSocketClient1();
-	SOCKET getSocketClient2();
+	Client getClient1();
+	Client getClient2();
 
-	void setSocketClient1(SOCKET value);
-	void setSocketClient2(SOCKET value);
+	void setClient1(Client value);
+	void setClient2(Client value);
 
 	int getGridCoord(int x, int y);
 	void setGridCoord(int x, int y, int value);
@@ -32,8 +33,8 @@ private:
 	int _id;
 	bool _isPrivate; // false = public match, true = private match
 
-	SOCKET _socketClient1;
-	SOCKET _socketClient2;
+	Client Client1;
+	Client Client2;
 	
 	int _grid[3][3] = { 0 };
 

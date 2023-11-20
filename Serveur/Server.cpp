@@ -69,8 +69,14 @@ int Server::Init(HINSTANCE hInstance)
 void Server::AcceptConnexion(WPARAM wParam, HWND hwnd)
 {
     SOCKET Accept;
-    OutputDebugString(L"\nConnexion accepted\n");
-    Accept = accept(wParam, NULL, NULL);
+    if (Accept = accept(wParam, NULL, NULL)) {
+        LogClient(wParam);
+        OutputDebugString(L"\nConnexion accepted\n");
+    }
+    else OutputDebugString(L"\nConnexion rejeted\n");
+
+    send(Accept, "Connection Accepted", 19, 0);
+
     WSAAsyncSelect(Accept, hwnd, WM_SOCKET, FD_READ | FD_CLOSE);
 }
 
@@ -89,11 +95,16 @@ void Server::Read()
     
     if (data["Cmd"] == REQUEST_ID) {
         if (data["Type"] == SET) {
-            grid[(int)data["x"]][(int)data["y"]] = (int)data["Player"];
+            _data[(int)data["ID"]]->setGridCoord((int)data["x"], (int)data["y"], (int)data["Player"]);
+            //Check if the game is ended
+            if ((int)data["GameEnded"] != -1) {
+				_data[(int)data["ID"]]->setEnded((int)data["GameEnded"]);
+                //envoyer la fin de partie
+			}
         }
     }
     OutputDebugString(L"\nCompleted\n");
-    send(hClient, "Ok", 2, 0);
+    send(hClient, "Completed", 2, 0);
 }
 
 void Server::LogClient(WPARAM wParam) {

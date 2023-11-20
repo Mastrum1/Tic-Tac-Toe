@@ -24,22 +24,22 @@ void Data::setPrivate(bool value)
 	_isPrivate = value;
 }
 
-SOCKET Data::getSocketClient1()
+Client Data::getClient1()
 {
-	return _socketClient1;
+	return Client1;
 }
-SOCKET Data::getSocketClient2()
+Client Data::getClient2()
 {
-	return _socketClient2;
+	return Client2;
 }
 
-void Data::setSocketClient1(SOCKET value)
+void Data::setClient1(Client value)
 {
-	_socketClient1 = value;
+	Client1 = value;
 }
-void Data::setSocketClient2(SOCKET value)
+void Data::setClient2(Client value)
 {
-	_socketClient2 = value;
+	Client2 = value;
 }
 
 int Data::getGridCoord(int x, int y)

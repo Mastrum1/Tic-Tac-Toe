@@ -38,7 +38,6 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
     {
         case WM_SOCKET:
         {
-            serv->LogClient(wParam);
             if (WSAGETSELECTERROR(lParam))
             {
                 serv->CloseConnexion(wParam);

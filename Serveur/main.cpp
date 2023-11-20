@@ -15,14 +15,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     {
         if (Ret == -1)
         {
-            OutputDebugString(L"\nin While\n");
             return 1;
         }
 
         else 
         {
-        }
 
+        }
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

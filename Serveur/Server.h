@@ -1,7 +1,7 @@
 #pragma once
 #include "pch/pch.h"
-#include <Windows.h>
 #include "Window.h"
+#include "Data.h"
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -38,9 +38,8 @@ private:
 
 //Data
 private :
-	SOCKET Client1;
-	SOCKET Client2;
 
-	int grid[3][3] = { 0 };
+	std::map<int, Data*> _data;
+	std::map<int, Client*> _clientsList;
 
 };
