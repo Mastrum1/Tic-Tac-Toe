@@ -19,7 +19,7 @@ Game::Game()
 
 Game::~Game()
 {
-	assert(_client = nullptr);
+	assert(_client == nullptr);
 	Quit();
 }
 
@@ -39,12 +39,14 @@ void Game::Start()
 			_boxAssinged[row][col] = EMPTY;
 		}
 	}
+}
 
-	while (_window.isOpen()) 
+void Game::Update()
+{
+	while (_window.isOpen())
 	{
 		Handle();
 
-		_windowMessage.UpdateWindowMessage();
 		_window.clear(sf::Color::White);
 
 		if (_menu.IsMenuShowing())
@@ -140,10 +142,10 @@ void Game::UserPlay()
 					_gridPieces[row][col].setTexture(&_xTex);
 
 					//Create coordinate message
-					auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+					auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
 					mes["x"] = col;
 					mes["y"] = row;
-					_client->ClientSendMessage(_messages.FinalizeMessage(mes));
+					_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));
 					OnWin(CheckWin());
 				}
 			}
@@ -209,9 +211,9 @@ void Game::OnWin(int checkwin)
 
 	_menu.ShowMenu(_gameMessage);
 	_PlayerWon = true; 
-	auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+	auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
 	mes["WinCondition"] = _PlayerWon;
-	_client->ClientSendMessage(_messages.FinalizeMessage(mes));
+	_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));
 
 	Reset();
 

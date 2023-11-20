@@ -1,8 +1,6 @@
 #pragma once
 
-#include "Client/Messages/MessageGenerator.h"
 #include "Menus/MenuManager.h"
-#include "Client/Messages/WindowMessage.h"
 class Client;
 
 class Game
@@ -12,6 +10,7 @@ public:
 	~Game();
 
 	void Start();
+	void Update();
 	void Reset();
 	void Handle();
 	void UserPlay();
@@ -21,9 +20,8 @@ public:
 	void Quit();
 
 	static Game* GetInstance();
-	WindowMessage* GetWindowMessage() { return &_windowMessage; }
+
 	Client* GetClient() { return _client; };
-	void setMessages(MessageGenerator messages) {_messages = messages;}
 
 private:
 		
@@ -44,10 +42,6 @@ private:
 	bool _PlayerWon = false;
 
 	Client* _client;
-	MessageGenerator _messages;
 	MenuManager _menu;
-
-
-	WindowMessage _windowMessage;
 };
 

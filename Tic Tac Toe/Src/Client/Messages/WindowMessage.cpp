@@ -1,11 +1,11 @@
 #include "pch/pch.h"
-#include "Game/Game.h"
+
 #include "Client/Client.h"
 
 
 WindowMessage::WindowMessage()
 {
-    WindowInit(GetModuleHandle(NULL));
+    m_Hwnd = NULL;
 }
 
 WindowMessage::~WindowMessage()
@@ -41,11 +41,11 @@ void WindowMessage::WindowInit(HINSTANCE hInstance)
 
 LRESULT WindowMessage::ClientWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    Game* _game = Game::GetInstance();
+    Client* _client = Client::GetInstance();
     switch (uMsg) {
     case WM_DESTROY:
         PostQuitMessage(0);
-        closesocket(_game->GetClient()->GetSocket());
+        closesocket(_client->GetSocket());
         return 0;
 
         case WM_SOCKET:
@@ -53,19 +53,19 @@ LRESULT WindowMessage::ClientWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
             if (WSAGETSELECTERROR(lParam))
             {
 				std::cout << "Socket error" << std::endl;
-                closesocket(_game->GetClient()->GetSocket());
+                closesocket(_client->GetSocket());
 				return 0;
 			}
             switch (WSAGETSELECTEVENT(lParam))
             {
 			case FD_READ:
             {
-				_game->GetClient()->ClientReceiveMessage();
+				_client->ClientReceiveMessage();
 				break;
 			}
 			case FD_CLOSE:
 				std::cout << "Connection closed" << std::endl;
-                closesocket(_game->GetClient()->GetSocket());
+                closesocket(_client->GetSocket());
 				return 0;
 			}
 			break;
@@ -83,7 +83,7 @@ void WindowMessage::UpdateWindowMessage()
 
     //Message Loop
     MSG msg = {};
-    while (GetMessage(&msg, NULL, 0, 0) > 0)
+    while (GetMessage(&msg, NULL, 0, 0))
     {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);

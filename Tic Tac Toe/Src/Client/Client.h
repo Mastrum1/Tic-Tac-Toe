@@ -1,12 +1,12 @@
 #pragma once
-#include "pch/pch.h"
-#include "Game/Game.h"
+
 #include "Messages/MessageGenerator.h"
+#include "Client/Messages/WindowMessage.h"
 
 #pragma comment (lib, "Ws2_32.lib")
 
 
-#define IP_ADRESS "10.1.170.18"
+#define IP_ADRESS "10.1.170.19"
 #define PORT 31350
 #define WM_SOCKET (WM_USER + 1)
 
@@ -16,12 +16,17 @@ public:
 	Client();
 	~Client();
 
+	static Client* GetInstance();
+
 	int InitClient();
 	int ClientSendMessage(std::string message);
 	int ClientReceiveMessage();
 	int GetSocket() { return sockfd; };
-	void setMessages(MessageGenerator* messages) { _messages = messages; }
 	void CloseSocket() { closesocket(sockfd); WSACleanup(); };
+
+	void setMessages(MessageGenerator* messages) { _messages = messages; }
+	MessageGenerator* getMessages() { return _messages; }
+	void close();
 private:
 	
 	//Server Connection
@@ -38,7 +43,7 @@ private:
 
 	DWORD _adressInfo = NULL;
 	MessageGenerator* _messages;
-	Game* _game; 
+	WindowMessage _windowMessage;
 
 };
 

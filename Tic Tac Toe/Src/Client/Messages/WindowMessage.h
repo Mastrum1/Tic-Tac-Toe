@@ -1,7 +1,5 @@
 #pragma once
 
-//#include "Game/Game.h"
-
 class WindowMessage
 {
 public:
@@ -16,5 +14,6 @@ public:
 
 private:
 	HWND m_Hwnd;
+
 };
 

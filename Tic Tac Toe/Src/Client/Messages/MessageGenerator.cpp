@@ -1,3 +1,4 @@
+#include "pch/pch.h"
 #include "MessageGenerator.h"
 
 MessageGenerator::MessageGenerator()
@@ -9,7 +10,7 @@ MessageGenerator::~MessageGenerator()
 {
 }
 
-json& MessageGenerator::CreateMessage(int id, int cmd)
+json& MessageGenerator::CreateNewMessage(int id, int cmd)
 {
 	m_Message.clear();
 	m_Message["Type"] = id;

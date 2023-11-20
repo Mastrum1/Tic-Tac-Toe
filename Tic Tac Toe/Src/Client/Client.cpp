@@ -1,20 +1,32 @@
+#include "pch/pch.h"
+
 #include "Client.h"
 #include "Messages/WindowMessage.h"
 
 
 Client::Client()
 {
-	_game = Game::GetInstance();
+	_messages = nullptr;
 }	
 
 Client::~Client()
 {
+	assert(_messages = nullptr);
+	close();
+}
+
+Client* Client::GetInstance()
+{
+	static Client instance;
+	return &instance;
 }
 
 int Client::InitClient()
 {
 	//Todo add id of player (X or O)
 	//  
+	_windowMessage.WindowInit(GetModuleHandle(NULL));
+
 	if (WSAStartup(MAKEWORD(2, 2), &_wsaData) != 0)
 	{
 		std::cout << "Erreur d'initialisation de WinSock : " << WSAGetLastError() << std::endl;
@@ -29,7 +41,7 @@ int Client::InitClient()
 		return -1;
 	}
 
-	if (WSAAsyncSelect(sockfd, _game->GetWindowMessage()->GetHwnd(), WM_SOCKET, FD_READ | FD_CLOSE) == SOCKET_ERROR)
+	if (WSAAsyncSelect(sockfd, _windowMessage.GetHwnd(), WM_SOCKET, FD_READ | FD_CLOSE) == SOCKET_ERROR)
 	{
 		std::cout << "Failed to set async select : " << WSAGetLastError() << std::endl;
 		return -1;
@@ -51,16 +63,14 @@ int Client::InitClient()
 		return -1;
 	}
 	std::cout << "Adress works" << std::endl;
-	if (connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress)) == SOCKET_ERROR)
-	{
-		std::cout << "Connection error : " << WSAGetLastError() << std::endl;
-		return -1;
-	}
+	connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress));
 	std::cout << "Connection made" << std::endl;
 }
 
 int Client::ClientSendMessage(std::string message)
 {
+	_messages = new MessageGenerator;
+
 	int sendError = send(sockfd,  message.c_str(), message.length(), 0);
 	if (sendError == SOCKET_ERROR)
 	{
@@ -68,13 +78,14 @@ int Client::ClientSendMessage(std::string message)
 		return -1;
 	}
 	std::cout << "Message sent" << std::endl;
-	//ClientRecieveMessage();
-
+	ClientReceiveMessage();
 
 }
 
 int Client::ClientReceiveMessage()
 {
+	_windowMessage.UpdateWindowMessage();
+
 	ZeroMemory(buffer, sizeof(buffer));
 	int bytesReceived = recv(sockfd, buffer, sizeof(buffer), 0);
 	if (bytesReceived <= 0)
@@ -84,7 +95,11 @@ int Client::ClientReceiveMessage()
 		return 0;
 	}
 	std::cout << "Message received : " << buffer << std::endl;
-	_game->GetWindowMessage()->UpdateWindowMessage();
+}
+
+void Client::close()
+{
+	delete _messages;
 }
 
 

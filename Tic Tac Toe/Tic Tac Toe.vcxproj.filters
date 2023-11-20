@@ -70,7 +70,7 @@
       <Filter>Header Files\Game\Menus</Filter>
     </ClInclude>
     <ClInclude Include="Src\Client\Messages\WindowMessage.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Client\Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,7 +98,7 @@
       <Filter>Source Files\Game\Menus</Filter>
     </ClCompile>
     <ClCompile Include="Src\Client\Messages\WindowMessage.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Client\Messages</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
