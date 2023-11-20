@@ -1,14 +1,15 @@
 #pragma once
-#include "pch/pch.h"
 
-static class WindowMessage
+//#include "Game/Game.h"
+
+class WindowMessage
 {
 public:
 	WindowMessage();
 	virtual ~WindowMessage();
 
 	void WindowInit(HINSTANCE hInstance);
-	static WindowMessage* GetWindowInstance();
+	HWND GetHwnd() { return m_Hwnd; };
 
 	static LRESULT CALLBACK ClientWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	void UpdateWindowMessage();

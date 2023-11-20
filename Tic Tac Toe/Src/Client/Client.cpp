@@ -1,8 +1,10 @@
 #include "Client.h"
+#include "Messages/WindowMessage.h"
 
 
 Client::Client()
 {
+	_game = Game::GetInstance();
 }	
 
 Client::~Client()
@@ -24,6 +26,12 @@ int Client::InitClient()
 	if (sockfd == INVALID_SOCKET)
 	{
 		std::cout << "Erreur de creation de socket : " << WSAGetLastError() << std::endl;
+		return -1;
+	}
+
+	if (WSAAsyncSelect(sockfd, _game->GetWindowMessage()->GetHwnd(), WM_SOCKET, FD_READ | FD_CLOSE) == SOCKET_ERROR)
+	{
+		std::cout << "Failed to set async select : " << WSAGetLastError() << std::endl;
 		return -1;
 	}
 
@@ -60,16 +68,23 @@ int Client::ClientSendMessage(std::string message)
 		return -1;
 	}
 	std::cout << "Message sent" << std::endl;
-	ClientRecieveMessage();
+	//ClientRecieveMessage();
+
 
 }
 
-void Client::ClientRecieveMessage()
+int Client::ClientReceiveMessage()
 {
-	valread = recv(sockfd, buffer, 1024 - 1, 0);
-	std::cout << valread << std::endl;
-	std::cout << "Message re�u : " << buffer << std::endl;
-
+	ZeroMemory(buffer, sizeof(buffer));
+	int bytesReceived = recv(sockfd, buffer, sizeof(buffer), 0);
+	if (bytesReceived <= 0)
+	{
+		std::cout << "Connection closed" << std::endl;
+		closesocket(sockfd);
+		return 0;
+	}
+	std::cout << "Message received : " << buffer << std::endl;
+	_game->GetWindowMessage()->UpdateWindowMessage();
 }
 
 

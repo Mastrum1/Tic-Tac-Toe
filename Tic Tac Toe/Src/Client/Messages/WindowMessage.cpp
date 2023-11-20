@@ -1,4 +1,7 @@
-#include "WindowMessage.h"
+#include "pch/pch.h"
+#include "Game/Game.h"
+#include "Client/Client.h"
+
 
 WindowMessage::WindowMessage()
 {
@@ -36,18 +39,37 @@ void WindowMessage::WindowInit(HINSTANCE hInstance)
     std::cout << "Window created" << std::endl;
 }
 
-WindowMessage* WindowMessage::GetWindowInstance()
-{
-    static WindowMessage instance;
-    return &instance;
-}
-
 LRESULT WindowMessage::ClientWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    Game* _game = Game::GetInstance();
     switch (uMsg) {
     case WM_DESTROY:
         PostQuitMessage(0);
+        closesocket(_game->GetClient()->GetSocket());
         return 0;
+
+        case WM_SOCKET:
+        {
+            if (WSAGETSELECTERROR(lParam))
+            {
+				std::cout << "Socket error" << std::endl;
+                closesocket(_game->GetClient()->GetSocket());
+				return 0;
+			}
+            switch (WSAGETSELECTEVENT(lParam))
+            {
+			case FD_READ:
+            {
+				_game->GetClient()->ClientReceiveMessage();
+				break;
+			}
+			case FD_CLOSE:
+				std::cout << "Connection closed" << std::endl;
+                closesocket(_game->GetClient()->GetSocket());
+				return 0;
+			}
+			break;
+		}
 
     default:
         return DefWindowProc(hwnd, uMsg, wParam, lParam);

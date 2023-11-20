@@ -1,5 +1,6 @@
 #pragma once
 #include "pch/pch.h"
+#include "Game/Game.h"
 #include "Messages/MessageGenerator.h"
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -7,6 +8,7 @@
 
 #define IP_ADRESS "10.1.170.18"
 #define PORT 31350
+#define WM_SOCKET (WM_USER + 1)
 
 class Client
 {
@@ -16,7 +18,8 @@ public:
 
 	int InitClient();
 	int ClientSendMessage(std::string message);
-	void ClientRecieveMessage();
+	int ClientReceiveMessage();
+	int GetSocket() { return sockfd; };
 	void setMessages(MessageGenerator* messages) { _messages = messages; }
 	void CloseSocket() { closesocket(sockfd); WSACleanup(); };
 private:
@@ -35,6 +38,7 @@ private:
 
 	DWORD _adressInfo = NULL;
 	MessageGenerator* _messages;
+	Game* _game; 
 
 };
 

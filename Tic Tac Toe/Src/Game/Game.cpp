@@ -1,4 +1,6 @@
+#include "pch/pch.h"
 #include "Game.h"
+#include "Client/Client.h"
 
 
 Game::Game()
@@ -11,19 +13,22 @@ Game::Game()
 	_gridSprite.setTexture(_grid);
 	_gridSprite.setPosition(50, 50);
 	_gridSprite.setScale(sf::Vector2f(3.5, 3.5));
+	_client = nullptr;
 	
 }
 
 Game::~Game()
 {
+	assert(_client = nullptr);
+	Quit();
 }
 
 void Game::Start()
 {
 	_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Tic Tac Toe");
 	_window.setFramerateLimit(30);
-
-	_client.InitClient();
+	_client = new Client();
+	_client->InitClient();
 
 	for (size_t row = 0; row < 3; row++)
 	{
@@ -65,9 +70,9 @@ void Game::Start()
 
 void Game::Reset()
 {
-	_client.CloseSocket();
+	_client->CloseSocket();
 	_PlayerWon = false;
-	_client.CloseSocket();
+	_client->CloseSocket();
 	for (size_t row = 0; row < 3; row++)
 	{
 		for (size_t col = 0; col < 3; col++)
@@ -138,7 +143,7 @@ void Game::UserPlay()
 					auto mes = _messages.CreateMessage(SET, REQUEST_ID);
 					mes["x"] = col;
 					mes["y"] = row;
-					_client.ClientSendMessage(_messages.FinalizeMessage(mes));
+					_client->ClientSendMessage(_messages.FinalizeMessage(mes));
 					OnWin(CheckWin());
 				}
 			}
@@ -204,9 +209,9 @@ void Game::OnWin(int checkwin)
 
 	_menu.ShowMenu(_gameMessage);
 	_PlayerWon = true; 
-	/*auto mes = _messages.CreateMessage(SET, REQUEST_ID);
+	auto mes = _messages.CreateMessage(SET, REQUEST_ID);
 	mes["WinCondition"] = _PlayerWon;
-	_client.ClientSendMessage(_messages.FinalizeMessage(mes));*/
+	_client->ClientSendMessage(_messages.FinalizeMessage(mes));
 
 	Reset();
 
@@ -227,4 +232,15 @@ void Game::BotPlay()
 			}
 		}
 	}
+}
+
+void Game::Quit()
+{
+	delete _client;
+}
+
+Game* Game::GetInstance()
+{
+	static Game instance;
+	return &instance;
 }
