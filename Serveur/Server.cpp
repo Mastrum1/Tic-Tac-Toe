@@ -4,6 +4,7 @@ using json = nlohmann::json;
 
 Server::Server()
 {
+    db = new DataBase();
 }
 
 Server* Server::_instance = nullptr;
@@ -92,13 +93,16 @@ void Server::Read()
     int byteNum = recv(hClient, _buffer, 1024 - 1, 0);
     _buffer[byteNum] = 0;
     json data = json::parse(_buffer);
+
+    Client _player1 = _dataList[(int)data["ID"]]->getClient1();
+    Client _player2 = _dataList[(int)data["ID"]]->getClient2();
     
     if (data["Cmd"] == REQUEST_ID) {
         if (data["Type"] == SET) {
-            _data[(int)data["ID"]]->setGridCoord((int)data["x"], (int)data["y"], (int)data["Player"]);
+            _dataList[(int)data["ID"]]->setGridCoord((int)data["x"], (int)data["y"], (int)data["Player"]);
             //Check if the game is ended
             if ((int)data["GameEnded"] != -1) {
-				_data[(int)data["ID"]]->setEnded((int)data["GameEnded"]);
+				_dataList[(int)data["ID"]]->setEnded((int)data["GameEnded"]);
                 //envoyer la fin de partie
 			}
         }

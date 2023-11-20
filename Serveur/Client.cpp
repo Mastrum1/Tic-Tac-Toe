@@ -29,3 +29,51 @@ void Client::closeSocket()
 {
 	_socket = NULL;
 }
+
+std::string Client::getName()
+{
+	return _name;
+}
+void Client::setName(std::string value)
+{
+	_name = value;
+}
+
+int Client::getRoundCount()
+{
+	return _roundCount;
+}
+void Client::setRoundCount(int value)
+{
+	_roundCount = value;
+}
+void Client::addRoundCount()
+{
+	_roundCount++;
+}
+
+int Client::getRoundWin()
+{
+	return _roundWin;
+}
+void Client::setRoundWin(int value)
+{
+	_roundWin = value;
+}
+void Client::addRoundWin()
+{
+	_roundWin++;
+}
+
+int Client::getRoundLose()
+{
+	return _roundLose;
+}
+void Client::setRoundLose(int value)
+{
+	_roundLose = value;
+}
+void Client::addRoundLose()
+{
+	_roundLose++;
+}

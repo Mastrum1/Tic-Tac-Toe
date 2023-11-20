@@ -1,6 +1,7 @@
 #pragma once
 #include "pch/pch.h"
 #include "Window.h"
+#include "DataBase.h"
 #include "Data.h"
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -38,8 +39,7 @@ private:
 
 //Data
 private :
+	DataBase* db; //Contain all the clients
 
-	std::map<int, Data*> _data;
-	std::map<int, Client*> _clientsList;
-
+	std::map<int, Data*> _dataList;
 };
