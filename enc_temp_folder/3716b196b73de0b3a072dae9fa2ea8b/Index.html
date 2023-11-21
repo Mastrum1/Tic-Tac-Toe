@@ -22,7 +22,7 @@
 
         function loadAndDisplayJSON() {
 
-            const jsonFilePath = 'grid.json';
+            const jsonFilePath = '../grid.json';
 
             fetch(jsonFilePath)
                 .then(response => response.json())
@@ -36,8 +36,8 @@
 
 
         function printTicTacToeGrid() {
-            const gridSize = 30; // 10 times bigger (3 * 10)
-            const cellSize = 30; // Set your desired cell size in pixels
+            const gridSize = 3; 
+            const cellSize = 300; 
             const gridContainer = document.getElementById('ticTacToeGrid');
 
             const table = document.createElement('table');
