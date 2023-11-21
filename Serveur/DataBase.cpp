@@ -22,7 +22,7 @@ void DataBase::loadClientDB()
 		client->setRoundCount(c["RoundCount"]);
 		client->setRoundWin(c["RoundWin"]);
 		client->setRoundLose(c["RoundLose"]);
-		_clientsList[client->getID()] = client;
+		_clientsList.insert(std::pair<int, Client*>(client->getID(), client));
 	}
 	ClientDB.clear();
 }
@@ -43,17 +43,17 @@ void DataBase::updateClientDB(std::map<int, Client*> _clientsList)
 	DB << ClientDB2;
 }
 
-Client DataBase::pullClientDB(int index)
+Client DataBase::pullClientDB(std::string name)
 {
 	std::ifstream DB("DB.json");
 	ClientDB = json::parse(DB);
 
 	Client* c = new Client();
-	c->setID(ClientDB[index]["ID"]);
-	c->setName(ClientDB[index]["Name"]);
-	c->setRoundCount(ClientDB[index]["RoundCount"]);
-	c->setRoundWin(ClientDB[index]["RoundWin"]);
-	c->setRoundLose(ClientDB[index]["RoundLose"]);
+	c->setID(ClientDB[name]["ID"]);
+	c->setName(ClientDB[name]["Name"]);
+	c->setRoundCount(ClientDB[name]["RoundCount"]);
+	c->setRoundWin(ClientDB[name]["RoundWin"]);
+	c->setRoundLose(ClientDB[name]["RoundLose"]);
 
 	ClientDB.clear();
 	return *c;

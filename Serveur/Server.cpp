@@ -70,7 +70,8 @@ void Server::AcceptConnexion(WPARAM wParam, HWND hwnd)
 {
     SOCKET Accept;
     if (Accept = accept(wParam, NULL, NULL)) {
-        LogClient(wParam);
+        Sleep(1000);
+        LogClient(Accept);
         OutputDebugString(L"\nConnexion accepted\n");
     }
     else OutputDebugString(L"\nConnexion rejeted\n");
@@ -96,6 +97,7 @@ void Server::Read()
     
     //Check informations of the game avec a move and send it to the other player (Not Completed)
     if (data["Cmd"] == REQUEST_ID) {
+
         if (data["Type"] == SET) {
             _dataList[(int)data["ID"]]->setGridCoord((int)data["x"], (int)data["y"], (int)data["Player"]);
             //Check if the game is ended
@@ -104,30 +106,38 @@ void Server::Read()
                 //envoyer la fin de partie
 			}
         }
-    }
 
-    //Check in the database if the player is already registered  (Not Completed)
-    else if (data["Cmd"] == REQUEST_ID) {
-        if (data["Type"] == SET) {
+        //Check in the database if the player is already registered in the local database
+        if (data["Type"] == CONNECTION_ID) {
             bool founded = false;
-            for (auto& c : db->_clientsList){
+            for (auto& c : db->_clientsList) {
                 if (data["Name"] == c.second->getName()) {
+                    db->_clientsList.insert(std::pair<int, Client*>(c.second->getID(), c.second));
                     send(hClient, "Connection Completed", 21, 0);
                     founded = true;
-				}
+                }
             }
+            //Complete the player passeport if not founded 
             if (founded == false) {
-                db->createClientinDB(data["Name"]);
-
-                //Renvoyer le passeport du client en JSON
-
+                Client myClient = db->createClientinDB(data["Name"]);
+                json myClientJson;
+                myClientJson["ID"] = myClient.getID();
+                myClientJson["Name"] = myClient.getName();
+                myClientJson["RoundCount"] = myClient.getRoundCount();
+                myClientJson["RoundWin"] = myClient.getRoundWin();
+                myClientJson["RoundLose"] = myClient.getRoundLose();
+                send(hClient, myClientJson.dump().c_str(), myClientJson.dump().size(), 0);
                 send(hClient, "Connection Completed", 21, 0);
+                db->_clientsList.insert(std::pair<int, Client*>(myClient.getID(), &myClient));
             }
-		}   
-    }
+            OutputDebugString(L"\nCompleted\n");
+            send(hClient, "Completed", 2, 0);
+        }
 
-    OutputDebugString(L"\nCompleted\n");
-    send(hClient, "Completed", 2, 0);
+        if (data["Type"] == MATCHMAKING_ID) {
+            
+        }
+    }
 }
 
 void Server::LogClient(WPARAM wParam) {

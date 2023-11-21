@@ -27,7 +27,9 @@
 #define NOTIFICATION_ID 2
 
 // for command to server 
+#define CONNECTION_ID 0
 #define GET 1
 #define SET 2
+#define MATCHMAKING_ID 3
 
 
