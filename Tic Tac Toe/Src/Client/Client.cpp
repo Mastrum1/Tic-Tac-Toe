@@ -90,7 +90,7 @@ int Client::ClientReceiveMessage()
 {
 	ZeroMemory(buffer, sizeof(buffer));
 	int bytesReceived = recv(sockfd, buffer, sizeof(buffer), 0);
-	if (buffer == "Connection Pending")
+	if (bytesReceived == 19)
 	{
 		std::ifstream Passport("Resources/Passport.json");
 		json yes = json::parse(Passport);

@@ -44,7 +44,7 @@ LRESULT WindowMessage::ClientWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg) {
     case WM_DESTROY:
         PostQuitMessage(0);
-        closesocket(_client->GetSocket());
+        //closesocket(_client->GetSocket());
         return 0;
 
         case WM_SOCKET:
