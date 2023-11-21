@@ -69,7 +69,7 @@ int Client::InitClient()
 
 void Client::Update()
 {
-	_windowMessage.UpdateWindowMessage(); 
+	_windowMessage.UpdateWindowMessage();
 
 }
 
@@ -83,14 +83,11 @@ int Client::ClientSendMessage(std::string message)
 		return -1;
 	}
 	std::cout << "Message sent" << std::endl;
-	ClientReceiveMessage();
 
 }
 
 int Client::ClientReceiveMessage()
 {
-	_windowMessage.UpdateWindowMessage();
-
 	ZeroMemory(buffer, sizeof(buffer));
 	int bytesReceived = recv(sockfd, buffer, sizeof(buffer), 0);
 	if (buffer == "Connection Pending")

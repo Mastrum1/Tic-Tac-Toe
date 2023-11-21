@@ -145,12 +145,15 @@ void Game::UserPlay()
 					_boxAssinged[row][col] = PLAYER1;
 
 					_gridPieces[row][col].setTexture(&_xTex);
-
-					//Create coordinate message
-					auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
-					mes["x"] = col;
-					mes["y"] = row;
-					_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));
+					if (_menu.CheckClickMulti())
+					{
+						//Create coordinate message
+						auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
+						mes["x"] = col;
+						mes["y"] = row;
+						_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));
+					}
+					
 					OnWin(CheckWin());
 				}
 			}
