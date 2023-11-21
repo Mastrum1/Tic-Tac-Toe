@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="grid.json" />
+    <None Include="Index.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

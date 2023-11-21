@@ -56,5 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="grid.json" />
+    <None Include="Index.html" />
   </ItemGroup>
 </Project>
