@@ -71,6 +71,8 @@
     </ClInclude>
     <ClInclude Include="Src\Client\Messages\WindowMessage.h">
       <Filter>Header Files\Client\Messages</Filter>
+    <ClInclude Include="Src\Game\GameWindow.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +101,8 @@
     </ClCompile>
     <ClCompile Include="Src\Client\Messages\WindowMessage.cpp">
       <Filter>Source Files\Client\Messages</Filter>
+    <ClCompile Include="Src\Game\GameWindow.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

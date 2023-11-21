@@ -6,8 +6,12 @@ public:
 	MainMenu();
 	virtual ~MainMenu();
 
-	void InitMainMenu();
+protected:
 
-private:
+	sf::Texture _backGroundT;
+	sf::Sprite _backGroundS;
 
+	sf::Font _arial;
+	sf::Text titleMessage, playMessage, customGameMessage;
+	sf::FloatRect playMessageButton, customGameButton;
 };

@@ -5,16 +5,17 @@
 
 Game::Game()
 {
+	_window = GameWindow::getInstance();
+
 	if (!_grid.loadFromFile("Resources/Board.png")) std::cout << "load texture error.\n";
 	if (!_xTex.loadFromFile("Resources/X_Piece.png")) std::cout << "load texture error.\n";
 	if (!_oTex.loadFromFile("Resources/O_Piece.png")) std::cout << "load texture error.\n";
 	if (!_arial.loadFromFile("Resources/arial.ttf")) std::cout << "load font error.\n";
 
 	_gridSprite.setTexture(_grid);
-	_gridSprite.setPosition(50, 50);
-	_gridSprite.setScale(sf::Vector2f(3.5, 3.5));
+	//_gridSprite.setPosition(50, 50);
+	//_gridSprite.setScale(sf::Vector2f(3.5, 3.5));
 	_client = nullptr;
-	
 }
 
 Game::~Game()
@@ -25,17 +26,17 @@ Game::~Game()
 
 void Game::Start()
 {
-	_window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Tic Tac Toe");
-	_window.setFramerateLimit(30);
 	_client = new Client();
 	_client->InitClient();
+	//_client.InitClient();
 
 	for (size_t row = 0; row < 3; row++)
 	{
 		for (size_t col = 0; col < 3; col++)
 		{
-			_gridPieces[row][col].setSize(sf::Vector2f(150, 150));
-			_gridPieces[row][col].setPosition(sf::Vector2f(110 + col * 210, 110 + row * 215));
+			_gridPieces[row][col].setSize(sf::Vector2f(120, 120));
+			_gridPieces[row][col].setPosition(sf::Vector2f(190 + col * 150, 190 + row * 150));
+			_gridPieces[row][col].setFillColor(_window->GetWindowColor());
 			_boxAssinged[row][col] = EMPTY;
 		}
 	}
@@ -43,30 +44,29 @@ void Game::Start()
 
 void Game::Update()
 {
-	while (_window.isOpen())
+	while (_window->GetWindow().isOpen()) 
 	{
 		Handle();
 
-		_window.clear(sf::Color::White);
+		_window->Update();
 
-		if (_menu.IsMenuShowing())
+		if (_menu.isMenuShowing())
 		{
-			//_window.draw(_menu.ShowMenu(_gameMessage));
-			_window.draw(_gameMessage);
+			_menu.ShowMainMenu();
 		}
 		else
 		{
-			_window.draw(_gridSprite);
+			_window->GetWindow().draw(_gridSprite);
 
 			for (size_t row = 0; row < 3; row++)
 			{
 				for (size_t col = 0; col < 3; col++)
 				{
-					_window.draw(_gridPieces[row][col]);
+					_window->GetWindow().draw(_gridPieces[row][col]);
 				}
 			}
 		}
-		_window.display();
+		_window->GetWindow().display();
 	}
 }
 
@@ -90,26 +90,24 @@ void Game::Handle()
 {
 	sf::Event e;
 
-	while (_window.pollEvent(e))
+	while (_window->GetWindow().pollEvent(e))
 	{
 		switch (e.type)
 		{
 		case sf::Event::Closed:
 		{
-			_window.close();
+			_window->GetWindow().close();
 			break;
 		}
 		case sf::Event::MouseButtonPressed:
 		{
 			if (e.mouseButton.button == sf::Mouse::Left)
 			{
-				if (_menu.IsMenuShowing())
+				if (_menu.isMenuShowing())
 				{
-					if (_gameMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
-					{
-						_menu.HideMenu();
-						break;
-					}
+					_menu.CheckClickPlay();
+					_menu.CheckClickCustom();
+					break;
 				}
 				else
 				{
@@ -133,7 +131,7 @@ void Game::UserPlay()
 	{
 		for (size_t col = 0; col < 3; col++)
 		{
-			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window).x, sf::Mouse::getPosition(_window).y))
+			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 			{
 				if (_boxAssinged[row][col] == EMPTY)
 				{
@@ -209,7 +207,7 @@ void Game::OnWin(int checkwin)
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("Player 2 Wins", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
-	_menu.ShowMenu(_gameMessage);
+	//_menu.ShowMainMenu(_gameMessage);
 	_PlayerWon = true; 
 	auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
 	mes["WinCondition"] = _PlayerWon;

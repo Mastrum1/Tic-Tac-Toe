@@ -1,7 +1,8 @@
 #pragma once
-
-#include "Menus/MenuManager.h"
 class Client;
+#include "Client/Client.h"
+#include "Menus/MenuManager.h"
+#include "Game/GameWindow.h"
 
 class Game
 {
@@ -24,8 +25,6 @@ public:
 	Client* GetClient() { return _client; };
 
 private:
-		
-	sf::RenderWindow _window;
 
 	sf::Texture _grid;
 	sf::Texture _xTex;
@@ -42,6 +41,7 @@ private:
 	bool _PlayerWon = false;
 
 	Client* _client;
+	GameWindow* _window;
 	MenuManager _menu;
 };
 

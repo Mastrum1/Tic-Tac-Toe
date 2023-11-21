@@ -2,30 +2,51 @@
 
 MenuManager::MenuManager()
 {
-	_menuShowing = false;
+	_window = GameWindow::getInstance();
+	_isMenuShowing = true;
 }
 
 MenuManager::~MenuManager()
 {
 }
 
-bool MenuManager::IsMenuShowing()
+bool MenuManager::isMenuShowing()
 {
-	return _menuShowing;
+	return _isMenuShowing;
+}
+
+void MenuManager::ShowMenu()
+{
+	_isMenuShowing = true;
 }
 
 void MenuManager::HideMenu()
 {
-	_menuShowing = false;
+	_isMenuShowing = false;
 }
 
-void MenuManager::ShowMenu(sf::Text message)
+void MenuManager::ShowMainMenu()
 {
-	messageButton = message.getGlobalBounds();
+	_window->GetWindow().draw(_backGroundS);
+	_window->GetWindow().draw(titleMessage);
+	_window->GetWindow().draw(playMessage);
+	_window->GetWindow().draw(customGameMessage);
+}
 
-	message.setOrigin(messageButton.left + messageButton.width / 2.0f, messageButton.top + messageButton.height / 2.0f);
-	message.setPosition(sf::Vector2f(400, 400));
-	message.setFillColor(sf::Color::Black);
+void MenuManager::CheckClickPlay()
+{
+	if (playMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
+	{
+		HideMenu();
+	}
+	else return;
+}
 
-	_menuShowing = true;
+void MenuManager::CheckClickCustom()
+{
+	if (customGameMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
+	{
+		HideMenu();
+	}
+	else return;
 }
