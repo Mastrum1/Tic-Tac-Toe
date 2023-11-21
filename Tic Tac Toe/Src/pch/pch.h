@@ -5,6 +5,8 @@
 #include <iostream>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#include <processthreadsapi.h>
+#include <WinUser.h>
 #include <string>
 #include <Windows.h>
 #include <fstream>

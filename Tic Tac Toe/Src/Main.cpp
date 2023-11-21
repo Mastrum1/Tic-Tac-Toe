@@ -2,7 +2,8 @@
 #include "Game/Game.h"
 #include "Client/Messages/WindowMessage.h"
 
-int main() {
+int main() 
+{
 	GameWindow* window = GameWindow::getInstance();
 	window->InitWindow();
 	Game* game = Game::GetInstance();

@@ -26,9 +26,7 @@ Game::~Game()
 
 void Game::Start()
 {
-	_client = new Client();
-	_client->InitClient();
-	//_client.InitClient();
+	HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
 
 	for (size_t row = 0; row < 3; row++)
 	{
@@ -40,6 +38,13 @@ void Game::Start()
 			_boxAssinged[row][col] = EMPTY;
 		}
 	}
+}
+
+DWORD Game::ClientThread(void* param)
+{
+	Client* _client = Client::GetInstance();
+	_client->InitClient();
+	return 0;
 }
 
 void Game::Update()

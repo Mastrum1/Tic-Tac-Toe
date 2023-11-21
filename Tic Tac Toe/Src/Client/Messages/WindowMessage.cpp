@@ -31,7 +31,6 @@ void WindowMessage::WindowInit(HINSTANCE hInstance)
     RegisterClassEx(&wc);
 
     m_Hwnd = CreateWindow(L"Client", L"", 0, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, 0, 0, hInstance, 0);
-
     if (!m_Hwnd)
     {
         OutputDebugString(L"\nWindow creation failed\n");

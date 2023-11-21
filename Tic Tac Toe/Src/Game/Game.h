@@ -11,6 +11,7 @@ public:
 	~Game();
 
 	void Start();
+	static DWORD ClientThread(void* param);
 	void Update();
 	void Reset();
 	void Handle();

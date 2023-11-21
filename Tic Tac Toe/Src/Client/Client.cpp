@@ -6,13 +6,10 @@
 
 Client::Client()
 {
-	_messages = nullptr;
 }	
 
 Client::~Client()
 {
-	assert(_messages = nullptr);
-	close();
 }
 
 Client* Client::GetInstance()
@@ -65,11 +62,19 @@ int Client::InitClient()
 	std::cout << "Adress works" << std::endl;
 	connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress));
 	std::cout << "Connection made" << std::endl;
+
+	Update();
+	
+}
+
+void Client::Update()
+{
+	_windowMessage.UpdateWindowMessage(); 
+
 }
 
 int Client::ClientSendMessage(std::string message)
 {
-	_messages = new MessageGenerator;
 
 	int sendError = send(sockfd,  message.c_str(), message.length(), 0);
 	if (sendError == SOCKET_ERROR)
@@ -104,9 +109,5 @@ int Client::ClientReceiveMessage()
 	std::cout << "Message received : " << buffer << std::endl;
 }
 
-void Client::close()
-{
-	delete _messages;
-}
 
 

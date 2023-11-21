@@ -18,16 +18,15 @@ public:
 
 	static Client* GetInstance();
 
-	void Connect();
 	int InitClient();
+	void Update();
 	int ClientSendMessage(std::string message);
 	int ClientReceiveMessage();
 	int GetSocket() { return sockfd; };
 	void CloseSocket() { closesocket(sockfd); WSACleanup(); };
 
-	void setMessages(MessageGenerator* messages) { _messages = messages; }
-	MessageGenerator* getMessages() { return _messages; }
-	void close();
+	void setMessages(MessageGenerator messages) { _messages = messages; }
+	MessageGenerator* getMessages() { return &_messages; }
 private:
 	
 	//Server Connection
@@ -43,7 +42,7 @@ private:
 	int valread, clienfd, sockfd;
 
 	DWORD _adressInfo = NULL;
-	MessageGenerator* _messages;
+	MessageGenerator _messages;
 	WindowMessage _windowMessage;
 
 };
