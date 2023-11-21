@@ -1,4 +1,6 @@
+#include "pch/pch.h"
 #include "MainMenu.h"
+
 
 MainMenu::MainMenu() 
 {
