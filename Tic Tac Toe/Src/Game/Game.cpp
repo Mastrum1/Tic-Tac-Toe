@@ -26,7 +26,6 @@ Game::~Game()
 
 void Game::Start()
 {
-	HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
 
 	for (size_t row = 0; row < 3; row++)
 	{
@@ -110,8 +109,11 @@ void Game::Handle()
 			{
 				if (_menu.isMenuShowing())
 				{
-					_menu.CheckClickPlay();
-					_menu.CheckClickCustom();
+					if (_menu.CheckClickMulti())
+					{
+						HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
+					}
+					_menu.CheckClickSingle();
 					break;
 				}
 				else

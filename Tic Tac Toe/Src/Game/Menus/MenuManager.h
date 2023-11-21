@@ -18,8 +18,8 @@ public:
 	void HideMenu();
 
 	void ShowMainMenu();
-	void CheckClickPlay();
-	void CheckClickCustom();
+	bool CheckClickMulti();
+	bool CheckClickSingle();
 
 private:
 

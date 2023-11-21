@@ -12,6 +12,6 @@ protected:
 	sf::Sprite _backGroundS;
 
 	sf::Font _arial;
-	sf::Text titleMessage, playMessage, customGameMessage;
+	sf::Text titleMessage, multiPlayerMessage, singlePlayerMessage;
 	sf::FloatRect playMessageButton, customGameButton;
 };

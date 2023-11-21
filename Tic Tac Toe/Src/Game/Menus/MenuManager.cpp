@@ -29,24 +29,26 @@ void MenuManager::ShowMainMenu()
 {
 	_window->GetWindow().draw(_backGroundS);
 	_window->GetWindow().draw(titleMessage);
-	_window->GetWindow().draw(playMessage);
-	_window->GetWindow().draw(customGameMessage);
+	_window->GetWindow().draw(multiPlayerMessage);
+	_window->GetWindow().draw(singlePlayerMessage);
 }
 
-void MenuManager::CheckClickPlay()
+bool MenuManager::CheckClickMulti()
 {
-	if (playMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
+	if (multiPlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
 		HideMenu();
+		return true;
 	}
-	else return;
+	else return false;
 }
 
-void MenuManager::CheckClickCustom()
+bool MenuManager::CheckClickSingle()
 {
-	if (customGameMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
+	if (singlePlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
 		HideMenu();
+		return true;
 	}
-	else return;
+	else return false;
 }
