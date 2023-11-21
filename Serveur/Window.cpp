@@ -3,7 +3,6 @@
 
 Window::Window(HINSTANCE hInstance)
 {
-
     WNDCLASSEX wc;
     wc.cbSize = sizeof(wc);
     wc.style = 0;// CS_HREDRAW | CS_VREDRAW;
@@ -66,7 +65,6 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     return 0;
                 }
             }
-
             return 0;
         }
     }

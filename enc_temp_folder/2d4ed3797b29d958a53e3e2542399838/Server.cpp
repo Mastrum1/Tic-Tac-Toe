@@ -85,8 +85,13 @@ void Server::CloseConnexion(SOCKET sock)
     OutputDebugString(L"\nSocket closed\n");
 }
 
-void Server::WriteInJson(json data) {
-
+void Server::Read()
+{
+    OutputDebugString(L"\nReading..\n");
+    int byteNum = recv(hClient, _buffer, 1024 - 1, 0);
+    _buffer[byteNum] = 0;
+    json data = json::parse(_buffer);
+    
     std::ofstream outputFile("grid.json");
     if (outputFile.is_open()) {
         outputFile << std::setw(4) << data << std::endl;  // Pretty-print with indentation
@@ -96,17 +101,6 @@ void Server::WriteInJson(json data) {
     else {
         OutputDebugString(L"\nFailed to open file for writing\n");
     }
-}
-
-void Server::Read()
-{
-    OutputDebugString(L"\nReading..\n");
-    int byteNum = recv(hClient, _buffer, 1024 - 1, 0);
-    _buffer[byteNum] = 0;
-    json data = json::parse(_buffer);
-    
-    // Writes the data in grid.json
-    WriteInJson(data);
 
     Client _player1 = _dataList[(int)data["ID"]]->getClient1();
     Client _player2 = _dataList[(int)data["ID"]]->getClient2();

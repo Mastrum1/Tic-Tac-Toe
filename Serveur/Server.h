@@ -3,6 +3,7 @@
 #include "Window.h"
 #include "DataBase.h"
 #include "Data.h"
+#include <fstream>
 
 #pragma comment (lib, "Ws2_32.lib")
 
@@ -21,6 +22,7 @@ public:
 	void CloseConnexion(SOCKET sock);
 	void Read();
 	void LogClient(WPARAM wParam);
+	void WriteInJson(json data);
 
 	sockaddr_in addr;
 	socklen_t addrlen = sizeof(addr);
@@ -43,3 +45,4 @@ private :
 
 	std::map<int, Data*> _dataList;
 };
+

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Server</title>
+</head>
+<body>
+
+    <h1>GRID OF CURRENT TIC TAC TOE GAME</h1>
+
+    <h1>JSON File Reader</h1>
+    <pre id="jsonOutput"></pre>
+
+    <script>
+
+        function loadAndDisplayJSON() {
+
+            const jsonFilePath = 'grid.json';
+
+            fetch(jsonFilePath)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('jsonOutput').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => {
+                    console.error('Error loading JSON:', error);
+                });
+        }
+
+        // Call the function when the page is loaded
+        window.onload = loadAndDisplayJSON;
+    </script>
+
+</body>
+</html>
