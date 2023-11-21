@@ -1,8 +1,10 @@
 #pragma once
-class Client;
 #include "Client/Client.h"
 #include "Menus/MenuManager.h"
 #include "Game/GameWindow.h"
+
+class Client;
+class GameWindow;
 
 class Game
 {
@@ -22,8 +24,6 @@ public:
 	void Quit();
 
 	static Game* GetInstance();
-
-	Client* GetClient() { return _client; };
 
 private:
 

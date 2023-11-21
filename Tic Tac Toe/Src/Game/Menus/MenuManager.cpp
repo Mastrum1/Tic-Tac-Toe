@@ -4,6 +4,7 @@ MenuManager::MenuManager()
 {
 	_window = GameWindow::getInstance();
 	_isMenuShowing = true;
+	_inMultiGame = false;
 }
 
 MenuManager::~MenuManager()
@@ -15,17 +16,12 @@ bool MenuManager::isMenuShowing()
 	return _isMenuShowing;
 }
 
-void MenuManager::ShowMenu()
-{
-	_isMenuShowing = true;
-}
-
 void MenuManager::HideMenu()
 {
 	_isMenuShowing = false;
 }
 
-void MenuManager::ShowMainMenu()
+void MenuManager::ShowMenu()
 {
 	_window->GetWindow().draw(_backGroundS);
 	_window->GetWindow().draw(titleMessage);
@@ -37,18 +33,22 @@ bool MenuManager::CheckClickMulti()
 {
 	if (multiPlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
+		_inMultiGame = true;
 		HideMenu();
 		return true;
 	}
 	else return false;
 }
 
-bool MenuManager::CheckClickSingle()
+void MenuManager::CheckClickSingle()
 {
 	if (singlePlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
 		HideMenu();
-		return true;
 	}
-	else return false;
+}
+
+bool MenuManager::getInMulti()
+{
+	return _inMultiGame;
 }

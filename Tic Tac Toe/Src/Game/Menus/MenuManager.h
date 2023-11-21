@@ -4,8 +4,6 @@
 #include "MainMenu.h"
 #include "Game/GameWindow.h"
 
-class GameMenu;
-
 class MenuManager : public MainMenu
 {
 public:
@@ -14,16 +12,19 @@ public:
 
 	bool isMenuShowing();
 	
-	void ShowMenu();
 	void HideMenu();
 
-	void ShowMainMenu();
+	void ShowMenu();
 	bool CheckClickMulti();
-	bool CheckClickSingle();
+	void CheckClickSingle();
+
+	bool getInMulti();
 
 private:
 
 	bool _isMenuShowing;
+
+	bool _inMultiGame;
 
 	GameWindow* _window;
 };

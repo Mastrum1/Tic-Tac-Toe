@@ -24,6 +24,9 @@ public:
 	int ClientReceiveMessage();
 	int GetSocket() { return sockfd; };
 	void CloseSocket() { closesocket(sockfd); WSACleanup(); };
+	bool CheckPassport();
+
+	void ReadPassport();
 
 	void setMessages(MessageGenerator messages) { _messages = messages; }
 	MessageGenerator* getMessages() { return &_messages; }
@@ -35,6 +38,7 @@ private:
 	const char* _clientMessage = NULL;  //"GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n"
 	char buffer[1024] = { 0 };
 
+	json _passport;
 
 	addrinfo* _result = NULL;
 	addrinfo _hints;

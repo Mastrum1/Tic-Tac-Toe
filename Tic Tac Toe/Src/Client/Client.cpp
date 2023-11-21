@@ -60,8 +60,11 @@ int Client::InitClient()
 		return -1;
 	}
 	std::cout << "Adress works" << std::endl;
-	connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress));
-	std::cout << "Connection made" << std::endl;
+
+	if (connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress)))
+	{
+		std::cout << "Connection made" << std::endl;
+	}
 
 	Update();
 	
@@ -92,10 +95,9 @@ int Client::ClientReceiveMessage()
 	int bytesReceived = recv(sockfd, buffer, sizeof(buffer), 0);
 	if (bytesReceived == 19)
 	{
-		std::ifstream Passport("Resources/Passport.json");
-		json yes = json::parse(Passport);
-		std::string yess = yes.dump();
-		send(sockfd, yess.c_str(), yess.size(), 0);
+		ReadPassport();
+		std::string PassportContents = _passport.dump();
+		send(sockfd, PassportContents.c_str(), PassportContents.size(), 0);
 	}
 	if (bytesReceived <= 0)
 	{
@@ -104,6 +106,31 @@ int Client::ClientReceiveMessage()
 		return 0;
 	}
 	std::cout << "Message received : " << buffer << std::endl;
+}
+
+// check gamertag
+bool Client::CheckPassport()
+{
+	// To do
+	// Open json
+	// parse
+	// and check "name" null
+	// if name null then ask player to create neme
+	// else return
+
+	ReadPassport();
+	if (_passport["Name"] == NULL)
+	{
+		return false;
+	}
+	else return true;
+
+}
+
+void Client::ReadPassport()
+{
+	std::ifstream Passport("Resources/Passport.json");
+	_passport = json::parse(Passport);
 }
 
 
