@@ -111,8 +111,7 @@ void Game::Handle()
 				}
 				else
 				{
-					if(_client->getClientCanPlay())
-						UserPlay();
+					UserPlay();
 					break;
 				}
 			}
@@ -163,7 +162,7 @@ void Game::UserPlay()
 					_boxAssinged[row][col] = PLAYER1;
 
 					_gridPieces[row][col].setTexture(&_xTex);
-					if (_menu.getInMulti())
+					if (_menu.getInMulti() && _client->getClientCanPlay())
 					{
 						//Create coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
@@ -172,15 +171,15 @@ void Game::UserPlay()
 						mes["x"] = col;
 						mes["y"] = row;
 						_client->setMessage(mes);
-						_client->ClientSendMessage(mes);
+						_client->ClientSendMessage(_client->getMessage());
+						_client->setClientCanPlay(false);
 					}
-
-					if (!_menu.getInMulti())
+					else if (!_menu.getInMulti())
 					{
 						BotPlay();
-					}
+					} 
+
 					OnWin(CheckWin());
-					_client->setClientCanPlay(false);
 				}
 			}
 		}

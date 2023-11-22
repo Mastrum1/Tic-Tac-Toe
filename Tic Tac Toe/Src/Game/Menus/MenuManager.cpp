@@ -72,6 +72,7 @@ bool MenuManager::ClickMatchMake()
 		// add waiting screen menu
 		_isMatchMaking = true;
 		HideMenu();
+		_window->GetWindow().clear();
 		return true;
 	}
 	else return false;
