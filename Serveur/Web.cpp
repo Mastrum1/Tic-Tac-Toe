@@ -51,49 +51,117 @@ void Web::deleteFile(const std::string& filename) {
 void Web::rewriteIndexHtml(int clientSocket) {
     // Read the content of the index.html file
     std::string fileContent = readFile("Index.html");
-    int oui = 10;
-    int neuf = 5;
-    int gh = 15;
+
     int numberOfGames;
     std::string buttonString;
     Server* serv = Server::GetInstance();
 
-    std::string ouiStr = std::to_string(oui);
-    std::string ghStr = std::to_string(gh);
-    std::string neufStr = std::to_string(neuf);
-
     // Send the modified response
-    for (int i = 1; i < 7; i++)
-    {
+
+    // Remplace 7 by : Serv->getDataListLenght(); for actual number of games
+    for (int i = 0; i < 7; i++) {
         std::string pageName = std::to_string(i);
-        buttonString += "<li><button onclick=\"window.open('blank" + pageName + ".html', '_blank');\">Button " + std::to_string(i) + "</button></li>\n";
+        std::string gameId = "game" + std::to_string(i);
+        buttonString += "<li><button onclick=\"window.open('tictactoe.html?gameId=" + gameId + "', '_blank');\">Game number " + std::to_string(i) + "</button></li>\n";
     }
 
     std::string modifiedContent = R"(
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Modified HTML Page</title>
-        </head>
-        <body>
-            <header>
-                <h1>This is a Modified HTML Page</h1>
-            </header>
+     <!DOCTYPE html>
+     <html lang="en">
+     <head>
+         <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>Modified HTML Page</title>
+         <style>
+             body {
+                 display: flex;
+                 align-items: center;
+                 justify-content: center;
+                 height: 100vh;
+                 margin: 0;
+                 text-align: center;
+             }
 
-            <section>
-                <p>This is a modified paragraph of text.</p>
+             #content-container {
+                 display: flex;
+                 flex-direction: column;
+                 align-items: center;
+             }
 
-                <p>Feel free to modify and customize this page further!</p>
-            </section>)" +
+             #grid-container {
+                 display: grid;
+                 grid-template-columns: repeat(3, 100px);
+                 grid-gap: 5px;
+                 margin-top: 10px;
+             }
+
+             .cell {
+                 width: 100px;
+                 height: 100px;
+                 border: 1px solid #ccc;
+                 display: flex;
+                 align-items: center;
+                 justify-content: center;
+                 font-size: 24px;
+                 cursor: pointer;
+             }
+         </style>
+     </head>
+     <body>
+         <div id="content-container">
+             <header>
+                 <h1>Ha yes, a Tic Tac Toe game</h1>
+             </header>
+
+             <section>
+               
+                 <p>Hope we end this project ASAP</p>
+             </section>)" +
         buttonString +
-        R"(<footer>
-                <p>&copy; 2023 Modified HTML Page. All rights reserved.</p>
-            </footer>
-        </body>
-        </html>
-    )";
+        R"(<div id="grid-container"></div>
+
+             <footer>
+                 <p>Help me, this page has a trash aesthetic</p>
+             </footer>
+         </div>
+
+         <script>
+             // Function to handle cell clicks
+             function onCellClick(row, col) {
+                 console.log('Clicked on cell:', row, col);
+                 // Add your logic here for handling cell clicks
+             }
+
+             // Function to create the Tic-Tac-Toe grid
+             function createGrid() {
+                 var gridContainer = document.getElementById('grid-container');
+
+                 for (var i = 0; i < 3; i++) {
+                     for (var j = 0; j < 3; j++) {
+                         var cell = document.createElement('div');
+                         cell.className = 'cell';
+                         cell.dataset.row = i;
+                         cell.dataset.col = j;
+
+                         // Add a click event listener to each cell
+                         cell.addEventListener('click', function (event) {
+                             var clickedRow = event.target.dataset.row;
+                             var clickedCol = event.target.dataset.col;
+                             onCellClick(clickedRow, clickedCol);
+                         });
+
+                         gridContainer.appendChild(cell);
+                     }
+                 }
+             }
+
+             // Create the grid when the page loads
+             document.addEventListener('DOMContentLoaded', createGrid);
+         </script>
+
+     </body>
+     </html>
+)";
 
     std::string httpResponse = "HTTP/1.1 200 OK\r\n"
         "Content-Type: text/html\r\n"
