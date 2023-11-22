@@ -134,7 +134,8 @@ void Client::ClientReceiveMessage()
 		}
 	}
 	
-	std::cout << "Message received : " << buffer << std::endl;
+	//std::cout << "Message received : " << buffer << std::endl;
+	_message.clear();
 }
 
 // check gamertag
