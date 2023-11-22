@@ -1,9 +1,19 @@
 ﻿#include "Server.h"
 #include "Window.h"
 
+DWORD ServerThread(void* param)
+{
+	Server* serv = Server::GetInstance();
+	serv->Work();
+	return 0;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     Server* serv = Server::GetInstance();
+
+    HANDLE Thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)ServerThread, NULL, 0, NULL);
+
     SOCKADDR_IN InternetAddr;
     MSG msg;
     DWORD Ret;

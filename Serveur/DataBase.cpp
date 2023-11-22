@@ -43,22 +43,21 @@ void DataBase::updateClientDB(std::map<int, Client*> _clientsList)
 	DB << ClientDB2;
 }
 
-Client DataBase::pullClientDB(std::string name)
+Client* DataBase::pullClientDB(int id)
 {
 	std::ifstream DB("DB.json");
 	ClientDB = json::parse(DB);
 
 	Client* c = new Client();
-	c->setID(ClientDB[name]["ID"]);
-	c->setName(ClientDB[name]["Name"]);
-	c->setRoundCount(ClientDB[name]["RoundCount"]);
-	c->setRoundWin(ClientDB[name]["RoundWin"]);
-	c->setRoundLose(ClientDB[name]["RoundLose"]);
+	c->setID(ClientDB[std::to_string(id)]["ID"]);
+	c->setName(ClientDB[std::to_string(id)]["Name"]);
+	c->setRoundCount(ClientDB[std::to_string(id)]["RoundCount"]);
+	c->setRoundWin(ClientDB[std::to_string(id)]["RoundWin"]);
+	c->setRoundLose(ClientDB[std::to_string(id)]["RoundLose"]);
 
 	ClientDB.clear();
-	return *c;
+	return c;
 }
-
 void DataBase::updateClientinDB(Client* c)
 {
 	std::ofstream DB("DB.json");
