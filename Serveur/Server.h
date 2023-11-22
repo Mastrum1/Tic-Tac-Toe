@@ -5,7 +5,6 @@
 #include "Data.h"
 #include <fstream>
 #include <cstdlib>
-
 #pragma comment (lib, "Ws2_32.lib")
 
 #define PORT = 31350;

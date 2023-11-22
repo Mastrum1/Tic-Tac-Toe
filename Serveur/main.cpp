@@ -2,17 +2,25 @@
 #include "Window.h"
 #include "Web.h"
 
+DWORD WebThread(void* param)
+{
+    Web* web = Web::GetInstance();
+    web->CreateWebServer();
+
+    return 0;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+
+
     Server* serv = Server::GetInstance();
-    SimpleHttpServer* smp =  new SimpleHttpServer();
     SOCKADDR_IN InternetAddr;
     MSG msg;
     DWORD Ret;
     WSADATA wsaData;
 
     serv->Init(hInstance);
-    smp->start();
 
     while (Ret = GetMessage(&msg, NULL, 0, 0))
     {
@@ -25,10 +33,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         {
 
         }
+        HANDLE threadWeb = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)WebThread, 0, 0, NULL);
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+    return 0;  
 }
+
+
 
 
 

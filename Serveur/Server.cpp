@@ -18,11 +18,13 @@ Server* Server::GetInstance()
 	return _instance;
 }
 
+
 int Server::Init(HINSTANCE hInstance)
 {
 	WSADATA wsaData;
 	SOCKADDR_IN InternetAddr;
     Window window(hInstance);
+
 
     OutputDebugString(L"\nServer Starting...\n");
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
