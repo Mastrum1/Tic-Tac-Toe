@@ -117,6 +117,8 @@ void Game::Handle()
 				}
 				else
 				{
+					UpdateGrid();
+
 					UserPlay();
 					break;
 				}
@@ -180,7 +182,11 @@ void Game::UserPlay()
 					{
 						_client->setBoxAssigned(row, col, PLAYER1);
 
-						_gridPieces[row][col].setTexture(&_xTex);
+						if (_client->getPlayerNum() == 1)
+						{
+							_gridPieces[row][col].setTexture(&_xTex);
+						}
+						else _gridPieces[row][col].setTexture(&_oTex);
 
 						//Send coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
@@ -203,6 +209,27 @@ void Game::UserPlay()
 						BotPlay();
 					}
 					OnWin(CheckWin());
+				}
+			}
+		}
+	}
+}
+
+void Game::UpdateGrid()
+{
+	if (_menu.getInMulti())
+	{
+		for (size_t row = 0; row < 3; row++)
+		{
+			for (size_t col = 0; col < 3; col++)
+			{
+				if (_client->getBoxAssigned(row, col) == PLAYER2)
+				{
+					if (_client->getPlayerNum() == 1)
+					{
+						_gridPieces[row][col].setTexture(&_oTex);
+					}
+					else _gridPieces[row][col].setTexture(&_xTex);
 				}
 			}
 		}

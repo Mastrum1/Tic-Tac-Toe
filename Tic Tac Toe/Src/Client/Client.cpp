@@ -130,6 +130,7 @@ void Client::ClientReceiveMessage()
 			if (_playerNum == 1)
 			{
 				clientCanPlay = true;
+
 			}
 			else clientCanPlay = false;
 		}

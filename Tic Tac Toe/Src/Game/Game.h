@@ -22,6 +22,7 @@ public:
 	bool ChangeGameState();
 	bool CreateGame();
 	void UserPlay();
+	void UpdateGrid();
 	int CheckWin();
 	void OnWin(int checkwin);
 	void BotPlay();
