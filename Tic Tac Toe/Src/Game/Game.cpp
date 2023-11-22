@@ -25,6 +25,12 @@ Game::~Game()
 	Quit();
 }
 
+Game* Game::GetInstance() 
+{
+	static Game instance;
+	return &instance;
+}
+
 void Game::Start()
 {
 	_client = Client::GetInstance();
@@ -100,38 +106,12 @@ void Game::Handle()
 			{
 				if (_menu.isMenuShowing())
 				{
-					if (_menu.CheckClickMulti())
-					{
-						
-						if (!_client->CheckPassport())
-						{
-							// open name menu
-						}
-						else HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
-						break;
-					}
-					_menu.CheckClickSingle();
-
-					if (_menu.CheckClickMatchMake())
-					{
-						//Create match make message
-						_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
-						auto mes = _client->getMessage();
-						mes["Msg"] = "Give me a game bitch";
-						_client->setMessage(mes);
-						Sleep(1000);
-						_client->ClientSendMessage(mes);
-						break;
-					}
+					ChangeGameState();
 					break;
 				}
 				else
 				{
 					UserPlay();
-					if (!_menu.getInMulti())
-					{
-						BotPlay();
-					}
 					break;
 				}
 			}
@@ -143,6 +123,30 @@ void Game::Handle()
 		}
 
 	}
+}
+
+void Game::ChangeGameState()
+{
+	if (_menu.ClickMulti())
+	{
+		if (!_client->CheckPassport())
+		{
+			_menu.ShowNameMenu();
+		}
+		else CreateClientThread();
+	}
+	if (_menu.ClickMatchMake())
+	{
+		//Create match make message
+		_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
+		auto mes = _client->getMessage();
+		mes["Msg"] = "Give me a game bitch";
+		_client->setMessage(mes);
+		Sleep(1000);
+		_client->ClientSendMessage(mes);
+	}
+	else _menu.ClickSingle();
+
 }
 
 void Game::UserPlay()
@@ -168,7 +172,11 @@ void Game::UserPlay()
 						_client->setMessage(mes);
 						_client->ClientSendMessage(mes);
 					}
-					
+
+					if (!_menu.getInMulti())
+					{
+						BotPlay();
+					}
 					OnWin(CheckWin());
 				}
 			}
@@ -286,8 +294,12 @@ void Game::Quit()
 	delete _client;
 }
 
-Game* Game::GetInstance()
+void Game::CreateClientThread()
 {
-	static Game instance;
-	return &instance;
+	HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
+}
+
+Client* Game::getClient()
+{
+	return _client;
 }

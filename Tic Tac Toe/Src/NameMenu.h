@@ -7,6 +7,11 @@ public:
 
 protected:
 
+	sf::Font _arial;
+
 	sf::Text _name;
+	sf::FloatRect _editNameButton;
+
+	bool _isWriting;
 };
 
