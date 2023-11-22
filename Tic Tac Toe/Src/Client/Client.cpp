@@ -61,13 +61,17 @@ int Client::InitClient()
 	}
 	std::cout << "Adress works" << std::endl;
 
+	Update();
+	
+}
+
+int Client::ConnectToServer()
+{
 	if (connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress)))
 	{
 		std::cout << "Connection made" << std::endl;
 	}
-
-	Update();
-	
+	return 0;
 }
 
 void Client::Update()
@@ -129,7 +133,13 @@ bool Client::CheckPassport()
 
 void Client::ReadPassport()
 {
-	std::ifstream Passport("Resources/Passport.json");
+	std::ifstream Passport("Passport.json");
+	if (!Passport.is_open())
+	{
+		std::cout << "Failed to open passport" << std::endl;
+		return;
+	}
+	else std::cout << "Passport opened" << std::endl;
 	_passport = json::parse(Passport);
 }
 

@@ -102,11 +102,12 @@ void Game::Handle()
 				{
 					if (_menu.CheckClickMulti())
 					{
+						HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
 						if (!_client->CheckPassport())
 						{
 							// open name menu
 						}
-						else HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
+						else _client->ConnectToServer();
 						break;
 					}
 					_menu.CheckClickSingle();
