@@ -138,12 +138,15 @@ void Game::ChangeGameState()
 	if (_menu.ClickMatchMake())
 	{
 		//Create match make message
-		_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
+		//_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
 		auto mes = _client->getMessage();
-		mes["Msg"] = "Give me a game bitch";
+		mes = _client->getPassport();
+		mes["Cmd"] = MATCHMAKING_ID;
+		mes["Type"] = REQUEST_ID;
+		//mes["Msg"] = "Give me a game bitch";
 		_client->setMessage(mes);
 		Sleep(1000);
-		_client->ClientSendMessage(mes);
+		_client->ClientSendMessage(_client->getMessage());
 	}
 	else _menu.ClickSingle();
 
@@ -170,6 +173,8 @@ void Game::UserPlay()
 						auto mes = _client->getMessage();
 						mes["ID"] = _client->getID();
 						mes["Player"] = _client->getPlayerNum();
+						mes["Cmd"] = SET;
+						mes["Type"] = REQUEST_ID;
 						mes["x"] = col;
 						mes["y"] = row;
 						_client->setMessage(mes);

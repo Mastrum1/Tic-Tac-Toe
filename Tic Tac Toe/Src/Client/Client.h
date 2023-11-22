@@ -36,6 +36,7 @@ public:
 
 	void setMessage(json message);
 	json getMessage();
+	json getPassport();
 
 	int getID();
 	int getPlayerNum();

@@ -104,6 +104,7 @@ void Client::ClientReceiveMessage()
 			{
 				setInstructions(CONNECTION_ID, REQUEST_ID);
 				_message = _passport;
+				std::cout << _message << std::endl;
 				std::string connectMessage = _message.dump();
 				send(sockfd, connectMessage.c_str(), connectMessage.size(), 0);
 			}
@@ -194,6 +195,11 @@ void Client::setMessage(json message)
 json Client::getMessage()
 {
 	return _message;
+}
+
+json Client::getPassport()
+{
+	return _passport;
 }
 
 int Client::getID()
