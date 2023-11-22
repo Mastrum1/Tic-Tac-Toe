@@ -38,6 +38,7 @@ public:
 	json getMessage();
 
 	int getID();
+	int getPlayerNum();
 
 	bool getClientCanPlay() { return clientCanPlay; };
 	void setClientCanPlay(bool play) { clientCanPlay = play; };
@@ -53,6 +54,7 @@ private:
 	json _message;
 
 	int _partyID;
+	int _playerNum;
 
 	addrinfo* _result = NULL;
 	addrinfo _hints;

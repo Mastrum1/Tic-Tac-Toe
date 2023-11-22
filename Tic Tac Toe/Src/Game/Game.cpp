@@ -162,12 +162,14 @@ void Game::UserPlay()
 					_boxAssinged[row][col] = PLAYER1;
 
 					_gridPieces[row][col].setTexture(&_xTex);
+
 					if (_menu.getInMulti() && _client->getClientCanPlay())
 					{
 						//Create coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
 						auto mes = _client->getMessage();
 						mes["ID"] = _client->getID();
+						mes["Player"] = _client->getPlayerNum();
 						mes["x"] = col;
 						mes["y"] = row;
 						_client->setMessage(mes);
