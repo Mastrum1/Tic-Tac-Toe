@@ -109,9 +109,15 @@ void Client::ClientReceiveMessage()
 			}
 			
 		}
+
 		if (data["Cmd"] == UPDATE_PASS)
 		{
 			UpdatePassport(data);
+		}
+
+		if (data["Cmd"] == PLAY)
+		{
+			clientCanPlay = true;
 		}
 	}
 	

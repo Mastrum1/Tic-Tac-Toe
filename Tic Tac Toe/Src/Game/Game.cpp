@@ -127,7 +127,8 @@ void Game::Handle()
 				}
 				else
 				{
-					UserPlay();
+					if(_client->getClientCanPlay())
+						UserPlay();
 					if (!_menu.getInMulti())
 					{
 						BotPlay();
@@ -170,6 +171,7 @@ void Game::UserPlay()
 					}
 					
 					OnWin(CheckWin());
+					_client->setClientCanPlay(false);
 				}
 			}
 		}
