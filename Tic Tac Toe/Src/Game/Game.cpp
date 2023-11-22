@@ -176,12 +176,12 @@ void Game::UserPlay()
 			{
 				if (_boxAssinged[row][col] == EMPTY)
 				{
-					_boxAssinged[row][col] = PLAYER1;
-
-					_gridPieces[row][col].setTexture(&_xTex);
-
 					if (_menu.getInMulti() && _client->getClientCanPlay())
 					{
+						_boxAssinged[row][col] = PLAYER1;
+
+						_gridPieces[row][col].setTexture(&_xTex);
+
 						//Send coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
 						auto mes = _client->getMessage();
@@ -195,6 +195,10 @@ void Game::UserPlay()
 					}
 					else if (!_menu.getInMulti())
 					{
+						_boxAssinged[row][col] = PLAYER1;
+
+						_gridPieces[row][col].setTexture(&_xTex);
+
 						BotPlay();
 					} 
 					OnWin(CheckWin());
