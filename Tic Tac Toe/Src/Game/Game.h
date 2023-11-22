@@ -43,7 +43,7 @@ private:
 	sf::Text _gameMessage;
 
 	sf::RectangleShape _gridPieces[3][3];
-	int _boxAssinged[3][3];
+	int _boxAssignedSingle[3][3];
 
 	bool _PlayerWon = false;
 

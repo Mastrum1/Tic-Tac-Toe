@@ -21,7 +21,14 @@ Client* Client::GetInstance()
 int Client::InitClient()
 {
 	//Todo add id of player (X or O)
-	//  
+	for (size_t row = 0; row < 3; row++)
+	{
+		for (size_t col = 0; col < 3; col++)
+		{
+			_boxAssigned[row][col] = EMPTY;
+		}
+	}
+
 	_windowMessage.WindowInit(GetModuleHandle(NULL));
 
 	if (WSAStartup(MAKEWORD(2, 2), &_wsaData) != 0)
@@ -210,6 +217,16 @@ int Client::getID()
 int Client::getPlayerNum()
 {
 	return _playerNum;
+}
+
+int Client::getBoxAssigned(int row, int col)
+{
+	return _boxAssigned[row][col];
+}
+
+void Client::setBoxAssigned(int row, int col, int state)
+{
+	_boxAssigned[row][col] = state;
 }
 
 

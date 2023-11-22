@@ -44,7 +44,7 @@ void Game::Start()
 			_gridPieces[row][col].setSize(sf::Vector2f(120, 120));
 			_gridPieces[row][col].setPosition(sf::Vector2f(190 + col * 150, 190 + row * 150));
 			_gridPieces[row][col].setFillColor(_window->GetWindowColor());
-			_boxAssinged[row][col] = EMPTY;
+			_boxAssignedSingle[row][col] = EMPTY;
 		}
 	}
 
@@ -174,11 +174,11 @@ void Game::UserPlay()
 		{
 			if (_gridPieces[row][col].getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 			{
-				if (_boxAssinged[row][col] == EMPTY)
+				if (_client->getBoxAssigned(row, col) == EMPTY && _boxAssignedSingle[row][col] == EMPTY)
 				{
 					if (_menu.getInMulti() && _client->getClientCanPlay())
 					{
-						_boxAssinged[row][col] = PLAYER1;
+						_client->setBoxAssigned(row, col, PLAYER1);
 
 						_gridPieces[row][col].setTexture(&_xTex);
 
@@ -191,16 +191,17 @@ void Game::UserPlay()
 						_client->ClientSendMessage(_client->getMessage());
 
 						std::cout << _client->getMessage() << std::endl;
+
 						_client->setClientCanPlay(false);
 					}
 					else if (!_menu.getInMulti())
 					{
-						_boxAssinged[row][col] = PLAYER1;
+						_boxAssignedSingle[row][col] = PLAYER1;
 
 						_gridPieces[row][col].setTexture(&_xTex);
 
 						BotPlay();
-					} 
+					}
 					OnWin(CheckWin());
 				}
 			}
@@ -220,24 +221,47 @@ int Game::CheckWin()
 	for (size_t i = 0; i < 3; i++)
 	{
 		// check rows
-		if (_boxAssinged[i][0] == PLAYER1 && _boxAssinged[i][1] == PLAYER1 && _boxAssinged[i][2] == PLAYER1)
+		if ((_client->getBoxAssigned(i, 0) == PLAYER1 && _client->getBoxAssigned(i, 1) == PLAYER1 && _client->getBoxAssigned(i, 2) == PLAYER1) || 
+			(_boxAssignedSingle[i][0] == PLAYER1 && _boxAssignedSingle[i][1] == PLAYER1 && _boxAssignedSingle[i][2] == PLAYER1))
 		{
 			return PLAYER1_WIN;
 		}
+		else if (_boxAssignedSingle[i][0] == PLAYER2 && _boxAssignedSingle[i][1] == PLAYER2 && _boxAssignedSingle[i][2] == PLAYER2)
+		{
+			return PLAYER2_WIN;
+		}
+	
 		// check clolumns
-		if (_boxAssinged[0][i] == PLAYER1 && _boxAssinged[1][i] == PLAYER1 && _boxAssinged[2][i] == PLAYER1)
+		if ((_client->getBoxAssigned(0, i) == PLAYER1 && _client->getBoxAssigned(1, i) == PLAYER1 && _client->getBoxAssigned(2, i) == PLAYER1) ||
+			(_boxAssignedSingle[0][i] == PLAYER1 && _boxAssignedSingle[1][i] == PLAYER1 && _boxAssignedSingle[2][i] == PLAYER1))
 		{
 			return PLAYER1_WIN;
 		}
+		else if (_boxAssignedSingle[0][i] == PLAYER2 && _boxAssignedSingle[1][i] == PLAYER2 && _boxAssignedSingle[2][i] == PLAYER2)
+		{
+			return PLAYER2_WIN;
+		}
+
 		// check left-right diagonal
-		if (_boxAssinged[0][0] == PLAYER1 && _boxAssinged[1][1] == PLAYER1 && _boxAssinged[2][2] == PLAYER1)
+		if ((_client->getBoxAssigned(0, 0) == PLAYER1 && _client->getBoxAssigned(1, 1) == PLAYER1 && _client->getBoxAssigned(2, 2) == PLAYER1) ||
+			(_boxAssignedSingle[0][0] == PLAYER1 && _boxAssignedSingle[1][1] == PLAYER1 && _boxAssignedSingle[2][2] == PLAYER1))
 		{
 			return PLAYER1_WIN;
 		}
+		else if (_boxAssignedSingle[0][0] == PLAYER2 && _boxAssignedSingle[1][1] == PLAYER2 && _boxAssignedSingle[2][2] == PLAYER2)
+		{
+			return PLAYER2_WIN;
+		}
+
 		// check right-left diagonal
-		if (_boxAssinged[0][2] == PLAYER1 && _boxAssinged[1][1] == PLAYER1 && _boxAssinged[2][0] == PLAYER1)
+		if ((_client->getBoxAssigned(0, 2) == PLAYER1 && _client->getBoxAssigned(1, 1) == PLAYER1 && _client->getBoxAssigned(2, 0) == PLAYER1) ||
+			(_boxAssignedSingle[0][2] == PLAYER1 && _boxAssignedSingle[1][1] == PLAYER1 && _boxAssignedSingle[2][0] == PLAYER1))
 		{
 			return PLAYER1_WIN;
+		}
+		else if (_boxAssignedSingle[0][2] == PLAYER2 && _boxAssignedSingle[1][1] == PLAYER2 && _boxAssignedSingle[2][0] == PLAYER2)
+		{
+			return PLAYER2_WIN;
 		}
 	}
 
@@ -246,7 +270,7 @@ int Game::CheckWin()
 	{
 		for (size_t col = 0; col < 3; col++)
 		{
-			if (_boxAssinged[row][col] == EMPTY)
+			if (_client->getBoxAssigned(row, col) == EMPTY && _boxAssignedSingle[row][col] == EMPTY)
 			{
 				return EMPTY;
 			}
@@ -280,14 +304,14 @@ void Game::OnWin(int checkwin)
 
 void Game::BotPlay()
 {
-	for (size_t i = 0; i < 3; i++)
+	for (size_t row = 0; row < 3; row++)
 	{
-		for (size_t j = 0; j < 3; j++)
+		for (size_t col = 0; col < 3; col++)
 		{
-			if (_boxAssinged[i][j] == EMPTY)
+			if (_boxAssignedSingle[row][col] == EMPTY)
 			{
-				_gridPieces[i][j].setTexture(&_oTex);
-				_boxAssinged[i][j] = PLAYER2;
+				_gridPieces[row][col].setTexture(&_oTex);
+				_boxAssignedSingle[row][col] = PLAYER2;
 				return;
 			}
 		}
@@ -306,7 +330,8 @@ void Game::Reset()
 	{
 		for (size_t col = 0; col < 3; col++)
 		{
-			_boxAssinged[row][col] = EMPTY;
+			_boxAssignedSingle[row][col] = EMPTY;
+			_client->setBoxAssigned(row, col, EMPTY);
 			_gridPieces[row][col].setTexture(NULL);
 		}
 	}

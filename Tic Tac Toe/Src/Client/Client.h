@@ -40,6 +40,8 @@ public:
 
 	int getID();
 	int getPlayerNum();
+	int getBoxAssigned(int row, int col);
+	void setBoxAssigned(int row, int col, int state);
 
 	bool getClientCanPlay() { return clientCanPlay; };
 	void setClientCanPlay(bool play) { clientCanPlay = play; };
@@ -56,6 +58,8 @@ private:
 
 	int _gameID;
 	int _playerNum;
+
+	int _boxAssigned[3][3];
 
 	addrinfo* _result = NULL;
 	addrinfo _hints;
