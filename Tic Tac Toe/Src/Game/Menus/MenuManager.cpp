@@ -4,6 +4,8 @@ MenuManager::MenuManager()
 {
 	_window = GameWindow::getInstance();
 	_isMenuShowing = true;
+	_isMainMenuShowing = true;
+	_inMultiGame = false;
 }
 
 MenuManager::~MenuManager()
@@ -15,38 +17,59 @@ bool MenuManager::isMenuShowing()
 	return _isMenuShowing;
 }
 
-void MenuManager::ShowMenu()
-{
-	_isMenuShowing = true;
-}
-
 void MenuManager::HideMenu()
 {
 	_isMenuShowing = false;
 }
 
-void MenuManager::ShowMainMenu()
+void MenuManager::ShowMenu()
 {
 	_window->GetWindow().draw(_backGroundS);
-	_window->GetWindow().draw(titleMessage);
-	_window->GetWindow().draw(playMessage);
-	_window->GetWindow().draw(customGameMessage);
+	if (_isMainMenuShowing)
+	{
+		_window->GetWindow().draw(titleMessage);
+		_window->GetWindow().draw(multiPlayerMessage);
+		_window->GetWindow().draw(singlePlayerMessage);
+	}
+	else
+	{
+		_window->GetWindow().draw(matchMake);
+	}
+	
 }
 
-void MenuManager::CheckClickPlay()
+bool MenuManager::CheckClickMulti()
 {
-	if (playMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
+	if (multiPlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
-		HideMenu();
+		_inMultiGame = true;
+		_isMainMenuShowing = false;
+		_window->GetWindow().clear();
+		return true;
 	}
-	else return;
+	else return false;
 }
 
-void MenuManager::CheckClickCustom()
+void MenuManager::CheckClickSingle()
 {
-	if (customGameMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
+	if (singlePlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
 		HideMenu();
+		//_isMainMenuShowing = false;
 	}
-	else return;
+}
+
+bool MenuManager::CheckClickMatchMake()
+{
+	if (matchMake.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
+	{
+		HideMenu();
+		return true;
+	}
+	else return false;
+}
+
+bool MenuManager::getInMulti()
+{
+	return _inMultiGame;
 }

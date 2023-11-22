@@ -77,7 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\include;%(AdditionalIncludeDirectories);$(SolutionDir)\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -111,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Tic Tac Toe\Src;$(SolutionDir)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Tic Tac Toe\Src;$(SolutionDir)\include;%(AdditionalIncludeDirectories);$(SolutionDir)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -149,7 +149,9 @@
     <ClInclude Include="Src\Game\GameWindow.h" />
     <ClInclude Include="Src\Game\Menus\MainMenu.h" />
     <ClInclude Include="Src\Game\Menus\MenuManager.h" />
+    <ClInclude Include="Src\NameMenu.h" />
     <ClInclude Include="Src\pch\pch.h" />
+    <ClInclude Include="Src\Client\Messages\WindowMessage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tic Tac Toe.rc" />
@@ -162,6 +164,8 @@
     <ClCompile Include="Src\Game\Menus\MainMenu.cpp" />
     <ClCompile Include="Src\Game\Menus\MenuManager.cpp" />
     <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Client\Messages\WindowMessage.cpp" />
+    <ClCompile Include="Src\NameMenu.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

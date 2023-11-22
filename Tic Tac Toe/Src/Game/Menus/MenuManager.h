@@ -1,28 +1,33 @@
 #pragma once
+
 #include "pch/pch.h"
 #include "MainMenu.h"
+#include "NameMenu.h"
 #include "Game/GameWindow.h"
 
-class GameMenu;
-
-class MenuManager : public MainMenu
+class MenuManager : public MainMenu, NameMenu
 {
 public:
 	MenuManager();
-	~MenuManager();
+	virtual ~MenuManager();
 
 	bool isMenuShowing();
 	
-	void ShowMenu();
 	void HideMenu();
 
-	void ShowMainMenu();
-	void CheckClickPlay();
-	void CheckClickCustom();
+	void ShowMenu();
+	bool CheckClickMulti();
+	void CheckClickSingle();
+	bool CheckClickMatchMake();
+
+	bool getInMulti();
 
 private:
 
 	bool _isMenuShowing;
+	bool _isMainMenuShowing;
+
+	bool _inMultiGame;
 
 	GameWindow* _window;
 };

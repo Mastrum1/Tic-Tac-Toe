@@ -1,7 +1,5 @@
 #pragma once
 
-#include "pch/pch.h"
-
 class MainMenu
 {
 public:
@@ -14,6 +12,6 @@ protected:
 	sf::Sprite _backGroundS;
 
 	sf::Font _arial;
-	sf::Text titleMessage, playMessage, customGameMessage;
-	sf::FloatRect playMessageButton, customGameButton;
+	sf::Text titleMessage, multiPlayerMessage, singlePlayerMessage, matchMake;
+	sf::FloatRect playMessageButton, customGameButton, matchMakeButton;
 };

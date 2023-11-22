@@ -1,8 +1,10 @@
 #pragma once
 #include "Client/Client.h"
-#include "Client/Messages/MessageGenerator.h"
 #include "Menus/MenuManager.h"
 #include "Game/GameWindow.h"
+
+class Client;
+class GameWindow;
 
 class Game
 {
@@ -11,14 +13,18 @@ public:
 	~Game();
 
 	void Start();
+	static DWORD ClientThread(void* param);
+	void Update();
 	void Reset();
 	void Handle();
 	void UserPlay();
 	int CheckWin();
 	void OnWin(int checkwin);
 	void BotPlay();
+	void Quit();
 
-	void setMessages(MessageGenerator messages) {_messages = messages;}
+	static Game* GetInstance();
+
 private:
 
 	sf::Texture _grid;
@@ -35,9 +41,8 @@ private:
 
 	bool _PlayerWon = false;
 
+	Client* _client;
 	GameWindow* _window;
-	Client _client;
-	MessageGenerator _messages;
 	MenuManager _menu;
 };
 

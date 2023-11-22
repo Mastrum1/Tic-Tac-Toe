@@ -1,10 +1,13 @@
 #include "pch/pch.h"
 #include "Game.h"
+#include "Client/Client.h"
+#include "Client/Messages/WindowMessage.h"
 
 
 Game::Game()
 {
-	_window = GameWindow::getInstance();
+	_window = nullptr;
+	_client = nullptr;
 
 	if (!_grid.loadFromFile("Resources/Board.png")) std::cout << "load texture error.\n";
 	if (!_xTex.loadFromFile("Resources/X_Piece.png")) std::cout << "load texture error.\n";
@@ -18,11 +21,15 @@ Game::Game()
 
 Game::~Game()
 {
+	assert(_client == nullptr);
+	Quit();
 }
 
 void Game::Start()
 {
-	//_client.InitClient();
+	_client = Client::GetInstance();
+	_window = GameWindow::getInstance();
+	_window->InitWindow();
 
 	for (size_t row = 0; row < 3; row++)
 	{
@@ -35,6 +42,19 @@ void Game::Start()
 		}
 	}
 
+	Update();
+
+}
+
+DWORD Game::ClientThread(void* param)
+{
+	Client* client = Client::GetInstance();
+	client->InitClient();
+	return 0;
+}
+
+void Game::Update()
+{
 	while (_window->GetWindow().isOpen()) 
 	{
 		Handle();
@@ -43,7 +63,7 @@ void Game::Start()
 
 		if (_menu.isMenuShowing())
 		{
-			_menu.ShowMainMenu();
+			_menu.ShowMenu();
 		}
 		else
 		{
@@ -59,22 +79,6 @@ void Game::Start()
 		}
 		_window->GetWindow().display();
 	}
-}
-
-void Game::Reset()
-{
-	_client.CloseSocket();
-	_PlayerWon = false;
-	_client.CloseSocket();
-	for (size_t row = 0; row < 3; row++)
-	{
-		for (size_t col = 0; col < 3; col++)
-		{
-			_boxAssinged[row][col] = EMPTY;
-			_gridPieces[row][col].setTexture(NULL);
-		}
-	}
-	return;
 }
 
 void Game::Handle()
@@ -96,13 +100,38 @@ void Game::Handle()
 			{
 				if (_menu.isMenuShowing())
 				{
-					_menu.CheckClickPlay();
-					_menu.CheckClickCustom();
+					if (_menu.CheckClickMulti())
+					{
+						
+						if (!_client->CheckPassport())
+						{
+							// open name menu
+						}
+						else HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
+						break;
+					}
+					_menu.CheckClickSingle();
+
+					if (_menu.CheckClickMatchMake())
+					{
+						//Create match make message
+						_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
+						auto mes = _client->getMessage();
+						mes["Msg"] = "Give me a game bitch";
+						_client->setMessage(mes);
+						Sleep(1000);
+						_client->ClientSendMessage(mes);
+						break;
+					}
 					break;
 				}
 				else
 				{
 					UserPlay();
+					if (!_menu.getInMulti())
+					{
+						BotPlay();
+					}
 					break;
 				}
 			}
@@ -129,12 +158,17 @@ void Game::UserPlay()
 					_boxAssinged[row][col] = PLAYER1;
 
 					_gridPieces[row][col].setTexture(&_xTex);
-
-					//Create coordinate message
-					auto mes = _messages.CreateMessage(SET, REQUEST_ID);
-					mes["x"] = col;
-					mes["y"] = row;
-					_client.ClientSendMessage(_messages.FinalizeMessage(mes));
+					if (_menu.getInMulti())
+					{
+						//Create coordinate message
+						_client->setInstructions(SET, REQUEST_ID);
+						auto mes = _client->getMessage();
+						mes["x"] = col;
+						mes["y"] = row;
+						_client->setMessage(mes);
+						_client->ClientSendMessage(mes);
+					}
+					
 					OnWin(CheckWin());
 				}
 			}
@@ -194,15 +228,18 @@ void Game::OnWin(int checkwin)
 {
 	if (checkwin == EMPTY) { return; }
 
-	if (checkwin == PLAYER1_WIN) _gameMessage = sf::Text("Player 1 Wins", _arial, 30);
-	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("Player 2 Wins", _arial, 30);
+	if (checkwin == PLAYER1_WIN) _gameMessage = sf::Text("You Won!", _arial, 30);
+	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("You lost...", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
 	//_menu.ShowMainMenu(_gameMessage);
-	_PlayerWon = true; 
-	/*auto mes = _messages.CreateMessage(SET, REQUEST_ID);
-	mes["WinCondition"] = _PlayerWon;
-	_client.ClientSendMessage(_messages.FinalizeMessage(mes));*/
+	_PlayerWon = true;
+	if (_menu.getInMulti())
+	{
+		/*auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
+		mes["WinCondition"] = _PlayerWon;
+		_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));*/
+	}
 
 	Reset();
 
@@ -223,4 +260,34 @@ void Game::BotPlay()
 			}
 		}
 	}
+}
+
+void Game::Reset()
+{
+	_PlayerWon = false;
+	if (_menu.getInMulti())
+	{
+		_client->CloseSocket();
+	}
+
+	for (size_t row = 0; row < 3; row++)
+	{
+		for (size_t col = 0; col < 3; col++)
+		{
+			_boxAssinged[row][col] = EMPTY;
+			_gridPieces[row][col].setTexture(NULL);
+		}
+	}
+	return;
+}
+
+void Game::Quit()
+{
+	delete _client;
+}
+
+Game* Game::GetInstance()
+{
+	static Game instance;
+	return &instance;
 }
