@@ -36,12 +36,15 @@ public:
 
 	void setMessage(json message);
 	json getMessage();
+
+	bool getClientCanPlay() { return clientCanPlay; };
+	void setClientCanPlay(bool play) { clientCanPlay = play; };
 private:
 	
 	//Server Connection
 	WSADATA _wsaData;
 	sockaddr_in _serverAdress;
-	const char* _clientMessage = NULL;  //"GET / HTTP/1.1\r\nHost: www.google.com\r\nConnection: close\r\n\r\n"
+	const char* _clientMessage = NULL;  
 	char buffer[1024] = { 0 };
 
 	json _passport;
@@ -54,6 +57,8 @@ private:
 
 	DWORD _adressInfo = NULL;
 	WindowMessage _windowMessage;
+
+	bool clientCanPlay = false;
 
 };
 
