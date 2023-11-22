@@ -54,12 +54,19 @@ void Web::rewriteIndexHtml(int clientSocket) {
     int oui = 10;
     int neuf = 5;
     int gh = 15;
+    int numberOfGames;
+    std::string buttonString;
+    Server* serv = Server::GetInstance();
 
     std::string ouiStr = std::to_string(oui);
     std::string ghStr = std::to_string(gh);
     std::string neufStr = std::to_string(neuf);
 
     // Send the modified response
+    for (int i = 1; i < 7; i++)
+    {
+        buttonString += "<li><button onclick=\"window.open('blank.html', '_blank');\">Button " + std::to_string(i) + "</button></li>\n";
+    }
 
     std::string modifiedContent = R"(
         <!DOCTYPE html>
@@ -77,16 +84,10 @@ void Web::rewriteIndexHtml(int clientSocket) {
             <section>
                 <p>This is a modified paragraph of text.</p>
 
-                <ul>
-                    <li>)" + ouiStr + R"(</li>
-                    <li>)" + ghStr + R"(</li>
-                    <li>)" + neufStr + R"(</li>
-                </ul>
-
                 <p>Feel free to modify and customize this page further!</p>
-            </section>
-
-            <footer>
+            </section>)" +
+        buttonString +
+        R"(<footer>
                 <p>&copy; 2023 Modified HTML Page. All rights reserved.</p>
             </footer>
         </body>

@@ -180,6 +180,17 @@ void Server::LogClient(WPARAM wParam) {
     send(hClient, "Connection Pending", 19, 0);
 }
 
+Data* Server::getGameData(int index)
+{
+    return _dataList[index];
+}
+
+int Server::getDataListLenght() 
+{
+    return _dataList.size();
+}
+
+
 //void Server::HttpPost() {
 //    // Prepare the HTTP POST request
 //    std::string httpRequest = "POST ../../../Tic-Tac-Toe/Serveur/Index.html HTTP/1.1\r\n"

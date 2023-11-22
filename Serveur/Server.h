@@ -22,6 +22,8 @@ public:
 	void CloseConnexion(SOCKET sock);
 	void Read();
 	void LogClient(WPARAM wParam);
+	Data* getGameData(int index);
+	int getDataListLenght();
 	void HttpGet();
 	void WriteInJson(json data);
 
