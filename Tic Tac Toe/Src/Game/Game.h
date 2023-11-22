@@ -12,18 +12,23 @@ public:
 	Game();
 	~Game();
 
+	static Game* GetInstance();
+
 	void Start();
 	static DWORD ClientThread(void* param);
 	void Update();
 	void Reset();
 	void Handle();
+	void ChangeGameState();
 	void UserPlay();
 	int CheckWin();
 	void OnWin(int checkwin);
 	void BotPlay();
 	void Quit();
 
-	static Game* GetInstance();
+	void CreateClientThread();
+	
+	Client* getClient();
 
 private:
 

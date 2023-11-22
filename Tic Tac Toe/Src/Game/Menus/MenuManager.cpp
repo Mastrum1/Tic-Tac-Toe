@@ -6,6 +6,7 @@ MenuManager::MenuManager()
 	_isMenuShowing = true;
 	_isMainMenuShowing = true;
 	_inMultiGame = false;
+	_isMatchMaking = false;
 }
 
 MenuManager::~MenuManager()
@@ -20,6 +21,11 @@ bool MenuManager::isMenuShowing()
 void MenuManager::HideMenu()
 {
 	_isMenuShowing = false;
+}
+
+void MenuManager::ShowNameMenu()
+{
+	_needsName = true;
 }
 
 void MenuManager::ShowMenu()
@@ -38,31 +44,33 @@ void MenuManager::ShowMenu()
 	
 }
 
-bool MenuManager::CheckClickMulti()
+bool MenuManager::ClickMulti()
 {
 	if (multiPlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
 		_inMultiGame = true;
 		_isMainMenuShowing = false;
+
 		_window->GetWindow().clear();
 		return true;
 	}
 	else return false;
 }
 
-void MenuManager::CheckClickSingle()
+void MenuManager::ClickSingle() 
 {
 	if (singlePlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
 		HideMenu();
-		//_isMainMenuShowing = false;
 	}
 }
 
-bool MenuManager::CheckClickMatchMake()
+bool MenuManager::ClickMatchMake()
 {
 	if (matchMake.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
+		// add waiting screen menu
+		_isMatchMaking = true;
 		HideMenu();
 		return true;
 	}
@@ -72,4 +80,9 @@ bool MenuManager::CheckClickMatchMake()
 bool MenuManager::getInMulti()
 {
 	return _inMultiGame;
+}
+
+bool MenuManager::getIsMatchMaking()
+{
+	return _isMatchMaking;
 }
