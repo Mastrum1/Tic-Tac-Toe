@@ -65,7 +65,8 @@ void Web::rewriteIndexHtml(int clientSocket) {
     // Send the modified response
     for (int i = 1; i < 7; i++)
     {
-        buttonString += "<li><button onclick=\"window.open('blank.html', '_blank');\">Button " + std::to_string(i) + "</button></li>\n";
+        std::string pageName = std::to_string(i);
+        buttonString += "<li><button onclick=\"window.open('blank" + pageName + ".html', '_blank');\">Button " + std::to_string(i) + "</button></li>\n";
     }
 
     std::string modifiedContent = R"(
