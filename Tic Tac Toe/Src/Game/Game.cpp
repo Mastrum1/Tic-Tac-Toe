@@ -15,8 +15,6 @@ Game::Game()
 	if (!_arial.loadFromFile("Resources/arial.ttf")) std::cout << "load font error.\n";
 
 	_gridSprite.setTexture(_grid);
-	//_gridSprite.setPosition(50, 50);
-	//_gridSprite.setScale(sf::Vector2f(3.5, 3.5));
 }
 
 Game::~Game()

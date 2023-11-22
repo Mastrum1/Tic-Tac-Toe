@@ -137,6 +137,7 @@ void Client::ClientReceiveMessage()
 
 		if (data["Cmd"] == PLAY)
 		{
+			_boxAssigned[data["x"]][data["y"]] = PLAYER2;
 			clientCanPlay = true;
 		}
 	}	
