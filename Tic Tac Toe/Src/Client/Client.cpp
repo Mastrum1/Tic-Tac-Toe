@@ -61,17 +61,13 @@ int Client::InitClient()
 	}
 	std::cout << "Adress works" << std::endl;
 
-	Update();
-	
-}
-
-int Client::ConnectToServer()
-{
 	if (connect(sockfd, (sockaddr*)&_serverAdress, sizeof(_serverAdress)))
 	{
 		std::cout << "Connection made" << std::endl;
 	}
-	return 0;
+
+	Update();
+	
 }
 
 void Client::Update()
@@ -80,10 +76,10 @@ void Client::Update()
 
 }
 
-int Client::ClientSendMessage(std::string message)
+int Client::ClientSendMessage(json message)
 {
-
-	int sendError = send(sockfd,  message.c_str(), message.length(), 0);
+	std::string temp = message.dump();
+	int sendError = send(sockfd, temp.c_str(), temp.length(), 0);
 	if (sendError == SOCKET_ERROR)
 	{
 		std::cout << "Failed to send message : " << WSAGetLastError() << std::endl;
@@ -93,22 +89,32 @@ int Client::ClientSendMessage(std::string message)
 
 }
 
-int Client::ClientReceiveMessage()
+void Client::ClientReceiveMessage()
 {
 	ZeroMemory(buffer, sizeof(buffer));
 	int bytesReceived = recv(sockfd, buffer, sizeof(buffer), 0);
-	if (bytesReceived == 19)
+	buffer[bytesReceived] = 0;
+	json data = json::parse(buffer);
+
+	if (data["Type"] == NOTIFICATION_ID)
 	{
-		ReadPassport();
-		std::string PassportContents = _passport.dump();
-		send(sockfd, PassportContents.c_str(), PassportContents.size(), 0);
+		if (data["Cmd"] == CONNECTION_ID)
+		{
+			if (data["Msg"] == "Connection Pending")
+			{
+				ReadPassport();
+				setInstructions(0, REQUEST_ID);
+				std::string connectMessage = _message.dump();
+				send(sockfd, connectMessage.c_str(), connectMessage.size(), 0);
+			}
+			
+		}
+		if (data["Cmd"] == UPDATE_PASS)
+		{
+			UpdatePassport(data);
+		}
 	}
-	if (bytesReceived <= 0)
-	{
-		std::cout << "Connection closed" << std::endl;
-		closesocket(sockfd);
-		return 0;
-	}
+	
 	std::cout << "Message received : " << buffer << std::endl;
 }
 
@@ -141,6 +147,37 @@ void Client::ReadPassport()
 	}
 	else std::cout << "Passport opened" << std::endl;
 	_passport = json::parse(Passport);
+}
+
+void Client::UpdatePassport(json msg)
+{
+	std::ofstream Passport("Passport.json");
+	//pass.erase(1);
+	json pass;
+	
+	pass["ID"] = msg["ID"];
+	pass["Name"] = msg["Name"];
+
+	Passport << pass;
+}
+
+void Client::setInstructions(int Cmd, int Type)
+{
+	_message.clear();
+	_message = _passport;
+	_message["Cmd"] = Cmd;
+	_message["Type"] = Type;
+
+}
+
+void Client::setMessage(json message)
+{
+	_message = message;
+}
+
+json Client::getMessage()
+{
+	return _message;
 }
 
 

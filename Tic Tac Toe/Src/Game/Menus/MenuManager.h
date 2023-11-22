@@ -2,13 +2,14 @@
 
 #include "pch/pch.h"
 #include "MainMenu.h"
+#include "NameMenu.h"
 #include "Game/GameWindow.h"
 
-class MenuManager : public MainMenu
+class MenuManager : public MainMenu, NameMenu
 {
 public:
 	MenuManager();
-	~MenuManager();
+	virtual ~MenuManager();
 
 	bool isMenuShowing();
 	
@@ -17,12 +18,14 @@ public:
 	void ShowMenu();
 	bool CheckClickMulti();
 	void CheckClickSingle();
+	bool CheckClickMatchMake();
 
 	bool getInMulti();
 
 private:
 
 	bool _isMenuShowing;
+	bool _isMainMenuShowing;
 
 	bool _inMultiGame;
 

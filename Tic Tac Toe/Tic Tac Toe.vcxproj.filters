@@ -9,6 +9,7 @@
     <ClCompile Include="Src\Game\Menus\MenuManager.cpp" />
     <ClCompile Include="Src\Main.cpp" />
     <ClCompile Include="Src\Client\Messages\WindowMessage.cpp" />
+    <ClCompile Include="Src\NameMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -20,6 +21,7 @@
     <ClInclude Include="Src\Game\Menus\MenuManager.h" />
     <ClInclude Include="Src\pch\pch.h" />
     <ClInclude Include="Src\Client\Messages\WindowMessage.h" />
+    <ClInclude Include="Src\NameMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Tic Tac Toe.rc" />

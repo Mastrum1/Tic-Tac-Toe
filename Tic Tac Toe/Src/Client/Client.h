@@ -1,9 +1,13 @@
 #pragma once
 
-#include "Messages/MessageGenerator.h"
 #include "Client/Messages/WindowMessage.h"
+#include "nlohmann/json.hpp"
 
 #pragma comment (lib, "Ws2_32.lib")
+
+using json = nlohmann::json;
+
+
 
 
 #define IP_ADRESS "10.1.170.19"
@@ -19,18 +23,19 @@ public:
 	static Client* GetInstance();
 
 	int InitClient();
-	int ConnectToServer();
 	void Update();
-	int ClientSendMessage(std::string message);
-	int ClientReceiveMessage();
+	int ClientSendMessage(json message);
+	void ClientReceiveMessage();
 	int GetSocket() { return sockfd; };
 	void CloseSocket() { closesocket(sockfd); WSACleanup(); };
 	bool CheckPassport();
-
 	void ReadPassport();
+	void UpdatePassport(json pass);
 
-	void setMessages(MessageGenerator messages) { _messages = messages; }
-	MessageGenerator* getMessages() { return &_messages; }
+	void setInstructions(int Cmd, int Type);
+
+	void setMessage(json message);
+	json getMessage();
 private:
 	
 	//Server Connection
@@ -40,6 +45,7 @@ private:
 	char buffer[1024] = { 0 };
 
 	json _passport;
+	json _message;
 
 	addrinfo* _result = NULL;
 	addrinfo _hints;
@@ -47,7 +53,6 @@ private:
 	int valread, clienfd, sockfd;
 
 	DWORD _adressInfo = NULL;
-	MessageGenerator _messages;
 	WindowMessage _windowMessage;
 
 };

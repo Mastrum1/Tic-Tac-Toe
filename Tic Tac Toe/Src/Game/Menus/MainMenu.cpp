@@ -12,9 +12,11 @@ MainMenu::MainMenu()
 	titleMessage = sf::Text("Welcome to Tic Tac Toe", _arial, 30);
 	multiPlayerMessage = sf::Text("Multiplayer", _arial, 30);
 	singlePlayerMessage = sf::Text("SinglePlayer", _arial, 30);
+	matchMake = sf::Text("Find Game", _arial, 30);
 
 	playMessageButton = multiPlayerMessage.getGlobalBounds();
 	customGameButton = singlePlayerMessage.getGlobalBounds();
+	matchMakeButton = matchMake.getGlobalBounds();
 
 	titleMessage.setPosition(sf::Vector2f(225, 250));
 	titleMessage.setFillColor(sf::Color::Black);
@@ -24,6 +26,9 @@ MainMenu::MainMenu()
 
 	singlePlayerMessage.setPosition(sf::Vector2f(315, 400));
 	singlePlayerMessage.setFillColor(sf::Color::Black);
+
+	matchMake.setPosition(sf::Vector2f(315, 400));
+	matchMake.setFillColor(sf::Color::Black);
 
 }
 

@@ -102,15 +102,27 @@ void Game::Handle()
 				{
 					if (_menu.CheckClickMulti())
 					{
-						HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
+						
 						if (!_client->CheckPassport())
 						{
 							// open name menu
 						}
-						else _client->ConnectToServer();
+						else HANDLE Thread = CreateThread(NULL, 1, (LPTHREAD_START_ROUTINE)ClientThread, 0, 0, NULL);
 						break;
 					}
 					_menu.CheckClickSingle();
+
+					if (_menu.CheckClickMatchMake())
+					{
+						//Create match make message
+						_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
+						auto mes = _client->getMessage();
+						mes["Msg"] = "Give me a game bitch";
+						_client->setMessage(mes);
+						Sleep(1000);
+						_client->ClientSendMessage(mes);
+						break;
+					}
 					break;
 				}
 				else
@@ -149,10 +161,12 @@ void Game::UserPlay()
 					if (_menu.getInMulti())
 					{
 						//Create coordinate message
-						auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
+						_client->setInstructions(SET, REQUEST_ID);
+						auto mes = _client->getMessage();
 						mes["x"] = col;
 						mes["y"] = row;
-						_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));
+						_client->setMessage(mes);
+						_client->ClientSendMessage(mes);
 					}
 					
 					OnWin(CheckWin());
@@ -222,9 +236,9 @@ void Game::OnWin(int checkwin)
 	_PlayerWon = true;
 	if (_menu.getInMulti())
 	{
-		auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
+		/*auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
 		mes["WinCondition"] = _PlayerWon;
-		_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));
+		_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));*/
 	}
 
 	Reset();
