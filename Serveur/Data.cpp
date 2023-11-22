@@ -8,10 +8,12 @@ Data::~Data()
 {
 }
 
-int Data::getID() {
+int Data::getID() 
+{
 	return _id;
 }
-void Data::setID(int value) {
+void Data::setID(int value) 
+{
 	_id = value;
 }
 

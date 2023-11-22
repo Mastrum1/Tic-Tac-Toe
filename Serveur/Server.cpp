@@ -142,9 +142,35 @@ void Server::Read()
             }
 		}   
     }
-
     OutputDebugString(L"\nCompleted\n");
     send(hClient, "Completed", 2, 0);
+}
+
+void Server::HttpGet()
+{
+    std::ifstream htmlFile("Index.html", std::ios::in | std::ios::binary);
+
+    if (!htmlFile.is_open()) {
+        std::string errorResponse = "HTTP/1.0 404 Not Found\r\n\r\n";
+        send(hClient, errorResponse.c_str(), errorResponse.length(), 0);
+        closesocket(hClient);
+        return;
+    }
+
+    std::string content((std::istreambuf_iterator<char>(htmlFile)), std::istreambuf_iterator<char>());
+
+    std::string response =
+        "HTTP/1.0 200 OK\r\n"
+        "Content-Type: text/html\r\n"
+        "Content-Length: " + std::to_string(content.length()) + "\r\n"
+        "\r\n" + content;
+
+    if (send(hClient, response.c_str(), response.length(), 0) == -1) {
+        OutputDebugString(L"Error sending HTTP response.\n");
+    }
+
+    htmlFile.close();
+    closesocket(hClient);
 }
 
 void Server::LogClient(WPARAM wParam) {
@@ -152,5 +178,20 @@ void Server::LogClient(WPARAM wParam) {
     send(hClient, "Connection Pending", 19, 0);
 }
 
-
+//void Server::HttpPost() {
+//    // Prepare the HTTP POST request
+//    std::string httpRequest = "POST ../../../Tic-Tac-Toe/Serveur/Index.html HTTP/1.1\r\n"
+//        "Host: " + std::string() + "\r\n"
+//        "Content-Type: application/x-www-form-urlencoded\r\n"
+//        "Content-Length: " + std::to_string(strlen(postData)) + "\r\n"
+//        "\r\n" + postData;
+//
+//    // Send the HTTP request
+//    if (send(clientSocket, httpRequest.c_str(), httpRequest.length(), 0) == -1) {
+//        std::cerr << "Error sending HTTP request." << std::endl;
+//        close(clientSocket);
+//        return 1;
+//    }
+//
+//}
 

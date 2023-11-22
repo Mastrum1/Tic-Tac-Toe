@@ -3,70 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Server</title>
+    <title>Artistic Direction isn't my strong side </title>
+    <style>
+        body 
+        {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 
+        {
+            color: #333;
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>GRID OF CURRENT TIC TAC TOE GAME</h1>
-
-    <h1>JSON File Reader</h1>
-    <pre id="jsonOutput"></pre>
-
-
-
-    <h1>Tic-Tac-Toe Grid</h1>
-    <div id="ticTacToeGrid"></div>
-
+    <header>
+        <h1>TIC TAC TOE</h1>
+    </header>
 
     <script>
+        function displayMessage() {
+            const urlParams = new URLSearchParams(window.location.search);
 
-        function loadAndDisplayJSON() {
+            if (urlParams.has('message')) {
+                const message = urlParams.get('message');
 
-            const jsonFilePath = 'grid.json';
-
-            fetch(jsonFilePath)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('jsonOutput').textContent = JSON.stringify(data, null, 2);
-                })
-                .catch(error => {
-                    console.error('Error loading JSON:', error);
-                });
-        }
-
-
-        function printTicTacToeGrid() {
-            const gridSize = 3; 
-            const cellSize = 300; 
-            const gridContainer = document.getElementById('ticTacToeGrid');
-
-            const table = document.createElement('table');
-            table.style.borderCollapse = 'collapse';
-
-            for (let i = 0; i < gridSize; i++) {
-                const row = table.insertRow();
-
-                for (let j = 0; j < gridSize; j++) {
-                    const cell = row.insertCell();
-                    cell.textContent = ' ';
-                    cell.style.border = '1px solid #000';
-                    cell.style.width = cellSize + 'px';
-                    cell.style.height = cellSize + 'px';
-
-                    cell.addEventListener('click', function () {
-                        alert(`Clicked on cell ${i + 1}-${j + 1}`);
-                    });
-                }
+                document.body.innerHTML += `<p>Received Message: ${message}</p>`;
             }
-            gridContainer.appendChild(table);
         }
 
-        window.onload = function () {
-            printTicTacToeGrid();
-            loadAndDisplayJSON();
-        };
-
+        // Call the function when the page loads
+        window.onload = displayMessage;
     </script>
+
+
+    <footer>
+        <p>Projet Reseau</p>
+    </footer>
 
 </body>
 </html>
