@@ -151,7 +151,8 @@ void Server::Read()
                     myData["Player"] = 1;
                     send(d.second->getClient1()->getSocket(), myData.dump().c_str(), myData.dump().size(), 0);
                     myData["Player"] = 2;
-                    send(d.second->getClient2()->getSocket(), myData.dump().c_str(), myData.dump().size(), 0);             
+                    send(d.second->getClient2()->getSocket(), myData.dump().c_str(), myData.dump().size(), 0);     
+                    OutputDebugString(L"\nGame Joined\n");
                 }
             }
             if (founded == false) {
