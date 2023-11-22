@@ -63,11 +63,11 @@ void DataBase::updateClientinDB(Client* c)
 {
 	std::ofstream DB("DB.json");
 
-	ClientDB[c->getID()]["ID"] = c->getID();
-	ClientDB[c->getID()]["Name"] = c->getName();
-	ClientDB[c->getID()]["RoundCount"] = c->getRoundCount();
-	ClientDB[c->getID()]["RoundWin"] = c->getRoundWin();
-	ClientDB[c->getID()]["RoundLose"] = c->getRoundLose();
+	ClientDB[std::to_string(c->getID())]["ID"] = c->getID();
+	ClientDB[std::to_string(c->getID())]["Name"] = c->getName();
+	ClientDB[std::to_string(c->getID())]["RoundCount"] = c->getRoundCount();
+	ClientDB[std::to_string(c->getID())]["RoundWin"] = c->getRoundWin();
+	ClientDB[std::to_string(c->getID())]["RoundLose"] = c->getRoundLose();
 
 	DB << ClientDB;
 
@@ -77,6 +77,11 @@ void DataBase::updateClientinDB(Client* c)
 Client DataBase::createClientinDB(std::string name)
 {
 	std::ifstream DB("DB.json");
+	if (!DB.is_open())
+	{
+		OutputDebugString(L"\nDB not Found\n");
+	}
+
 	ClientDB = json::parse(DB);
 
 	Client* c = new Client();
@@ -99,6 +104,11 @@ Client DataBase::createClientinDB(std::string name)
 
 	ClientDB.clear();
 	return *c;	
+}
+
+Client* DataBase::getClient(int id)
+{
+	return _clientsList[id];
 }
 
 

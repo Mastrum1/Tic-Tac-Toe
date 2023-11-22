@@ -27,3 +27,4 @@
 #define GET 1
 #define SET 2
 #define MATCHMAKING_ID 3
+#define SENDPASSPORT_ID 4
