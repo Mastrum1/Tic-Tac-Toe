@@ -103,7 +103,8 @@ void Client::ClientReceiveMessage()
 			if (data["Msg"] == "Connection Pending")
 			{
 				setInstructions(CONNECTION_ID, REQUEST_ID);
-				_message = _passport;
+				_message["ID"] = _passport["ID"];
+				_message["Name"] = _passport["Name"];
 				std::cout << _message << std::endl;
 				std::string connectMessage = _message.dump();
 				send(sockfd, connectMessage.c_str(), connectMessage.size(), 0);
