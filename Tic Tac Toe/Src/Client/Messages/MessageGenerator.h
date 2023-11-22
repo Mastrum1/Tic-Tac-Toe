@@ -9,7 +9,6 @@ public:
 	MessageGenerator();
 	virtual ~MessageGenerator();
 	json& CreateNewMessage(int id, int cmd);
-	std::string& FinalizeMessage(json message);
 
 
 	json GetClientMessage() { return m_Message; };
@@ -17,7 +16,6 @@ public:
 
 private:
 	json m_Message;
-	std::string m_FinalMessage;
 
 };
 

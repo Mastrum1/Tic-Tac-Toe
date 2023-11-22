@@ -57,11 +57,12 @@ bool MenuManager::ClickMulti()
 	else return false;
 }
 
-void MenuManager::ClickSingle() 
+bool MenuManager::ClickSingle() 
 {
 	if (singlePlayerMessage.getGlobalBounds().contains(sf::Mouse::getPosition(_window->GetWindow()).x, sf::Mouse::getPosition(_window->GetWindow()).y))
 	{
 		HideMenu();
+		return true;
 	}
 }
 

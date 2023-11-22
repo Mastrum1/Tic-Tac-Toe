@@ -19,10 +19,5 @@ json& MessageGenerator::CreateNewMessage(int id, int cmd)
 	return m_Message;
 }
 
-std::string& MessageGenerator::FinalizeMessage(json message)
-{
-	m_FinalMessage = message.dump();
-	return m_FinalMessage;
-}
 
 

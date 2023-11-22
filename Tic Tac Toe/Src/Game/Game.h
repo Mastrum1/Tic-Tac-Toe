@@ -19,7 +19,8 @@ public:
 	void Update();
 	void Reset();
 	void Handle();
-	void ChangeGameState();
+	bool ChangeGameState();
+	bool CreateGame();
 	void UserPlay();
 	int CheckWin();
 	void OnWin(int checkwin);

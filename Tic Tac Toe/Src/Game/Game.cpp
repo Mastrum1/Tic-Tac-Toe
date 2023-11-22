@@ -106,8 +106,14 @@ void Game::Handle()
 			{
 				if (_menu.isMenuShowing())
 				{
-					ChangeGameState();
-					break;
+					if (ChangeGameState())
+					{
+						break;
+					}
+					if (CreateGame())
+					{
+						break;
+					}
 				}
 				else
 				{
@@ -125,7 +131,7 @@ void Game::Handle()
 	}
 }
 
-void Game::ChangeGameState()
+bool Game::ChangeGameState()
 {
 	if (_menu.ClickMulti())
 	{
@@ -134,22 +140,30 @@ void Game::ChangeGameState()
 			_menu.ShowNameMenu();
 		}
 		else CreateClientThread();
+		return true;
 	}
+	if (_menu.ClickSingle())
+	{
+		return true;
+	}
+	else false;
+}
+
+bool Game::CreateGame()
+{
 	if (_menu.ClickMatchMake())
 	{
-		//Create match make message
-		//_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
+		//Send match making message
+		_client->setInstructions(MATCHMAKING_ID, REQUEST_ID);
 		auto mes = _client->getMessage();
-		mes = _client->getPassport();
-		mes["Cmd"] = MATCHMAKING_ID;
-		mes["Type"] = REQUEST_ID;
-		//mes["Msg"] = "Give me a game bitch";
+		mes["Msg"] = "Looking for Game";
 		_client->setMessage(mes);
-		Sleep(1000);
 		_client->ClientSendMessage(_client->getMessage());
-	}
-	else _menu.ClickSingle();
+		std::cout << _client->getMessage() << std::endl;
 
+		return true;
+	}
+	else return false;
 }
 
 void Game::UserPlay()
@@ -168,24 +182,21 @@ void Game::UserPlay()
 
 					if (_menu.getInMulti() && _client->getClientCanPlay())
 					{
-						//Create coordinate message
+						//Send coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
 						auto mes = _client->getMessage();
-						mes["ID"] = _client->getID();
-						mes["Player"] = _client->getPlayerNum();
-						mes["Cmd"] = SET;
-						mes["Type"] = REQUEST_ID;
 						mes["x"] = col;
 						mes["y"] = row;
 						_client->setMessage(mes);
 						_client->ClientSendMessage(_client->getMessage());
+
+						std::cout << _client->getMessage() << std::endl;
 						_client->setClientCanPlay(false);
 					}
 					else if (!_menu.getInMulti())
 					{
 						BotPlay();
 					} 
-
 					OnWin(CheckWin());
 				}
 			}
@@ -249,7 +260,6 @@ void Game::OnWin(int checkwin)
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("You lost...", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
 
-	//_menu.ShowMainMenu(_gameMessage);
 	_PlayerWon = true;
 	if (_menu.getInMulti())
 	{
@@ -258,6 +268,7 @@ void Game::OnWin(int checkwin)
 		_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));*/
 	}
 
+	// add Play again screen
 	Reset();
 
 	return;

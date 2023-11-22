@@ -98,16 +98,15 @@ void Client::ClientReceiveMessage()
 
 	if (data["Type"] == NOTIFICATION_ID)
 	{
-		if (data["Cmd"] == CONNECTION_ID)
+		if (data["Cmd"] == CONNECTION_ID) // needs to be a request not notify
 		{
 			if (data["Msg"] == "Connection Pending")
 			{
 				setInstructions(CONNECTION_ID, REQUEST_ID);
-				_message["ID"] = _passport["ID"];
-				_message["Name"] = _passport["Name"];
 				std::cout << _message << std::endl;
 				std::string connectMessage = _message.dump();
 				send(sockfd, connectMessage.c_str(), connectMessage.size(), 0);
+				std::cout << _message << std::endl;
 			}
 			
 		}
@@ -119,7 +118,7 @@ void Client::ClientReceiveMessage()
 		if (data["Cmd"] == SETTUP_PARTY)
 		{
 			//_partyID = 0;
-			_partyID = data["ID"];
+			_gameID = data["ID"];
 			_playerNum = data["Player"];
 			if (_playerNum == 1)
 			{
@@ -132,29 +131,19 @@ void Client::ClientReceiveMessage()
 		{
 			clientCanPlay = true;
 		}
-	}
-	
-	//std::cout << "Message received : " << buffer << std::endl;
-	_message.clear();
+	}	
+	std::cout << "Message received : " << buffer << std::endl;
 }
 
 // check gamertag
 bool Client::CheckPassport()
 {
-	// To do
-	// Open json
-	// parse
-	// and check "name" null
-	// if name null then ask player to create neme
-	// else return
-
 	ReadPassport();
 	if (_passport["Name"] == NULL)
 	{
 		return false;
 	}
 	else return true;
-
 }
 
 void Client::ReadPassport()
@@ -186,7 +175,16 @@ void Client::setInstructions(int Cmd, int Type)
 	_message.clear();
 	_message["Cmd"] = Cmd;
 	_message["Type"] = Type;
-
+	if (Cmd == CONNECTION_ID || Cmd == MATCHMAKING_ID)
+	{
+		_message["ID"] = _passport["ID"];
+		_message["Name"] = _passport["Name"];
+	}
+	if (Cmd == SET)
+	{
+		_message["ID"] = _gameID;
+		_message["Player"] = _playerNum;
+	}
 }
 
 void Client::setMessage(json message)
@@ -206,7 +204,7 @@ json Client::getPassport()
 
 int Client::getID()
 {
-	return _partyID;
+	return _gameID;
 }
 
 int Client::getPlayerNum()

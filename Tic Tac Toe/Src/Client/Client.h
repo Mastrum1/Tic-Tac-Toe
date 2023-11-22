@@ -54,7 +54,7 @@ private:
 	json _passport;
 	json _message;
 
-	int _partyID;
+	int _gameID;
 	int _playerNum;
 
 	addrinfo* _result = NULL;

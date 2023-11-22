@@ -20,7 +20,7 @@ public:
 	void ShowNameMenu();
 
 	bool ClickMulti();
-	void ClickSingle();
+	bool ClickSingle();
 
 	bool ClickMatchMake();
 
