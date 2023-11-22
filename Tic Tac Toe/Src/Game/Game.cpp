@@ -168,6 +168,7 @@ void Game::UserPlay()
 						//Create coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
 						auto mes = _client->getMessage();
+						mes["ID"] = _client->getID();
 						mes["x"] = col;
 						mes["y"] = row;
 						_client->setMessage(mes);

@@ -102,17 +102,26 @@ void Client::ClientReceiveMessage()
 		{
 			if (data["Msg"] == "Connection Pending")
 			{
-				ReadPassport();
-				setInstructions(0, REQUEST_ID);
+				setInstructions(CONNECTION_ID, REQUEST_ID);
 				std::string connectMessage = _message.dump();
 				send(sockfd, connectMessage.c_str(), connectMessage.size(), 0);
 			}
 			
 		}
-
 		if (data["Cmd"] == UPDATE_PASS)
 		{
 			UpdatePassport(data);
+		}
+
+		if (data["Cmd"] == SETTUP_PARTY)
+		{
+			//_partyID = 0;
+			_partyID = data["ID"];
+			if (data["Player"] == 1)
+			{
+				clientCanPlay = true;
+			}
+			else clientCanPlay = false;
 		}
 
 		if (data["Cmd"] == PLAY)
@@ -184,6 +193,11 @@ void Client::setMessage(json message)
 json Client::getMessage()
 {
 	return _message;
+}
+
+int Client::getID()
+{
+	return _partyID;
 }
 
 

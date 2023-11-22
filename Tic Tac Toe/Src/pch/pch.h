@@ -35,6 +35,7 @@
 #define SET 2
 #define MATCHMAKING_ID 3
 #define UPDATE_PASS 4
-#define PLAY 5
+#define SETTUP_PARTY 5
+#define PLAY 6
 
 
