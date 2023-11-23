@@ -6,6 +6,7 @@
 
 Client::Client()
 {
+	m_OnPlayerWon = false;
 }	
 
 Client::~Client()
@@ -138,6 +139,11 @@ void Client::ClientReceiveMessage()
 		{
 			_boxAssigned[data["x"]][data["y"]] = PLAYER2;
 			clientCanPlay = true;
+		}
+
+		if (data["Cmd"] == WIN)
+		{
+			m_OnPlayerWon = true;
 		}
 	}	
 	std::cout << "Message received : " << buffer << std::endl;

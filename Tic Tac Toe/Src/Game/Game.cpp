@@ -61,8 +61,8 @@ void Game::Update()
 {
 	while (_window->GetWindow().isOpen()) 
 	{
-		Handle();
 
+		Handle();
 		_window->Update();
 
 		if (_menu.isMenuShowing())
@@ -71,6 +71,7 @@ void Game::Update()
 		}
 		else
 		{
+			UpdateGrid();
 			_window->GetWindow().draw(_gridSprite);
 
 			for (size_t row = 0; row < 3; row++)
@@ -118,8 +119,6 @@ void Game::Handle()
 				}
 				else
 				{
-					UpdateGrid();
-
 					UserPlay();
 					break;
 				}
@@ -192,12 +191,10 @@ void Game::UserPlay()
 						//Send coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
 						auto mes = _client->getMessage();
-						mes["x"] = col;
-						mes["y"] = row;
+						mes["x"] = row;
+						mes["y"] = col;
 						_client->setMessage(mes);
-						_client->ClientSendMessage(_client->getMessage());
-
-						std::cout << _client->getMessage() << std::endl;
+						//_client->ClientSendMessage(_client->getMessage());
 
 						_client->setClientCanPlay(false);
 					}
@@ -300,6 +297,12 @@ int Game::CheckWin()
 		{
 			if (_client->getBoxAssigned(row, col) == EMPTY && _boxAssignedSingle[row][col] == EMPTY)
 			{
+				auto mes = _client->getMessage();
+				mes["State"] = -1;
+				_client->setMessage(mes);
+				_client->ClientSendMessage(_client->getMessage());
+
+				std::cout << _client->getMessage() << std::endl;
 				return EMPTY;
 			}
 		}
@@ -319,9 +322,11 @@ void Game::OnWin(int checkwin)
 	_PlayerWon = true;
 	if (_menu.getInMulti())
 	{
-		/*auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
-		mes["WinCondition"] = _PlayerWon;
-		_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));*/
+		auto mes = _client->getMessage();
+		mes["WinCondition"] = checkwin;
+		_client->setMessage(mes);
+		_client->ClientSendMessage(_client->getMessage());
+		std::cout << _client->getMessage() << std::endl;
 	}
 
 	// add Play again screen
