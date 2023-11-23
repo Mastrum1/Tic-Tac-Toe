@@ -19,8 +19,7 @@ public:
 	int Init(HINSTANCE hInstance);
 	void AcceptConnexion(WPARAM wParam, HWND hwnd);
 	void CloseConnexion(SOCKET sock);
-	void Read();
-	void Work();
+	void Read(WPARAM wParam);
 	void LogClient(WPARAM wParam);
 
 	sockaddr_in addr;
@@ -29,8 +28,6 @@ public:
 
 private:
 	static Server* _instance;
-
-	SOCKET hClient;
 
 	int _server_fd, _new_socket;
 	char _opt = 1;

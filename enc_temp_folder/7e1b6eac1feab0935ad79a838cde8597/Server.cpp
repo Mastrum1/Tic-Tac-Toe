@@ -114,7 +114,6 @@ void Server::Read(WPARAM wParam)
     if (data["Type"] == REQUEST_ID) {
         if (data["Cmd"] == SET) {
             json myGame;
-            
             if (data["Player"] == 1) {
                 myGame["Type"] = NOTIFICATION_ID;
                 myGame["Cmd"] = PLAY_ID;
@@ -131,30 +130,6 @@ void Server::Read(WPARAM wParam)
                 myGame["y"] = data["y"];
                 myGame["WinCondition"] = data["WinCondition"];
                 send(_dataList[data["ID"]]->getClient1()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-            }
-
-            if (data["WinCondition"] != -1) {
-                if (data["WinCondition"] == 1) {
-                    _dataList[data["ID"]]->getClient1()->addRoundCount();
-                    _dataList[data["ID"]]->getClient1()->addRoundWin();
-                    _dataList[data["ID"]]->getClient2()->addRoundCount();
-                    _dataList[data["ID"]]->getClient2()->addRoundLose();
-				}
-                else if (data["WinCondition"] == 2) {
-                    _dataList[data["ID"]]->getClient2()->addRoundCount();
-                    _dataList[data["ID"]]->getClient2()->addRoundWin();
-                    _dataList[data["ID"]]->getClient1()->addRoundCount();
-                    _dataList[data["ID"]]->getClient1()->addRoundLose();
-				}   
-                db->updateClientinDB(_dataList[data["ID"]]->getClient1());
-				db->updateClientinDB(_dataList[data["ID"]]->getClient2());
-				_dataList[data["ID"]]->setEnded(data["WinCondition"]);
-				myGame["Type"] = NOTIFICATION_ID;
-				myGame["Cmd"] = PLAY_ID; //Changer d'ID
-                //Envoyer les données de fin de partie + mettre a jour le joueur
-				send(_dataList[data["ID"]]->getClient1()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-				send(_dataList[data["ID"]]->getClient2()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-				myGame.clear(); 
             }
             myGame.clear();
         }

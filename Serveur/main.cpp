@@ -4,7 +4,6 @@
 DWORD ServerThread(void* param)
 {
 	Server* serv = Server::GetInstance();
-	serv->Work();
 	return 0;
 }
 
