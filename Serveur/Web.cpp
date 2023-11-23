@@ -1,7 +1,6 @@
 #include "Web.h"
 
 Web::Web() {
-    // Constructor implementation
 }
 
 Web::~Web() {
@@ -31,26 +30,23 @@ void Web::writeFile(const std::string& filename, const std::string& content) {
 }
 
 void Web::updateFile(const std::string& filename, const std::string& newContent) {
-    // Read existing content
     std::string existingContent = readFile(filename);
 
-    // Update content
     existingContent = newContent;
 
-    // Write back to the file
     writeFile(filename, existingContent);
 }
 
 void Web::deleteFile(const std::string& filename) {
-    // Use remove function to delete the file
     if (remove(filename.c_str()) != 0) {
         OutputDebugStringW(L"Failed Destroying");
     }
 }
 
 void Web::rewriteIndexHtml(int clientSocket) {
-    // Read the content of the index.html file
+
     std::string fileContent = readFile("Index.html");
+    Client _myGame;
 
     int numberOfGames;
     std::string buttonString;
@@ -58,10 +54,9 @@ void Web::rewriteIndexHtml(int clientSocket) {
     Server* serv = Server::GetInstance();
 
     for (int i = 0; i <= serv->getDataListLenght(); i++) {
-        std::string pageName = std::to_string(i);
-        std::string gameId = "game" + std::to_string(i);
-        buttonString += "<li><button onclick=\"window.open('tictactoe.html?gameId=" + gameId + "', '_blank');\">Game number " + std::to_string(i) + "</button></li>\n";
-        omegaString += "\n";
+        std::string pageName = std::to_string(i+1);
+        std::string gameId = "game" + std::to_string(i+1);
+        buttonString += "<button onclick=\"window.open('tictactoe.html?gameId=" + gameId + "', '_blank');\">Game number " + std::to_string(i+1) + "</button>\n";
     }
 
     std::string modifiedContent = R"(
@@ -114,13 +109,13 @@ void Web::rewriteIndexHtml(int clientSocket) {
 
              <section>
                
-                 <p>Hope we end this project ASAP</p>
+                 <p>Admin page for spectating</p>
              </section>)" +
         buttonString +
         R"(<div id="grid-container"></div>
 
              <footer>
-                 <p>Help me, this page has a trash aesthetic</p>
+                 <p>This page has no more than 3 lines of CSS</p>
              </footer>
          </div>
 
@@ -136,6 +131,8 @@ void Web::rewriteIndexHtml(int clientSocket) {
                          cell.dataset.col = j;
                          if(cell.dataset.row == 1  && cell.dataset.col == 1)
                          {cell.textContent = 'X'; }
+                         if(cell.dataset.row == 2  && cell.dataset.col == 1)
+                         {cell.textContent = 'O'; }
                          
 
                          gridContainer.appendChild(cell);
@@ -159,55 +156,52 @@ void Web::rewriteIndexHtml(int clientSocket) {
 
     send(clientSocket, httpResponse.c_str(), httpResponse.size(), 0);
 
-    // Update the file with new content
     updateFile("Index.html", modifiedContent);
 
     // Delete the file (uncomment if needed)
-    deleteFile("Index.html");
+    // deleteFile("Index.html");
 }
 
 int Web::CreateWebServer() {
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        OutputDebugStringW(L"Failed to init Winsock");
         return 1;
     }
 
-    // Create a socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket == -1) {
+        OutputDebugStringW(L"Failed to create server socket");
         return 1;
     }
 
-    // Bind the socket to an address
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(31310);
 
     if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) == -1) {
+        OutputDebugStringW(L"Failed to bind to an adress");
         return 1;
     }
 
-    // Listen for incoming connections
     if (listen(serverSocket, SOMAXCONN) == -1) {
+        OutputDebugStringW(L"Failed to connect");
         return 1;
     }
 
 
     while (true) {
-        // Accept a connection
         sockaddr_in clientAddress;
         socklen_t clientAddressSize = sizeof(clientAddress);
         int clientSocket = accept(serverSocket, reinterpret_cast<sockaddr*>(&clientAddress), &clientAddressSize);
         if (clientSocket == -1) {
-            std::cerr << "Failed to accept connection" << std::endl;
+            OutputDebugStringW(L"Failed to accept socket");
             continue;
         }
 
-        // Read the content of the index.html file
         std::string fileContent = readFile("Index.html");
 
-        // Send the regular response
         std::string httpResponse = "HTTP/1.1 200 OK\r\n"
             "Content-Type: text/html\r\n"
             "Content-Length: " + std::to_string(fileContent.size()) + "\r\n"
@@ -215,10 +209,8 @@ int Web::CreateWebServer() {
 
         send(clientSocket, httpResponse.c_str(), httpResponse.size(), 0);
 
-        // Rewrite and update the file
         rewriteIndexHtml(clientSocket);
 
-        // Close the client socket
         closesocket(clientSocket);
     }
 

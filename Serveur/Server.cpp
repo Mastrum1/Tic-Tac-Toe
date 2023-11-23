@@ -2,6 +2,12 @@
 
 using json = nlohmann::json;
 
+
+Window::~Window()
+{
+
+}
+
 Server::Server()
 {
     db = new DataBase();
@@ -225,33 +231,6 @@ void Server::Read(WPARAM wParam)
         }
     }
     data.clear();
-}
-
-void Server::HttpGet()
-{
-    std::ifstream htmlFile("Index.html", std::ios::in | std::ios::binary);
-
-    if (!htmlFile.is_open()) {
-        std::string errorResponse = "HTTP/1.0 404 Not Found\r\n\r\n";
-        send(hClient, errorResponse.c_str(), errorResponse.length(), 0);
-        closesocket(hClient);
-        return;
-    }
-
-    std::string content((std::istreambuf_iterator<char>(htmlFile)), std::istreambuf_iterator<char>());
-
-    std::string response =
-        "HTTP/1.0 200 OK\r\n"
-        "Content-Type: text/html\r\n"
-        "Content-Length: " + std::to_string(content.length()) + "\r\n"
-        "\r\n" + content;
-
-    if (send(hClient, response.c_str(), response.length(), 0) == -1) {
-        OutputDebugString(L"Error sending HTTP response.\n");
-    }
-
-    htmlFile.close();
-    closesocket(hClient);
 }
 
 void Server::LogClient(WPARAM wParam) {

@@ -48,29 +48,16 @@
 
              <section>
                
-                 <p>Hope we end this project ASAP</p>
-             </section><li><button onclick="window.open('tictactoe.html?gameId=game0', '_blank');">Game number 0</button></li>
-<li><button onclick="window.open('tictactoe.html?gameId=game1', '_blank');">Game number 1</button></li>
-<li><button onclick="window.open('tictactoe.html?gameId=game2', '_blank');">Game number 2</button></li>
-<li><button onclick="window.open('tictactoe.html?gameId=game3', '_blank');">Game number 3</button></li>
-<li><button onclick="window.open('tictactoe.html?gameId=game4', '_blank');">Game number 4</button></li>
-<li><button onclick="window.open('tictactoe.html?gameId=game5', '_blank');">Game number 5</button></li>
-<li><button onclick="window.open('tictactoe.html?gameId=game6', '_blank');">Game number 6</button></li>
+                 <p>Admin page for spectating</p>
+             </section><button onclick="window.open('tictactoe.html?gameId=game1', '_blank');">Game number 1</button>
 <div id="grid-container"></div>
 
              <footer>
-                 <p>Help me, this page has a trash aesthetic</p>
+                 <p>This page has no more than 3 lines of CSS</p>
              </footer>
          </div>
 
-         <script>
-             // Function to handle cell clicks
-             function onCellClick(row, col) {
-                 console.log('Clicked on cell:', row, col);
-                 // Add your logic here for handling cell clicks
-             }
-
-             // Function to create the Tic-Tac-Toe grid
+         <script> 
              function createGrid() {
                  var gridContainer = document.getElementById('grid-container');
 
@@ -82,6 +69,8 @@
                          cell.dataset.col = j;
                          if(cell.dataset.row == 1  && cell.dataset.col == 1)
                          {cell.textContent = 'X'; }
+                         if(cell.dataset.row == 2  && cell.dataset.col == 1)
+                         {cell.textContent = 'O'; }
                          
 
                          gridContainer.appendChild(cell);

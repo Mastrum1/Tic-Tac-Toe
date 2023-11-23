@@ -24,8 +24,6 @@ public:
 	void LogClient(WPARAM wParam);
 	Data* getGameData(int index);
 	int getDataListLenght();
-	void HttpGet();
-	void WriteInJson(json data);
 
 	sockaddr_in addr;
 	socklen_t addrlen = sizeof(addr);
