@@ -21,6 +21,7 @@ public:
 	void CloseConnexion(SOCKET sock);
 	void Read(WPARAM wParam);
 	void LogClient(WPARAM wParam);
+	Data* getData(int id);
 
 	sockaddr_in addr;
 	socklen_t addrlen = sizeof(addr);

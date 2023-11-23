@@ -18,6 +18,7 @@ public:
 	Client* getClient(int id); //Get a client from the local database
 
 	std::map<int, Client*> _clientsList;
+	std::map<SOCKET, Client*> _clientsSocketList;
 private:
 	json ClientDB;
 };
