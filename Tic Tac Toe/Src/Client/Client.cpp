@@ -6,7 +6,6 @@
 
 Client::Client()
 {
-	m_OnPlayerWon = false;
 }	
 
 Client::~Client()
