@@ -21,6 +21,7 @@
 #define PLAYER2 2
 
 // Result of Game
+#define NOWIN -1
 #define PLAYER1_WIN 1
 #define PLAYER2_WIN 2
 #define DRAW 0

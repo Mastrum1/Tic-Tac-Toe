@@ -297,13 +297,7 @@ int Game::CheckWin()
 		{
 			if (_client->getBoxAssigned(row, col) == EMPTY && _boxAssignedSingle[row][col] == EMPTY)
 			{
-				auto mes = _client->getMessage();
-				mes["State"] = -1;
-				_client->setMessage(mes);
-				_client->ClientSendMessage(_client->getMessage());
-
-				std::cout << _client->getMessage() << std::endl;
-				return EMPTY;
+				return NOWIN;
 			}
 		}
 	}
@@ -313,13 +307,6 @@ int Game::CheckWin()
 
 void Game::OnWin(int checkwin)
 {
-	if (checkwin == EMPTY) { return; }
-
-	if (checkwin == PLAYER1_WIN) _gameMessage = sf::Text("You Won!", _arial, 30);
-	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("You lost...", _arial, 30);
-	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
-
-	_PlayerWon = true;
 	if (_menu.getInMulti())
 	{
 		auto mes = _client->getMessage();
@@ -328,6 +315,13 @@ void Game::OnWin(int checkwin)
 		_client->ClientSendMessage(_client->getMessage());
 		std::cout << _client->getMessage() << std::endl;
 	}
+	if (checkwin == NOWIN) { return; }
+
+	if (checkwin == PLAYER1_WIN) _gameMessage = sf::Text("You Won!", _arial, 30);
+	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("You lost...", _arial, 30);
+	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
+
+	_PlayerWon = true;
 
 	// add Play again screen
 	Reset();
