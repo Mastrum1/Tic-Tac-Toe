@@ -92,14 +92,9 @@ void Server::AcceptConnexion(WPARAM wParam, HWND hwnd)
 
 void Server::CloseConnexion(SOCKET sock)
 {
-    for (auto& c : db->_clientsList)
-    {
-        if (c.second->getSocket() == sock)
-        {
-			db->_clientsList.erase(c.second->getID());
-            break;
-		}
-	}
+    int _cID = db->_clientsSocketList[sock]->getID();
+    db->_clientsList.erase(_cID);
+    db->_clientsSocketList.erase(sock);
 	closesocket(sock);
     OutputDebugString(L"\nSocket closed\n");
 }
@@ -124,23 +119,19 @@ void Server::Read(WPARAM wParam)
         if (data["Cmd"] == SET) {
             json myGame;
             
-            if (data["Player"] == 1) {
-                myGame["Type"] = NOTIFICATION_ID;
-                myGame["Cmd"] = PLAY_ID;
-                myGame["x"] = data["x"];
-                myGame["y"] = data["y"];
-                myGame["WinCondition"] = data["WinCondition"];
+            myGame["Type"] = NOTIFICATION_ID;
+            myGame["Cmd"] = PLAY_ID;
+            myGame["x"] = data["x"];
+            myGame["y"] = data["y"];
+            myGame["WinCondition"] = data["WinCondition"];
+
+            if (data["Player"] == 1) 
                 send(_dataList[data["ID"]]->getClient2()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-            }
-            else
-            {
-                myGame["Type"] = NOTIFICATION_ID;
-                myGame["Cmd"] = PLAY_ID;
-                myGame["x"] = data["x"];
-                myGame["y"] = data["y"];
-                myGame["WinCondition"] = data["WinCondition"];
+            
+            else if (data["Player"] == 2)
                 send(_dataList[data["ID"]]->getClient1()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-            }
+
+            _dataList[data["ID"]]->setGridCoord(data["x"], data["y"], data["Player"]);
 
             if (data["WinCondition"] != -1) {
                 if (data["WinCondition"] == 1) {
@@ -158,12 +149,27 @@ void Server::Read(WPARAM wParam)
                 db->updateClientinDB(_dataList[data["ID"]]->getClient1());
 				db->updateClientinDB(_dataList[data["ID"]]->getClient2());
 				_dataList[data["ID"]]->setEnded(data["WinCondition"]);
-				myGame["Type"] = NOTIFICATION_ID;
-				myGame["Cmd"] = PLAY_ID; //Changer d'ID
-                //Envoyer les données de fin de partie + mettre a jour le joueur
+                myGame.clear();
+                myGame["Type"] = NOTIFICATION_ID;
+                myGame["Cmd"] = SENDPASSPORT_ID;
+
+                //Player1
+                myGame["ID"] = _dataList[data["ID"]]->getClient1()->getID();
+                myGame["Name"] = _dataList[data["ID"]]->getClient1()->getName();
+                myGame["RoundCount"] = _dataList[data["ID"]]->getClient1()->getRoundCount();
+                myGame["RoundWin"] = _dataList[data["ID"]]->getClient1()->getRoundWin();
+                myGame["RoundLose"] = _dataList[data["ID"]]->getClient1()->getRoundLose();
 				send(_dataList[data["ID"]]->getClient1()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
+
+                //Player2
+                myGame["ID"] = _dataList[data["ID"]]->getClient2()->getID();
+                myGame["Name"] = _dataList[data["ID"]]->getClient2()->getName();
+                myGame["RoundCount"] = _dataList[data["ID"]]->getClient2()->getRoundCount();
+                myGame["RoundWin"] = _dataList[data["ID"]]->getClient2()->getRoundWin();
+                myGame["RoundLose"] = _dataList[data["ID"]]->getClient2()->getRoundLose();
 				send(_dataList[data["ID"]]->getClient2()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-				myGame.clear(); 
+
+                _dataList[data["ID"]] = NULL;
             }
             myGame.clear();
         }
@@ -184,6 +190,7 @@ void Server::Read(WPARAM wParam)
                 myClientJson["RoundLose"] = myClient.getRoundLose();
                 send(myClient.getSocket(), myClientJson.dump().c_str(), myClientJson.dump().size(), 0);
                 db->_clientsList.insert(std::pair<int, Client*>(data["ID"], &myClient));
+                db->_clientsSocketList.insert(std::pair<SOCKET, Client*>(hClient, &myClient));
             }
             else
             {
@@ -193,7 +200,6 @@ void Server::Read(WPARAM wParam)
                     db->_clientsList.insert(std::pair<int, Client*>(data["ID"], c));
                     db->_clientsList[data["ID"]]->setSocket(hClient);
                     OutputDebugString(L"\nConnection Completed\n");
-
                 }
             }
             OutputDebugString(L"\Passeport valided\n");
@@ -203,7 +209,7 @@ void Server::Read(WPARAM wParam)
             bool founded = false;
             json myData;
             for (auto& d : _dataList) {
-                if (d.second->isStarted() == false && d.second->isPrivate() == false && founded == false); {
+                if (d.second->isStarted() == false && d.second->isPrivate() == false && founded == false && d.second != NULL); {
                     founded = true;
                     d.second->setClient2(db->_clientsList[data["ID"]]);
                     d.second->setStarted(true);
@@ -217,7 +223,6 @@ void Server::Read(WPARAM wParam)
                     OutputDebugString(L"\nGame Joined\n");
                     myData.clear();
                 }
-
             }
             if (founded == false) {
                 Data* GameData = new Data();
