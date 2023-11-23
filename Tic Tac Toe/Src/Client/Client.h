@@ -46,7 +46,7 @@ public:
 	bool getClientCanPlay() { return clientCanPlay; };
 	void setClientCanPlay(bool play) { clientCanPlay = play; };
 
-	bool getOnPlayerWon() { return m_OnPlayerWon; };
+	int getWinState() { return m_WinState; };
 private:
 	
 	//Server Connection
@@ -60,7 +60,7 @@ private:
 
 	int _gameID;
 	int _playerNum;
-	bool m_OnPlayerWon;
+	int m_WinState;
 
 	int _boxAssigned[3][3];
 

@@ -138,12 +138,8 @@ void Client::ClientReceiveMessage()
 		if (data["Cmd"] == PLAY)
 		{
 			_boxAssigned[data["x"]][data["y"]] = PLAYER2;
+			m_WinState = data["WinCondition"];
 			clientCanPlay = true;
-		}
-
-		if (data["Cmd"] == WIN)
-		{
-			m_OnPlayerWon = true;
 		}
 	}	
 	std::cout << "Message received : " << buffer << std::endl;

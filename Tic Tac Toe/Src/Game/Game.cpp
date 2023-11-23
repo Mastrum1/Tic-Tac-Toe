@@ -178,7 +178,7 @@ void Game::UserPlay()
 			{
 				if (_client->getBoxAssigned(row, col) == EMPTY && _boxAssignedSingle[row][col] == EMPTY)
 				{
-					if (_menu.getInMulti() && _client->getClientCanPlay())
+					if (_menu.getInMulti() && _client->getClientCanPlay() && _client->getWinState() == NOWIN)
 					{
 						_client->setBoxAssigned(row, col, PLAYER1);
 
@@ -188,14 +188,12 @@ void Game::UserPlay()
 						}
 						else _gridPieces[row][col].setTexture(&_oTex);
 
-						//Send coordinate message
+						//Create coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
 						auto mes = _client->getMessage();
 						mes["x"] = row;
 						mes["y"] = col;
 						_client->setMessage(mes);
-						//_client->ClientSendMessage(_client->getMessage());
-
 						_client->setClientCanPlay(false);
 					}
 					else if (!_menu.getInMulti())
@@ -307,7 +305,7 @@ int Game::CheckWin()
 
 void Game::OnWin(int checkwin)
 {
-	if (_menu.getInMulti())
+	if (_menu.getInMulti() && _client->getWinState() != NOWIN)
 	{
 		auto mes = _client->getMessage();
 		mes["WinCondition"] = checkwin;
@@ -316,12 +314,9 @@ void Game::OnWin(int checkwin)
 		std::cout << _client->getMessage() << std::endl;
 	}
 	if (checkwin == NOWIN) { return; }
-
 	if (checkwin == PLAYER1_WIN) _gameMessage = sf::Text("You Won!", _arial, 30);
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("You lost...", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
-
-	_PlayerWon = true;
 
 	// add Play again screen
 	Reset();
@@ -347,7 +342,6 @@ void Game::BotPlay()
 
 void Game::Reset()
 {
-	_PlayerWon = false;
 	if (_menu.getInMulti())
 	{
 		_client->CloseSocket();
