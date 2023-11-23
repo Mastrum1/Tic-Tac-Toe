@@ -29,6 +29,7 @@ public:
 	int getEnded();
 	void setEnded(int value);
 
+
 private:
 	int _id;
 	bool _isPrivate; // false = public match, true = private match

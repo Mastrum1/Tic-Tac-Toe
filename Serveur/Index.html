@@ -80,17 +80,14 @@
                          cell.className = 'cell';
                          cell.dataset.row = i;
                          cell.dataset.col = j;
-
-                         // Add a click event listener to each cell
-                         cell.addEventListener('click', function (event) {
-                             var clickedRow = event.target.dataset.row;
-                             var clickedCol = event.target.dataset.col;
-                             onCellClick(clickedRow, clickedCol);
-                         });
+                         if(cell.dataset.row == 1)
+                         {cell.textContent = 'X'; }
+                         
 
                          gridContainer.appendChild(cell);
                      }
                  }
+                
              }
 
              // Create the grid when the page loads
