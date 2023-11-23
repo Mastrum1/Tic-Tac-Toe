@@ -305,7 +305,7 @@ int Game::CheckWin()
 
 void Game::OnWin(int checkwin)
 {
-	if (_menu.getInMulti() && _client->getWinState() != NOWIN)
+	if (_menu.getInMulti() && _client->getWinState() == NOWIN)
 	{
 		auto mes = _client->getMessage();
 		mes["WinCondition"] = checkwin;
@@ -313,6 +313,11 @@ void Game::OnWin(int checkwin)
 		_client->ClientSendMessage(_client->getMessage());
 		std::cout << _client->getMessage() << std::endl;
 	}
+	else if (_menu.getInMulti() && _client->getWinState() != NOWIN)
+	{
+		Reset();
+	}
+
 	if (checkwin == NOWIN) { return; }
 	if (checkwin == PLAYER1_WIN) _gameMessage = sf::Text("You Won!", _arial, 30);
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("You lost...", _arial, 30);

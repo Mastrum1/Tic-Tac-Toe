@@ -6,6 +6,7 @@
 
 Client::Client()
 {
+	m_WinState = NOWIN;
 }	
 
 Client::~Client()
