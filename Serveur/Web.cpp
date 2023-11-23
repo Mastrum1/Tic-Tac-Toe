@@ -44,7 +44,7 @@ void Web::updateFile(const std::string& filename, const std::string& newContent)
 void Web::deleteFile(const std::string& filename) {
     // Use remove function to delete the file
     if (remove(filename.c_str()) != 0) {
-        std::cerr << "Error deleting file: " << filename << std::endl;
+        OutputDebugStringW(L"Failed Destroying");
     }
 }
 
@@ -57,10 +57,7 @@ void Web::rewriteIndexHtml(int clientSocket) {
     std::string omegaString;
     Server* serv = Server::GetInstance();
 
-    // Send the modified response
-
-    // Remplace 7 by : Serv->getDataListLenght(); for actual number of games
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i <= serv->getDataListLenght(); i++) {
         std::string pageName = std::to_string(i);
         std::string gameId = "game" + std::to_string(i);
         buttonString += "<li><button onclick=\"window.open('tictactoe.html?gameId=" + gameId + "', '_blank');\">Game number " + std::to_string(i) + "</button></li>\n";
@@ -127,14 +124,7 @@ void Web::rewriteIndexHtml(int clientSocket) {
              </footer>
          </div>
 
-         <script>
-             // Function to handle cell clicks
-             function onCellClick(row, col) {
-                 console.log('Clicked on cell:', row, col);
-                 // Add your logic here for handling cell clicks
-             }
-
-             // Function to create the Tic-Tac-Toe grid
+         <script> 
              function createGrid() {
                  var gridContainer = document.getElementById('grid-container');
 
@@ -173,20 +163,18 @@ void Web::rewriteIndexHtml(int clientSocket) {
     updateFile("Index.html", modifiedContent);
 
     // Delete the file (uncomment if needed)
-    //deleteFile("Index.html");
+    deleteFile("Index.html");
 }
 
 int Web::CreateWebServer() {
     WSADATA wsaData;
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
-        std::cerr << "Failed to initialize winsock" << std::endl;
         return 1;
     }
 
     // Create a socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket == -1) {
-        std::cerr << "Failed to create socket" << std::endl;
         return 1;
     }
 
@@ -197,17 +185,14 @@ int Web::CreateWebServer() {
     serverAddress.sin_port = htons(31310);
 
     if (bind(serverSocket, reinterpret_cast<sockaddr*>(&serverAddress), sizeof(serverAddress)) == -1) {
-        std::cerr << "Failed to bind socket to address" << std::endl;
         return 1;
     }
 
     // Listen for incoming connections
     if (listen(serverSocket, SOMAXCONN) == -1) {
-        std::cerr << "Failed to listen for connections" << std::endl;
         return 1;
     }
 
-    std::cout << "Server listening on port " << 31310 << std::endl;
 
     while (true) {
         // Accept a connection

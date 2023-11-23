@@ -12,8 +12,6 @@ DWORD WebThread(void* param)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-
-
     Server* serv = Server::GetInstance();
     SOCKADDR_IN InternetAddr;
     MSG msg;
@@ -39,13 +37,3 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     return 0;  
 }
-
-
-
-
-
-//int main() {
-//	Server s;
-//	s.Init();
-//	return 0;
-//}
