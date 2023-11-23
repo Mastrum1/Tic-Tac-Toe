@@ -39,6 +39,31 @@ void Client::setName(std::string value)
 	_name = value;
 }
 
+bool Client::isInGame()
+{
+	return _inGame;
+}
+
+void Client::setInGame(bool value)
+{
+	_inGame = value;
+}
+
+int Client::getGameID()
+{
+	return _gameID;
+}
+
+void Client::setGameID(int value)
+{
+	_gameID = value;
+}
+
+void Client::resetGameID()
+{
+	_gameID = NULL;
+}
+
 int Client::getRoundCount()
 {
 	return _roundCount;
