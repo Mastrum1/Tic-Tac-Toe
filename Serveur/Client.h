@@ -20,6 +20,10 @@ public:
 	bool isInGame();
 	void setInGame(bool value);
 
+	int getGameID();
+	void setGameID(int value);
+	void resetGameID();
+
 	int getRoundCount();
 	void setRoundCount(int value);
 	void addRoundCount();
@@ -36,6 +40,9 @@ private:
 	int _id;
 	SOCKET _socket = NULL; //Null if not connected
 	std::string _name;
+
+	bool _inGame = false;
+	int _gameID = NULL;
 
 	int _roundCount = 0;
 	int _roundWin = 0;
