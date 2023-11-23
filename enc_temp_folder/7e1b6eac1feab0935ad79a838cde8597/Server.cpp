@@ -8,7 +8,6 @@ Server::Server()
 }
 
 Server* Server::_instance = nullptr;
-
 Server* Server::GetInstance()
 {
     if (_instance == nullptr)
@@ -18,13 +17,11 @@ Server* Server::GetInstance()
 	return _instance;
 }
 
-
 int Server::Init(HINSTANCE hInstance)
 {
 	WSADATA wsaData;
 	SOCKADDR_IN InternetAddr;
     Window window(hInstance);
-
 
     OutputDebugString(L"\nServer Starting...\n");
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
@@ -117,7 +114,6 @@ void Server::Read(WPARAM wParam)
     if (data["Type"] == REQUEST_ID) {
         if (data["Cmd"] == SET) {
             json myGame;
-            
             if (data["Player"] == 1) {
                 myGame["Type"] = NOTIFICATION_ID;
                 myGame["Cmd"] = PLAY_ID;
@@ -134,30 +130,6 @@ void Server::Read(WPARAM wParam)
                 myGame["y"] = data["y"];
                 myGame["WinCondition"] = data["WinCondition"];
                 send(_dataList[data["ID"]]->getClient1()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-            }
-
-            if (data["WinCondition"] != -1) {
-                if (data["WinCondition"] == 1) {
-                    _dataList[data["ID"]]->getClient1()->addRoundCount();
-                    _dataList[data["ID"]]->getClient1()->addRoundWin();
-                    _dataList[data["ID"]]->getClient2()->addRoundCount();
-                    _dataList[data["ID"]]->getClient2()->addRoundLose();
-				}
-                else if (data["WinCondition"] == 2) {
-                    _dataList[data["ID"]]->getClient2()->addRoundCount();
-                    _dataList[data["ID"]]->getClient2()->addRoundWin();
-                    _dataList[data["ID"]]->getClient1()->addRoundCount();
-                    _dataList[data["ID"]]->getClient1()->addRoundLose();
-				}   
-                db->updateClientinDB(_dataList[data["ID"]]->getClient1());
-				db->updateClientinDB(_dataList[data["ID"]]->getClient2());
-				_dataList[data["ID"]]->setEnded(data["WinCondition"]);
-				myGame["Type"] = NOTIFICATION_ID;
-				myGame["Cmd"] = PLAY_ID; //Changer d'ID
-                //Envoyer les données de fin de partie + mettre a jour le joueur
-				send(_dataList[data["ID"]]->getClient1()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-				send(_dataList[data["ID"]]->getClient2()->getSocket(), myGame.dump().c_str(), myGame.dump().size(), 0);
-				myGame.clear(); 
             }
             myGame.clear();
         }
@@ -227,33 +199,6 @@ void Server::Read(WPARAM wParam)
     data.clear();
 }
 
-void Server::HttpGet()
-{
-    std::ifstream htmlFile("Index.html", std::ios::in | std::ios::binary);
-
-    if (!htmlFile.is_open()) {
-        std::string errorResponse = "HTTP/1.0 404 Not Found\r\n\r\n";
-        send(hClient, errorResponse.c_str(), errorResponse.length(), 0);
-        closesocket(hClient);
-        return;
-    }
-
-    std::string content((std::istreambuf_iterator<char>(htmlFile)), std::istreambuf_iterator<char>());
-
-    std::string response =
-        "HTTP/1.0 200 OK\r\n"
-        "Content-Type: text/html\r\n"
-        "Content-Length: " + std::to_string(content.length()) + "\r\n"
-        "\r\n" + content;
-
-    if (send(hClient, response.c_str(), response.length(), 0) == -1) {
-        OutputDebugString(L"Error sending HTTP response.\n");
-    }
-
-    htmlFile.close();
-    closesocket(hClient);
-}
-
 void Server::LogClient(WPARAM wParam) {
     json Login;
     Login["Type"] = NOTIFICATION_ID;
@@ -262,31 +207,5 @@ void Server::LogClient(WPARAM wParam) {
     send((SOCKET)wParam, Login.dump().c_str(), Login.dump().size(), 0);
 }
 
-Data* Server::getGameData(int index)
-{
-    return _dataList[index];
-}
 
-int Server::getDataListLenght() 
-{
-    return _dataList.size();
-}
-
-
-//void Server::HttpPost() {
-//    // Prepare the HTTP POST request
-//    std::string httpRequest = "POST ../../../Tic-Tac-Toe/Serveur/Index.html HTTP/1.1\r\n"
-//        "Host: " + std::string() + "\r\n"
-//        "Content-Type: application/x-www-form-urlencoded\r\n"
-//        "Content-Length: " + std::to_string(strlen(postData)) + "\r\n"
-//        "\r\n" + postData;
-//
-//    // Send the HTTP request
-//    if (send(clientSocket, httpRequest.c_str(), httpRequest.length(), 0) == -1) {
-//        std::cerr << "Error sending HTTP request." << std::endl;
-//        close(clientSocket);
-//        return 1;
-//    }
-//
-//}
 

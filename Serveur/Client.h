@@ -17,6 +17,9 @@ public:
 	std::string getName();
 	void setName(std::string value);
 
+	bool isInGame();
+	void setInGame(bool value);
+
 	int getRoundCount();
 	void setRoundCount(int value);
 	void addRoundCount();

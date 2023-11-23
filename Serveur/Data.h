@@ -14,11 +14,11 @@ public:
 	bool isPrivate();
 	void setPrivate(bool value);
 
-	Client getClient1();
-	Client getClient2();
+	Client* getClient1();
+	Client* getClient2();
 
-	void setClient1(Client value);
-	void setClient2(Client value);
+	void setClient1(Client* value);
+	void setClient2(Client* value);
 
 	int getGridCoord(int x, int y);
 	void setGridCoord(int x, int y, int value);
@@ -34,8 +34,8 @@ private:
 	int _id;
 	bool _isPrivate; // false = public match, true = private match
 
-	Client Client1;
-	Client Client2;
+	Client* Client1;
+	Client* Client2;
 	
 	int _grid[3][3] = { 0 };
 

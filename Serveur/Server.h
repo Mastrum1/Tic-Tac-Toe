@@ -20,7 +20,7 @@ public:
 	int Init(HINSTANCE hInstance);
 	void AcceptConnexion(WPARAM wParam, HWND hwnd);
 	void CloseConnexion(SOCKET sock);
-	void Read();
+	void Read(WPARAM wParam);
 	void LogClient(WPARAM wParam);
 	Data* getGameData(int index);
 	int getDataListLenght();
@@ -34,18 +34,18 @@ public:
 private:
 	static Server* _instance;
 
-	SOCKET hClient;
-
 	int _server_fd, _new_socket;
 	char _opt = 1;
 	size_t _valread;
-	char _buffer[1024] = { 0 };
 	bool _isListening = false;
+
+	std::vector <SOCKET> _acceptConnectionList;
 
 //Data
 private :
 	DataBase* db; //Contain all the clients
 
 	std::map<int, Data*> _dataList;
+	std::vector<json> _dataListVector;
 };
 

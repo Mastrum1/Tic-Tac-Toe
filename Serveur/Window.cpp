@@ -52,7 +52,7 @@ LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
                 case FD_READ: 
                 {
-                    serv->Read();
+                    serv->Read(wParam);
                     return 0;
                 }
 

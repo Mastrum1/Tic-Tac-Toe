@@ -26,20 +26,20 @@ void Data::setPrivate(bool value)
 	_isPrivate = value;
 }
 
-Client Data::getClient1()
+Client* Data::getClient1()
 {
 	return Client1;
 }
-Client Data::getClient2()
+Client* Data::getClient2()
 {
 	return Client2;
 }
 
-void Data::setClient1(Client value)
+void Data::setClient1(Client* value)
 {
 	Client1 = value;
 }
-void Data::setClient2(Client value)
+void Data::setClient2(Client* value)
 {
 	Client2 = value;
 }

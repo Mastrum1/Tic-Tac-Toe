@@ -5,6 +5,7 @@
 #include <string>
 #include <Windows.h>
 #include <fstream>
+#include <vector>
 
 #include "nlohmann/json.hpp"
 
@@ -23,5 +24,10 @@
 #define NOTIFICATION_ID 2
 
 // for command to server 
+#define CONNECTION_ID 0
 #define GET 1
 #define SET 2
+#define MATCHMAKING_ID 3
+#define SENDPASSPORT_ID 4
+#define SETUPGAME_ID 5
+#define PLAY_ID 6

@@ -22,7 +22,7 @@ void DataBase::loadClientDB()
 		client->setRoundCount(c["RoundCount"]);
 		client->setRoundWin(c["RoundWin"]);
 		client->setRoundLose(c["RoundLose"]);
-		_clientsList[client->getID()] = client;
+		_clientsList.insert(std::pair<int, Client*>(client->getID(), client));
 	}
 	ClientDB.clear();
 }
@@ -43,31 +43,30 @@ void DataBase::updateClientDB(std::map<int, Client*> _clientsList)
 	DB << ClientDB2;
 }
 
-Client DataBase::pullClientDB(int index)
+Client* DataBase::pullClientDB(int id)
 {
 	std::ifstream DB("DB.json");
 	ClientDB = json::parse(DB);
 
 	Client* c = new Client();
-	c->setID(ClientDB[index]["ID"]);
-	c->setName(ClientDB[index]["Name"]);
-	c->setRoundCount(ClientDB[index]["RoundCount"]);
-	c->setRoundWin(ClientDB[index]["RoundWin"]);
-	c->setRoundLose(ClientDB[index]["RoundLose"]);
+	c->setID(ClientDB[std::to_string(id)]["ID"]);
+	c->setName(ClientDB[std::to_string(id)]["Name"]);
+	c->setRoundCount(ClientDB[std::to_string(id)]["RoundCount"]);
+	c->setRoundWin(ClientDB[std::to_string(id)]["RoundWin"]);
+	c->setRoundLose(ClientDB[std::to_string(id)]["RoundLose"]);
 
 	ClientDB.clear();
-	return *c;
+	return c;
 }
-
 void DataBase::updateClientinDB(Client* c)
 {
 	std::ofstream DB("DB.json");
 
-	ClientDB[c->getID()]["ID"] = c->getID();
-	ClientDB[c->getID()]["Name"] = c->getName();
-	ClientDB[c->getID()]["RoundCount"] = c->getRoundCount();
-	ClientDB[c->getID()]["RoundWin"] = c->getRoundWin();
-	ClientDB[c->getID()]["RoundLose"] = c->getRoundLose();
+	ClientDB[std::to_string(c->getID())]["ID"] = c->getID();
+	ClientDB[std::to_string(c->getID())]["Name"] = c->getName();
+	ClientDB[std::to_string(c->getID())]["RoundCount"] = c->getRoundCount();
+	ClientDB[std::to_string(c->getID())]["RoundWin"] = c->getRoundWin();
+	ClientDB[std::to_string(c->getID())]["RoundLose"] = c->getRoundLose();
 
 	DB << ClientDB;
 
@@ -77,6 +76,11 @@ void DataBase::updateClientinDB(Client* c)
 Client DataBase::createClientinDB(std::string name)
 {
 	std::ifstream DB("DB.json");
+	if (!DB.is_open())
+	{
+		OutputDebugString(L"\nDB not Found\n");
+	}
+
 	ClientDB = json::parse(DB);
 
 	Client* c = new Client();
@@ -99,6 +103,11 @@ Client DataBase::createClientinDB(std::string name)
 
 	ClientDB.clear();
 	return *c;	
+}
+
+Client* DataBase::getClient(int id)
+{
+	return _clientsList[id];
 }
 
 
