@@ -1,20 +1,42 @@
 #pragma once
-#include "pch/pch.h"
 
-class MenuManager
+#include "pch/pch.h"
+#include "MainMenu.h"
+#include "NameMenu.h"
+#include "Game/GameWindow.h"
+
+class GameWindow;
+
+class MenuManager : public MainMenu, NameMenu
 {
 public:
 	MenuManager();
-	~MenuManager();
+	virtual ~MenuManager();
 
-	bool IsMenuShowing();
+	bool isMenuShowing();
+	
+	void ShowMenu();
 	void HideMenu();
+	void ShowNameMenu();
 
-	void ShowMenu(sf::Text message);
+	bool ClickMulti();
+	bool ClickSingle();
+
+	bool ClickMatchMake();
+
+	bool getInMulti();
+	bool getIsMatchMaking();
+	bool getIsMainMenuShowing();
+	bool getIsMatchMakeShowing();
 
 private:
 
-	bool _menuShowing;
+	bool _isMenuShowing;
+	bool _isMainMenuShowing;
+	bool _needsName;
+	bool _inMultiGame;
+	bool _isMatchMaking;
+	bool _isMatchMakeShowing;
 
-	sf::FloatRect messageButton;
+	GameWindow* _window;
 };

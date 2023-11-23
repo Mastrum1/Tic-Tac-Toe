@@ -2,11 +2,14 @@
 
 #include "SFML/Graphics.hpp"
 #include "SFML/Window.hpp"
-#include "nlohmann/json.hpp"
 #include <iostream>
 #include <WinSock2.h>
 #include <WS2tcpip.h>
+#include <processthreadsapi.h>
+#include <WinUser.h>
 #include <string>
+#include <Windows.h>
+#include <fstream>
 
 //for screen size
 #define SCREEN_WIDTH 800
@@ -26,8 +29,13 @@
 #define REQUEST_ID 1
 #define NOTIFICATION_ID 2
 
-// for command to server 
+// for command to server
+#define CONNECTION_ID 0 
 #define GET 1
 #define SET 2
+#define MATCHMAKING_ID 3
+#define UPDATE_PASS 4
+#define SETTUP_PARTY 5
+#define PLAY 6
 
 

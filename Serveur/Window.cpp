@@ -26,10 +26,6 @@ Window::Window(HINSTANCE hInstance)
     }
 }
 
-Window::~Window()
-{
-}
-
 LRESULT Window::ServerWinProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     Server* serv = Server::GetInstance();

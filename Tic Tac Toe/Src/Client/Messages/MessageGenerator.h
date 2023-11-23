@@ -1,6 +1,5 @@
 #pragma once
-
-#include "pch/pch.h"
+#include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
 
@@ -9,8 +8,7 @@ class MessageGenerator
 public:
 	MessageGenerator();
 	virtual ~MessageGenerator();
-	json& CreateMessage(int id, int cmd);
-	std::string& FinalizeMessage(json message);
+	json& CreateNewMessage(int id, int cmd);
 
 
 	json GetClientMessage() { return m_Message; };
@@ -18,7 +16,6 @@ public:
 
 private:
 	json m_Message;
-	std::string m_FinalMessage;
 
 };
 

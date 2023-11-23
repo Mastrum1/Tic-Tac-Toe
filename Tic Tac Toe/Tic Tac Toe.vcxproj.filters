@@ -1,92 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Header Files\Game">
-      <UniqueIdentifier>{6e622f26-c47f-464f-a67b-5defd7d17b41}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\Board">
-      <UniqueIdentifier>{a88f92df-6dfd-46e9-8e9d-4cf1684aab2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Game\Menus">
-      <UniqueIdentifier>{9d717505-4560-44fd-a869-6c1996a86dc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Client">
-      <UniqueIdentifier>{22f71626-e44c-439e-b10d-1f2d9902b598}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Client\Messages">
-      <UniqueIdentifier>{2643d01c-1864-4537-9756-8b08eaed9bf4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="pch">
-      <UniqueIdentifier>{fc049c5e-a5b3-4136-9697-8421451e6f9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game">
-      <UniqueIdentifier>{c64600c9-897e-4a91-9a3d-ba3153148113}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Board">
-      <UniqueIdentifier>{dd06fbbb-2e82-4d89-bbd9-c195ac3c36a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game\Menus">
-      <UniqueIdentifier>{8e6221e8-5079-4e4e-ab43-4c586641ea02}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Client">
-      <UniqueIdentifier>{4eaea4f6-4ae0-4c09-aafa-6c838ded6eff}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Client\Messages">
-      <UniqueIdentifier>{02171fad-3519-4af2-a911-46b746f40d78}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="Src\Client\Client.cpp" />
+    <ClCompile Include="Src\Client\Messages\MessageGenerator.cpp" />
+    <ClCompile Include="Src\Game\Game.cpp" />
+    <ClCompile Include="Src\Game\GameWindow.cpp" />
+    <ClCompile Include="Src\Game\Menus\MainMenu.cpp" />
+    <ClCompile Include="Src\Game\Menus\MenuManager.cpp" />
+    <ClCompile Include="Src\Main.cpp" />
+    <ClCompile Include="Src\Client\Messages\WindowMessage.cpp" />
+    <ClCompile Include="Src\NameMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Src\Game\Game.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Client\Client.h">
-      <Filter>Header Files\Client</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\pch\pch.h">
-      <Filter>pch</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Client\Messages\MessageGenerator.h">
-      <Filter>Header Files\Client\Messages</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Game\Menus\MenuManager.h">
-      <Filter>Header Files\Game\Menus</Filter>
-    </ClInclude>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Src\Client\Client.h" />
+    <ClInclude Include="Src\Client\Messages\MessageGenerator.h" />
+    <ClInclude Include="Src\Game\Game.h" />
+    <ClInclude Include="Src\Game\GameWindow.h" />
+    <ClInclude Include="Src\Game\Menus\MainMenu.h" />
+    <ClInclude Include="Src\Game\Menus\MenuManager.h" />
+    <ClInclude Include="Src\pch\pch.h" />
+    <ClInclude Include="Src\Client\Messages\WindowMessage.h" />
+    <ClInclude Include="Src\NameMenu.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Tic Tac Toe.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Src\Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Game.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Client\Client.cpp">
-      <Filter>Source Files\Client</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Client\Messages\MessageGenerator.cpp">
-      <Filter>Source Files\Client\Messages</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Game\Menus\MenuManager.cpp">
-      <Filter>Source Files\Game\Menus</Filter>
-    </ClCompile>
+    <ResourceCompile Include="Tic Tac Toe.rc" />
   </ItemGroup>
 </Project>

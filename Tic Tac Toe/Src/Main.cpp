@@ -1,10 +1,9 @@
 #include "pch/pch.h"
 #include "Game/Game.h"
-#include "Client/Client.h"
 
-int main() {
-	Game game;
-	game.Start();
-
+int main() 
+{
+	Game* game = Game::GetInstance();
+	game->Start();
 	return 0;
 }
