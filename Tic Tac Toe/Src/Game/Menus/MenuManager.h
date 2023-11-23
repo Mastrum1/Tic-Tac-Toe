@@ -21,13 +21,22 @@ public:
 
 	bool ClickMulti();
 	bool ClickSingle();
-
 	bool ClickMatchMake();
+	void ClickEditName();
+	bool ClickSaveName();
+
+	void RemoveCharacter();
+	void AddCharacter(sf::Event e);
 
 	bool getInMulti();
 	bool getIsMatchMaking();
 	bool getIsMainMenuShowing();
 	bool getIsMatchMakeShowing();
+	bool getNeedsName();
+	bool getIsChangingName();
+
+	sf::Text getName();
+	void setName( sf::Text name );
 
 private:
 
@@ -37,6 +46,7 @@ private:
 	bool _inMultiGame;
 	bool _isMatchMaking;
 	bool _isMatchMakeShowing;
+	bool _isChangingName;
 
 	GameWindow* _window;
 };

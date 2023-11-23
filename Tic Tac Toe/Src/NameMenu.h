@@ -12,6 +12,8 @@ protected:
 	sf::Text _name;
 	sf::FloatRect _editNameButton;
 
+	sf::Text _save;
+	sf::FloatRect _saveButton;
 	bool _isWriting;
 };
 

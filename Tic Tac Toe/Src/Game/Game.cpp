@@ -61,6 +61,7 @@ void Game::Update()
 {
 	while (_window->GetWindow().isOpen()) 
 	{
+		UpdateGrid();
 
 		Handle();
 		_window->Update();
@@ -71,7 +72,6 @@ void Game::Update()
 		}
 		else
 		{
-			UpdateGrid();
 			_window->GetWindow().draw(_gridSprite);
 
 			for (size_t row = 0; row < 3; row++)
@@ -110,7 +110,22 @@ void Game::Handle()
 						break;
 					}
 				}
-				if (_menu.isMenuShowing() && _menu.getIsMatchMakeShowing())
+				else if (_menu.isMenuShowing() && _menu.getNeedsName())
+				{
+					_menu.ClickEditName();
+					if (_menu.ClickSaveName())
+					{
+						std::ofstream Passport("Passport.json");
+						json pass;
+
+						pass["ID"] = -1;
+						pass["Name"] = _menu.getName().getString();
+
+						Passport << pass;
+						break;
+					}
+				}
+				else if (_menu.isMenuShowing() && _menu.getIsMatchMakeShowing())
 				{
 					if (CreateGame())
 					{
@@ -126,10 +141,27 @@ void Game::Handle()
 			break;
 			
 		}
-		default:
-			break;
+		case sf::Event::KeyPressed:
+			if (_menu.getIsChangingName())
+			{
+				if (e.key.code == sf::Keyboard::BackSpace)
+				{
+					if (_menu.getName().getString().getSize() > 0)
+					{
+						_menu.RemoveCharacter();
+						std::cout << _menu.getName().getString().getSize() << std::endl;
+						return;
+					}
+					else return;
+				}
+				else
+				{
+					_menu.AddCharacter(e);
+					return;
+				}
+				break;
+			}
 		}
-
 	}
 }
 
@@ -140,6 +172,7 @@ bool Game::ChangeGameState()
 		if (!_client->CheckPassport())
 		{
 			_menu.ShowNameMenu();
+			return false;
 		}
 		else CreateClientThread();
 		return true;
