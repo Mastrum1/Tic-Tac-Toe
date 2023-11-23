@@ -7,6 +7,7 @@ MenuManager::MenuManager()
 	_isMainMenuShowing = true;
 	_inMultiGame = false;
 	_isMatchMaking = false;
+	_isMatchMakeShowing = false;
 }
 
 MenuManager::~MenuManager()
@@ -50,7 +51,7 @@ bool MenuManager::ClickMulti()
 	{
 		_inMultiGame = true;
 		_isMainMenuShowing = false;
-
+		_isMatchMakeShowing = true;
 		_window->GetWindow().clear();
 		return true;
 	}
@@ -72,6 +73,7 @@ bool MenuManager::ClickMatchMake()
 	{
 		// add waiting screen menu
 		_isMatchMaking = true;
+		_isMatchMakeShowing = false;
 		HideMenu();
 		_window->GetWindow().clear();
 		return true;
@@ -87,4 +89,14 @@ bool MenuManager::getInMulti()
 bool MenuManager::getIsMatchMaking()
 {
 	return _isMatchMaking;
+}
+
+bool MenuManager::getIsMainMenuShowing()
+{
+	return _isMainMenuShowing;
+}
+
+bool MenuManager::getIsMatchMakeShowing()
+{
+	return _isMatchMakeShowing;
 }

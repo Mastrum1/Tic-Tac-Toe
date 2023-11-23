@@ -102,12 +102,15 @@ void Game::Handle()
 		{
 			if (e.mouseButton.button == sf::Mouse::Left)
 			{
-				if (_menu.isMenuShowing())
+				if (_menu.isMenuShowing() && _menu.getIsMainMenuShowing())
 				{
 					if (ChangeGameState())
 					{
 						break;
 					}
+				}
+				if (_menu.isMenuShowing() && _menu.getIsMatchMakeShowing())
+				{
 					if (CreateGame())
 					{
 						break;

@@ -10,7 +10,7 @@ using json = nlohmann::json;
 
 
 
-#define IP_ADRESS "10.1.142.63"
+#define IP_ADRESS "10.1.170.23"
 #define PORT 31350
 #define WM_SOCKET (WM_USER + 1)
 

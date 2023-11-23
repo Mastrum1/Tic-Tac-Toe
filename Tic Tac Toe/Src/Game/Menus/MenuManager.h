@@ -26,6 +26,8 @@ public:
 
 	bool getInMulti();
 	bool getIsMatchMaking();
+	bool getIsMainMenuShowing();
+	bool getIsMatchMakeShowing();
 
 private:
 
@@ -34,6 +36,7 @@ private:
 	bool _needsName;
 	bool _inMultiGame;
 	bool _isMatchMaking;
+	bool _isMatchMakeShowing;
 
 	GameWindow* _window;
 };
