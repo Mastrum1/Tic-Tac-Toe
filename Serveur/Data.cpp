@@ -48,6 +48,7 @@ int Data::getGridCoord(int x, int y)
 {
 	return _grid[x][y];
 }
+
 void Data::setGridCoord(int x, int y, int value)
 {
 	_grid[x][y] = value;

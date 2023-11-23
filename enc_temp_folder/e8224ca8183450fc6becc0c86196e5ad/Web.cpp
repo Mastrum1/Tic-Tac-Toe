@@ -80,16 +80,7 @@ void Web::rewriteIndexHtml(int clientSocket) {
 
             gameId = "game" + std::to_string(i + 1);
             buttonString += "<button onclick=\"window.open('tictactoe.html?gameId=" + gameId + "', '_blank');\">Game number " + std::to_string(i + 1) + "</button>\n";
-            bool modulo = false;
-            if (modulo == false) {
-                marksString += "if (cell.dataset.row == )"+ coordStringX + "(&& cell.dataset.col == )" + coordStringY + "() { cell.textContent = 'X' }\n";
-                modulo = !modulo;
-            }
-            else
-            {
-                marksString += "if (cell.dataset.row == )"+ coordStringX + "(&& cell.dataset.col == )" + coordStringY + "() { cell.textContent = 'O' }\n";
-                modulo = !modulo;
-            }
+            marksString += "if (cell.dataset.row == )"+ coordStringX + "(&& cell.dataset.col == )" + coordStringY + "() { cell.textContent = 'X' }\n";
         }
     }
 

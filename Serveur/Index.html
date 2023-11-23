@@ -49,8 +49,7 @@
              <section>
                
                  <p>Admin page for spectating</p>
-             </section><button onclick="window.open('tictactoe.html?gameId=game1', '_blank');">Game number 1</button>
-<div id="grid-container"></div>
+             </section><div id="grid-container"></div>
 
              <footer>
                  <p>This page has no more than 3 lines of CSS</p>
@@ -67,10 +66,6 @@
                          cell.className = 'cell';
                          cell.dataset.row = i;
                          cell.dataset.col = j;
-                         if(cell.dataset.row == 1  && cell.dataset.col == 1)
-                         {cell.textContent = 'X'; }
-                         if(cell.dataset.row == 2  && cell.dataset.col == 1)
-                         {cell.textContent = 'O'; }
                          
 
                          gridContainer.appendChild(cell);
