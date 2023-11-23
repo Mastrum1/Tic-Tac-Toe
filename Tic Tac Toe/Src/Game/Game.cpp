@@ -61,8 +61,9 @@ void Game::Update()
 {
 	while (_window->GetWindow().isOpen()) 
 	{
-		Handle();
+		UpdateGrid();
 
+		Handle();
 		_window->Update();
 
 		if (_menu.isMenuShowing())
@@ -109,7 +110,22 @@ void Game::Handle()
 						break;
 					}
 				}
-				if (_menu.isMenuShowing() && _menu.getIsMatchMakeShowing())
+				else if (_menu.isMenuShowing() && _menu.getNeedsName())
+				{
+					_menu.ClickEditName();
+					if (_menu.ClickSaveName())
+					{
+						std::ofstream Passport("Passport.json");
+						json pass;
+
+						pass["ID"] = -1;
+						pass["Name"] = _menu.getName().getString();
+
+						Passport << pass;
+						break;
+					}
+				}
+				else if (_menu.isMenuShowing() && _menu.getIsMatchMakeShowing())
 				{
 					if (CreateGame())
 					{
@@ -118,8 +134,6 @@ void Game::Handle()
 				}
 				else
 				{
-					UpdateGrid();
-
 					UserPlay();
 					break;
 				}
@@ -127,10 +141,27 @@ void Game::Handle()
 			break;
 			
 		}
-		default:
-			break;
+		case sf::Event::KeyPressed:
+			if (_menu.getIsChangingName())
+			{
+				if (e.key.code == sf::Keyboard::BackSpace)
+				{
+					if (_menu.getName().getString().getSize() > 0)
+					{
+						_menu.RemoveCharacter();
+						std::cout << _menu.getName().getString().getSize() << std::endl;
+						return;
+					}
+					else return;
+				}
+				else
+				{
+					_menu.AddCharacter(e);
+					return;
+				}
+				break;
+			}
 		}
-
 	}
 }
 
@@ -141,6 +172,7 @@ bool Game::ChangeGameState()
 		if (!_client->CheckPassport())
 		{
 			_menu.ShowNameMenu();
+			return false;
 		}
 		else CreateClientThread();
 		return true;
@@ -179,7 +211,7 @@ void Game::UserPlay()
 			{
 				if (_client->getBoxAssigned(row, col) == EMPTY && _boxAssignedSingle[row][col] == EMPTY)
 				{
-					if (_menu.getInMulti() && _client->getClientCanPlay())
+					if (_menu.getInMulti() && _client->getClientCanPlay() && _client->getWinState() == NOWIN)
 					{
 						_client->setBoxAssigned(row, col, PLAYER1);
 
@@ -189,16 +221,12 @@ void Game::UserPlay()
 						}
 						else _gridPieces[row][col].setTexture(&_oTex);
 
-						//Send coordinate message
+						//Create coordinate message
 						_client->setInstructions(SET, REQUEST_ID);
 						auto mes = _client->getMessage();
-						mes["x"] = col;
-						mes["y"] = row;
+						mes["x"] = row;
+						mes["y"] = col;
 						_client->setMessage(mes);
-						_client->ClientSendMessage(_client->getMessage());
-
-						std::cout << _client->getMessage() << std::endl;
-
 						_client->setClientCanPlay(false);
 					}
 					else if (!_menu.getInMulti())
@@ -300,7 +328,7 @@ int Game::CheckWin()
 		{
 			if (_client->getBoxAssigned(row, col) == EMPTY && _boxAssignedSingle[row][col] == EMPTY)
 			{
-				return EMPTY;
+				return NOWIN;
 			}
 		}
 	}
@@ -310,19 +338,23 @@ int Game::CheckWin()
 
 void Game::OnWin(int checkwin)
 {
-	if (checkwin == EMPTY) { return; }
+	if (_menu.getInMulti() && _client->getWinState() == NOWIN)
+	{
+		auto mes = _client->getMessage();
+		mes["WinCondition"] = checkwin;
+		_client->setMessage(mes);
+		_client->ClientSendMessage(_client->getMessage());
+		std::cout << _client->getMessage() << std::endl;
+	}
+	else if (_menu.getInMulti() && _client->getWinState() != NOWIN)
+	{
+		Reset();
+	}
 
+	if (checkwin == NOWIN) { return; }
 	if (checkwin == PLAYER1_WIN) _gameMessage = sf::Text("You Won!", _arial, 30);
 	else if (checkwin == PLAYER2_WIN) _gameMessage = sf::Text("You lost...", _arial, 30);
 	else if (checkwin == DRAW) _gameMessage = sf::Text("Draw", _arial, 30);
-
-	_PlayerWon = true;
-	if (_menu.getInMulti())
-	{
-		/*auto mes = _client->getMessages()->CreateNewMessage(SET, REQUEST_ID);
-		mes["WinCondition"] = _PlayerWon;
-		_client->ClientSendMessage(_client->getMessages()->FinalizeMessage(mes));*/
-	}
 
 	// add Play again screen
 	Reset();
@@ -348,7 +380,6 @@ void Game::BotPlay()
 
 void Game::Reset()
 {
-	_PlayerWon = false;
 	if (_menu.getInMulti())
 	{
 		_client->CloseSocket();

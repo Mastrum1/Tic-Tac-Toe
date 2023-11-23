@@ -5,6 +5,7 @@
 
 Client::Client()
 {
+	m_WinState = NOWIN;
 }	
 
 Client::~Client()
@@ -136,6 +137,7 @@ void Client::ClientReceiveMessage()
 		if (data["Cmd"] == PLAY)
 		{
 			_boxAssigned[data["x"]][data["y"]] = PLAYER2;
+			m_WinState = data["WinCondition"];
 			clientCanPlay = true;
 		}
 	}	
@@ -146,7 +148,7 @@ void Client::ClientReceiveMessage()
 bool Client::CheckPassport()
 {
 	ReadPassport();
-	if (_passport["Name"] == NULL)
+	if (_passport["Name"] == "null")
 	{
 		return false;
 	}
@@ -185,6 +187,7 @@ void Client::setInstructions(int Cmd, int Type)
 
 	if (Cmd == CONNECTION_ID || Cmd == MATCHMAKING_ID)
 	{
+		ReadPassport();
 		_message["ID"] = _passport["ID"];
 		_message["Name"] = _passport["Name"];
 	}

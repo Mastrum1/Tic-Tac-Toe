@@ -21,9 +21,10 @@
 #define PLAYER2 2
 
 // Result of Game
-#define PLAYER1_WIN 3
-#define PLAYER2_WIN 4
-#define DRAW 5
+#define NOWIN -1
+#define PLAYER1_WIN 1
+#define PLAYER2_WIN 2
+#define DRAW 0
 
 //for type of message
 #define REQUEST_ID 1
@@ -37,5 +38,6 @@
 #define UPDATE_PASS 4
 #define SETTUP_PARTY 5
 #define PLAY 6
+#define WIN 7
 
 

@@ -46,8 +46,6 @@ private:
 	sf::RectangleShape _gridPieces[3][3];
 	int _boxAssignedSingle[3][3];
 
-	bool _PlayerWon = false;
-
 	Client* _client;
 	GameWindow* _window;
 	MenuManager _menu;
